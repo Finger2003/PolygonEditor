@@ -1,3 +1,5 @@
+using System.Windows.Forms.VisualStyles;
+
 namespace Lab1
 {
     public partial class PolygonEditor : Form
@@ -16,6 +18,7 @@ namespace Lab1
         public PolygonEditor()
         {
             InitializeComponent();
+            ContextMenuStrip = edgesContextMenuStrip;
             Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
             drawingPictureBox.Image = Bitmap;
             G = Graphics.FromImage(Bitmap);
@@ -34,7 +37,7 @@ namespace Lab1
                     SelectedEdge = new Edge(new Vertex(e.Location), new Vertex(e.Location));
                     IsDrawing = true;
                 }
-                else
+                else if (IsDrawing)
                 {
                     Edges.Add(SelectedEdge!);
                     if (Edges[0].Start.IsHit(e.Location))
@@ -48,9 +51,21 @@ namespace Lab1
                         SelectedEdge = new Edge(Edges[^1].End, new Vertex(e.Location));
                     }
                 }
+
+
                 //Edge edge = new Edge(new Vertex(1,2), new Vertex(3,4));
                 //edge.Accept(new EdgeDrawingVisitor());
             }
+            //Edge? edge = Edges.Find(edge => edge.IsHit(e.Location));
+            else if(e.Button == MouseButtons.Right)
+            {
+                SelectedEdge = Edges.Find(edge => edge.IsHit(e.Location));
+                if(SelectedEdge is not null)
+                {
+                    ContextMenuStrip!.Show(drawingPictureBox, e.Location);
+                }
+            }
+
         }
 
 
@@ -58,20 +73,15 @@ namespace Lab1
         {
             if (IsDrawing)
             {
-                //var g = Graphics.FromImage(Bitmap);
-                //g.Clear(Color.White);
-                //g.DrawLine(Pens.Black, startPoint, e.Location);
-                //drawingPictureBox.Image = Bitmap;
-
-                //SelectedEdge ??= new Edge(new Vertex(startPoint), new Vertex(e.Location));
                 SelectedEdge!.End = new Vertex(e.Location);
                 drawingPictureBox.Invalidate();
-
-                //using Graphics g = Graphics.FromImage(Bitmap);
-                //g.Clear(Color.White);
-                //SelectedEdge.Accept(EdgeDrawingVisitor);
-                //drawingPictureBox.Image = Bitmap;
             }
+            //if (SelectedVertex is not null)
+            //{
+            //    SelectedVertex.Position = e.Location;
+            //    drawingPictureBox.Invalidate();
+            //}
+
         }
 
         private void drawingPictureBox_Paint(object sender, PaintEventArgs e)
@@ -83,6 +93,16 @@ namespace Lab1
             }
             SelectedEdge?.Accept(EdgeDrawingVisitor);
             drawingPictureBox.Image = Bitmap;
+        }
+
+        private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            //SelectedVertex = Edges.Find(edge => edge.Start.IsHit(e.Location))?.Start;
+        }
+
+        private void drawingPictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            //SelectedVertex = null;
         }
     }
 

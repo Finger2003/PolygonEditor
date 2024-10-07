@@ -28,13 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             menuStrip = new MenuStrip();
             helpToolStripMenuItem = new ToolStripMenuItem();
             defaultRadioButton = new RadioButton();
             bresenhamRadioButton = new RadioButton();
             drawingPictureBox = new PictureBox();
+            edgesContextMenuStrip = new ContextMenuStrip(components);
+            dodajWierzchołekToolStripMenuItem = new ToolStripMenuItem();
+            dodajOgraniczenieToolStripMenuItem = new ToolStripMenuItem();
+            stałaDługośćToolStripMenuItem = new ToolStripMenuItem();
+            pionowaToolStripMenuItem = new ToolStripMenuItem();
+            poziomaToolStripMenuItem = new ToolStripMenuItem();
+            beToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).BeginInit();
+            edgesContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip
@@ -83,7 +92,52 @@
             drawingPictureBox.TabStop = false;
             drawingPictureBox.Paint += drawingPictureBox_Paint;
             drawingPictureBox.MouseClick += drawingPictureBox_MouseClick;
+            drawingPictureBox.MouseDown += drawingPictureBox_MouseDown;
             drawingPictureBox.MouseMove += drawingPictureBox_MouseMove;
+            drawingPictureBox.MouseUp += drawingPictureBox_MouseUp;
+            // 
+            // edgesContextMenuStrip
+            // 
+            edgesContextMenuStrip.Items.AddRange(new ToolStripItem[] { dodajWierzchołekToolStripMenuItem, dodajOgraniczenieToolStripMenuItem });
+            edgesContextMenuStrip.Name = "contextMenuStrip1";
+            edgesContextMenuStrip.Size = new Size(176, 48);
+            // 
+            // dodajWierzchołekToolStripMenuItem
+            // 
+            dodajWierzchołekToolStripMenuItem.Name = "dodajWierzchołekToolStripMenuItem";
+            dodajWierzchołekToolStripMenuItem.Size = new Size(175, 22);
+            dodajWierzchołekToolStripMenuItem.Text = "Dodaj wierzchołek";
+            // 
+            // dodajOgraniczenieToolStripMenuItem
+            // 
+            dodajOgraniczenieToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { stałaDługośćToolStripMenuItem, pionowaToolStripMenuItem, poziomaToolStripMenuItem, beToolStripMenuItem });
+            dodajOgraniczenieToolStripMenuItem.Name = "dodajOgraniczenieToolStripMenuItem";
+            dodajOgraniczenieToolStripMenuItem.Size = new Size(175, 22);
+            dodajOgraniczenieToolStripMenuItem.Text = "Dodaj ograniczenie";
+            // 
+            // stałaDługośćToolStripMenuItem
+            // 
+            stałaDługośćToolStripMenuItem.Name = "stałaDługośćToolStripMenuItem";
+            stałaDługośćToolStripMenuItem.Size = new Size(180, 22);
+            stałaDługośćToolStripMenuItem.Text = "Stała długość";
+            // 
+            // pionowaToolStripMenuItem
+            // 
+            pionowaToolStripMenuItem.Name = "pionowaToolStripMenuItem";
+            pionowaToolStripMenuItem.Size = new Size(180, 22);
+            pionowaToolStripMenuItem.Text = "Pionowa";
+            // 
+            // poziomaToolStripMenuItem
+            // 
+            poziomaToolStripMenuItem.Name = "poziomaToolStripMenuItem";
+            poziomaToolStripMenuItem.Size = new Size(180, 22);
+            poziomaToolStripMenuItem.Text = "Pozioma";
+            // 
+            // beToolStripMenuItem
+            // 
+            beToolStripMenuItem.Name = "beToolStripMenuItem";
+            beToolStripMenuItem.Size = new Size(180, 22);
+            beToolStripMenuItem.Text = "Bézier";
             // 
             // PolygonEditor
             // 
@@ -102,6 +156,7 @@
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).EndInit();
+            edgesContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -113,5 +168,12 @@
         private RadioButton defaultRadioButton;
         private RadioButton bresenhamRadioButton;
         private PictureBox drawingPictureBox;
+        private ContextMenuStrip edgesContextMenuStrip;
+        private ToolStripMenuItem dodajWierzchołekToolStripMenuItem;
+        private ToolStripMenuItem dodajOgraniczenieToolStripMenuItem;
+        private ToolStripMenuItem stałaDługośćToolStripMenuItem;
+        private ToolStripMenuItem pionowaToolStripMenuItem;
+        private ToolStripMenuItem poziomaToolStripMenuItem;
+        private ToolStripMenuItem beToolStripMenuItem;
     }
 }
