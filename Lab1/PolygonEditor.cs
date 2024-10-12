@@ -1,5 +1,3 @@
-using System.Windows.Forms.VisualStyles;
-
 namespace Lab1
 {
     public partial class PolygonEditor : Form
@@ -12,7 +10,9 @@ namespace Lab1
         private bool IsDrawing { get; set; } = false;
         private Point startPoint { get; set; }
 
-        private IEdgeVisitor EdgeDrawingVisitor { get; set; }
+        private EdgeDrawingVisitor EdgeDrawingVisitor { get; set; }
+        //private IEdgeVisitor[] EdgeDrawingVisitors { get; }
+        private ILineDrawer[] LineDrawers { get; }
         Graphics G { get; }
 
 
@@ -24,10 +24,10 @@ namespace Lab1
             drawingPictureBox.Image = Bitmap;
             G = Graphics.FromImage(Bitmap);
             G.Clear(Color.White);
-
+            LineDrawers = [new DefaultLineDrawer(Bitmap), new BresenhamLineDrawer(Bitmap)];
             //ContextMenuStrip.Enabled = false;
 
-            EdgeDrawingVisitor = new EdgeDrawingVisitor(G);
+            EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1]);
         }
 
         private void drawingPictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -65,6 +65,13 @@ namespace Lab1
             //Edge? edge = Edges.Find(edge => edge.IsHit(e.Location));
             else if (e.Button == MouseButtons.Right && !IsDrawing)
             {
+                SelectedVertex = Edges.Find(edge => edge.Start.IsHit(e.Location))?.Start;
+                if (SelectedVertex is not null)
+                {
+                    verticesContextMenuStrip.Show(drawingPictureBox, e.Location);
+                    return;
+                }
+
                 SelectedEdge = Edges.Find(edge => edge.IsHit(e.Location));
                 if (SelectedEdge is not null)
                 {
@@ -85,7 +92,7 @@ namespace Lab1
                 DrawnEdge!.End.Position = e.Location;
                 drawingPictureBox.Invalidate();
             }
-            if (SelectedVertex is not null)
+            if (SelectedVertex is not null && e.Button == MouseButtons.Left)
             {
                 try
                 {
@@ -95,7 +102,7 @@ namespace Lab1
                     //ResetVertexMovementFlags();
                     drawingPictureBox.Invalidate();
                 }
-                catch(VertexAlreadyMovedException)
+                catch (VertexAlreadyMovedException)
                 {
                     foreach (Edge edge in Edges)
                         edge.Start.Restore();
@@ -134,7 +141,8 @@ namespace Lab1
 
         private void drawingPictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            SelectedVertex = null;
+            if (e.Button == MouseButtons.Left)
+                SelectedVertex = null;
         }
 
         private void sta³aD³ugoœæToolStripMenuItem_Click(object sender, EventArgs e)
@@ -223,57 +231,193 @@ namespace Lab1
             Edges.RemoveAt(index);
             Edges.InsertRange(index, [edge1, edge2]);
         }
+
+        private void usuñWierczho³ekToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
+            int index2 = (index1 + 1) % Edges.Count;
+            if (index1 != -1)
+            {
+                Edge edge1 = Edges[index1];
+                Edge edge2 = Edges[index2];
+                Edge edge = new Edge(edge1.Start, edge2.End);
+                Edges[index1] = edge;
+                Edges.RemoveAt(index2);
+            }
+
+        }
+
+        private void defaultRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (defaultRadioButton.Checked)
+            {
+                EdgeDrawingVisitor.LineDrawer = LineDrawers[0];
+            }
+            else
+            {
+                EdgeDrawingVisitor.LineDrawer = LineDrawers[1];
+            }
+        }
+    }
+
+    public interface ILineDrawer
+    {
+        public void DrawHorizontalLine(Point start, Point end);
+        public void DrawVerticalLine(Point start, Point end);
+        public void DrawStraightLine(Point start, Point end);
+        public void DrawBezierCurve(Point start, Point end, Point control1, Point control2);
+    }
+
+    public abstract class AbstractLineDrawer : ILineDrawer
+    {
+        //protected Graphics G { get; }
+        //public AbstractLineDrawer(Graphics g) => G = g;
+        protected Graphics G;
+        protected AbstractLineDrawer(Graphics g) => G = g;
+        public abstract void DrawHorizontalLine(Point start, Point end);
+        public abstract void DrawVerticalLine(Point start, Point end);
+        public abstract void DrawStraightLine(Point start, Point end);
+        public void DrawBezierCurve(Point start, Point end, Point control1, Point control2)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DefaultLineDrawer : AbstractLineDrawer
+    {
+        public DefaultLineDrawer(Bitmap bitmap) : base(Graphics.FromImage(bitmap)) { }
+
+        public override void DrawHorizontalLine(Point start, Point end)
+        {
+            G.DrawLine(Pens.Black, start, end);
+        }
+
+        public override void DrawVerticalLine(Point start, Point end)
+        {
+            G.DrawLine(Pens.Black, start, end);
+        }
+
+        public override void DrawStraightLine(Point start, Point end)
+        {
+            G.DrawLine(Pens.Black, start, end);
+        }
+    }
+
+    public class BresenhamLineDrawer : AbstractLineDrawer
+    {
+        private Bitmap Bitmap { get; }
+        public BresenhamLineDrawer(Bitmap bitmap) : base(Graphics.FromImage(bitmap)) => Bitmap = bitmap;
+
+        public override void DrawHorizontalLine(Point start, Point end)
+        {
+            for (int i = start.X; i <= end.X; i++)
+            {
+                SetBitmapPixel(i, start.Y);
+                //Bitmap.SetPixel(i, start.Y, Color.Black);
+            }
+        }
+        public override void DrawVerticalLine(Point start, Point end)
+        {
+            for (int i = start.Y; i <= end.Y; i++)
+            {
+                SetBitmapPixel(start.X, i);
+                //Bitmap.SetPixel(start.X, i, Color.Black);
+            }
+        }
+
+        public override void DrawStraightLine(Point start, Point end)
+        {
+            int x0 = start.X;
+            int y0 = start.Y;
+            int x1 = end.X;
+            int y1 = end.Y;
+
+            int dx = Math.Abs(x1 - x0);
+            int sx = x0 < x1 ? 1 : -1;
+            int dy = -Math.Abs(y1 - y0);
+            int sy = y0 < y1 ? 1 : -1;
+            int err = dx + dy;
+
+            while (true)
+            {
+                SetBitmapPixel(x0, y0);
+                if (x0 == x1 && y0 == y1)
+                    break;
+                int e2 = 2 * err;
+                if (e2 >= dy)
+                {
+                    err += dy;
+                    x0 += sx;
+                }
+                if (e2 <= dx)
+                {
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
+
+        private void SetBitmapPixel(int x, int y)
+        {
+            Bitmap.SetPixel(x, y, Color.Black);
+        }
     }
 
     public interface IEdgeVisitor
-    {        
+    {
         void Visit(Edge edge);
         void Visit(HorizontalEdge edge);
         void Visit(VerticalEdge edge);
         void Visit(FixedEdge edge);
         void Visit(BezierEdge edge);
     }
-    public class EdgeDrawingVisitor: IEdgeVisitor
+    public class EdgeDrawingVisitor : IEdgeVisitor
     {
         //Bitmap Bitmap { get; }
-        Graphics G { get; }
-        //public EdgeDrawingVisitor(Bitmap bitmap)
-        //{
-        //    Bitmap = bitmap;
-        //}
-        public EdgeDrawingVisitor(Graphics g) => G = g;
+        //Graphics G { get; }
+        ////public EdgeDrawingVisitor(Bitmap bitmap)
+        ////{
+        ////    Bitmap = bitmap;
+        ////}
+        //public EdgeDrawingVisitor(Graphics g) => G = g;
+        public ILineDrawer LineDrawer { get; set; }
+        public EdgeDrawingVisitor(ILineDrawer lineDrawer) => LineDrawer = lineDrawer;
 
-        private void DrawStraightLine(Point start, Point end)
-        {
-            G.DrawLine(Pens.Black, start, end);
-        }
+        //private void DrawStraightLine(Point start, Point end)
+        //{
+        //    G.DrawLine(Pens.Black, start, end);
+        //}
         public void Visit(Edge edge)
         {
             //Pen pen = new Pen(Color.Black);
             //using Graphics g = Graphics.FromImage(Bitmap);
 
             //g.DrawLine(Pens.Black, startPoint, e.Location);
-            DrawStraightLine(edge.Start.Position, edge.End.Position);
+            //DrawStraightLine(edge.Start.Position, edge.End.Position);
             //drawingPictureBox.Image = Bitmap;
+            LineDrawer.DrawStraightLine(edge.Start.Position, edge.End.Position);
         }
 
         public void Visit(HorizontalEdge edge)
         {
             // draw horizontal edge
-            DrawStraightLine(edge.Start.Position, edge.End.Position);
+            //DrawStraightLine(edge.Start.Position, edge.End.Position);
+            LineDrawer.DrawHorizontalLine(edge.Start.Position, edge.End.Position);
 
         }
 
         public void Visit(VerticalEdge edge)
         {
             // draw vertical edge
-            DrawStraightLine(edge.Start.Position, edge.End.Position);
+            //DrawStraightLine(edge.Start.Position, edge.End.Position);
+            LineDrawer.DrawVerticalLine(edge.Start.Position, edge.End.Position);
         }
 
         public void Visit(FixedEdge edge)
         {
             // draw fixed edge
-            DrawStraightLine(edge.Start.Position, edge.End.Position);
+            //DrawStraightLine(edge.Start.Position, edge.End.Position);
+            LineDrawer.DrawStraightLine(edge.Start.Position, edge.End.Position);
         }
 
         public void Visit(BezierEdge edge)
@@ -331,7 +475,7 @@ namespace Lab1
         void Accept(IEdgeVisitor visitor);
     }
 
-    public class Edge: IEdgeVisitable
+    public class Edge : IEdgeVisitable
     {
         public virtual Vertex Start { get; set; }
         public virtual Vertex End { get; set; }
@@ -387,7 +531,7 @@ namespace Lab1
         public virtual void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 
-    public class  HorizontalEdge: Edge
+    public class HorizontalEdge : Edge
     {
         public override bool IsBasic { get => false; }
         public override bool IsHorizontal { get => true; }
@@ -402,7 +546,7 @@ namespace Lab1
         public override void StartChanged()
         {
 
-            if(Start.Position.Y == End.Position.Y)
+            if (Start.Position.Y == End.Position.Y)
             {
                 if (!End.WasChecked)
                     End.NeighbourPositionChanged();
@@ -461,7 +605,7 @@ namespace Lab1
 
             Start.WasChecked = true;
 
-            if(/*!End.WasMoved*/ Start.WasMoved)
+            if (/*!End.WasMoved*/ Start.WasMoved)
             {
                 End.Position = new Point(Start.Position.X, End.Position.Y);
                 End.WasMoved = true;
@@ -501,7 +645,7 @@ namespace Lab1
             Start.WasChecked = true;
             Point positionDifference;
 
-            if(/*!End.WasMoved*/Start.WasMoved)
+            if (/*!End.WasMoved*/Start.WasMoved)
             {
                 positionDifference = Start.PositionDifference;
                 End.Position = new Point(End.Position.X + positionDifference.X, End.Position.Y + positionDifference.Y);

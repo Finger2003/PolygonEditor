@@ -41,9 +41,12 @@
             pionowaToolStripMenuItem = new ToolStripMenuItem();
             poziomaToolStripMenuItem = new ToolStripMenuItem();
             beToolStripMenuItem = new ToolStripMenuItem();
+            verticesContextMenuStrip = new ContextMenuStrip(components);
+            usuńWierczhołekToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).BeginInit();
             edgesContextMenuStrip.SuspendLayout();
+            verticesContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip
@@ -71,6 +74,7 @@
             defaultRadioButton.TabStop = true;
             defaultRadioButton.Text = "Algorytm biblioteczny";
             defaultRadioButton.UseVisualStyleBackColor = true;
+            defaultRadioButton.CheckedChanged += defaultRadioButton_CheckedChanged;
             // 
             // bresenhamRadioButton
             // 
@@ -119,30 +123,43 @@
             // stałaDługośćToolStripMenuItem
             // 
             stałaDługośćToolStripMenuItem.Name = "stałaDługośćToolStripMenuItem";
-            stałaDługośćToolStripMenuItem.Size = new Size(180, 22);
+            stałaDługośćToolStripMenuItem.Size = new Size(144, 22);
             stałaDługośćToolStripMenuItem.Text = "Stała długość";
             stałaDługośćToolStripMenuItem.Click += stałaDługośćToolStripMenuItem_Click;
             // 
             // pionowaToolStripMenuItem
             // 
             pionowaToolStripMenuItem.Name = "pionowaToolStripMenuItem";
-            pionowaToolStripMenuItem.Size = new Size(180, 22);
+            pionowaToolStripMenuItem.Size = new Size(144, 22);
             pionowaToolStripMenuItem.Text = "Pionowa";
             pionowaToolStripMenuItem.Click += pionowaToolStripMenuItem_Click;
             // 
             // poziomaToolStripMenuItem
             // 
             poziomaToolStripMenuItem.Name = "poziomaToolStripMenuItem";
-            poziomaToolStripMenuItem.Size = new Size(180, 22);
+            poziomaToolStripMenuItem.Size = new Size(144, 22);
             poziomaToolStripMenuItem.Text = "Pozioma";
             poziomaToolStripMenuItem.Click += poziomaToolStripMenuItem_Click;
             // 
             // beToolStripMenuItem
             // 
             beToolStripMenuItem.Name = "beToolStripMenuItem";
-            beToolStripMenuItem.Size = new Size(180, 22);
+            beToolStripMenuItem.Size = new Size(144, 22);
             beToolStripMenuItem.Text = "Bézier";
             beToolStripMenuItem.Click += beToolStripMenuItem_Click;
+            // 
+            // verticesContextMenuStrip
+            // 
+            verticesContextMenuStrip.Items.AddRange(new ToolStripItem[] { usuńWierczhołekToolStripMenuItem });
+            verticesContextMenuStrip.Name = "verticesContextMenuStrip";
+            verticesContextMenuStrip.Size = new Size(167, 26);
+            // 
+            // usuńWierczhołekToolStripMenuItem
+            // 
+            usuńWierczhołekToolStripMenuItem.Name = "usuńWierczhołekToolStripMenuItem";
+            usuńWierczhołekToolStripMenuItem.Size = new Size(166, 22);
+            usuńWierczhołekToolStripMenuItem.Text = "Usuń wierczhołek";
+            usuńWierczhołekToolStripMenuItem.Click += usuńWierczhołekToolStripMenuItem_Click;
             // 
             // PolygonEditor
             // 
@@ -162,6 +179,7 @@
             menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).EndInit();
             edgesContextMenuStrip.ResumeLayout(false);
+            verticesContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -180,5 +198,7 @@
         private ToolStripMenuItem pionowaToolStripMenuItem;
         private ToolStripMenuItem poziomaToolStripMenuItem;
         private ToolStripMenuItem beToolStripMenuItem;
+        private ContextMenuStrip verticesContextMenuStrip;
+        private ToolStripMenuItem usuńWierczhołekToolStripMenuItem;
     }
 }
