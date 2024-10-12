@@ -107,6 +107,7 @@
             dodajWierzchołekToolStripMenuItem.Name = "dodajWierzchołekToolStripMenuItem";
             dodajWierzchołekToolStripMenuItem.Size = new Size(175, 22);
             dodajWierzchołekToolStripMenuItem.Text = "Dodaj wierzchołek";
+            dodajWierzchołekToolStripMenuItem.Click += dodajWierzchołekToolStripMenuItem_Click;
             // 
             // dodajOgraniczenieToolStripMenuItem
             // 
@@ -120,24 +121,28 @@
             stałaDługośćToolStripMenuItem.Name = "stałaDługośćToolStripMenuItem";
             stałaDługośćToolStripMenuItem.Size = new Size(180, 22);
             stałaDługośćToolStripMenuItem.Text = "Stała długość";
+            stałaDługośćToolStripMenuItem.Click += stałaDługośćToolStripMenuItem_Click;
             // 
             // pionowaToolStripMenuItem
             // 
             pionowaToolStripMenuItem.Name = "pionowaToolStripMenuItem";
             pionowaToolStripMenuItem.Size = new Size(180, 22);
             pionowaToolStripMenuItem.Text = "Pionowa";
+            pionowaToolStripMenuItem.Click += pionowaToolStripMenuItem_Click;
             // 
             // poziomaToolStripMenuItem
             // 
             poziomaToolStripMenuItem.Name = "poziomaToolStripMenuItem";
             poziomaToolStripMenuItem.Size = new Size(180, 22);
             poziomaToolStripMenuItem.Text = "Pozioma";
+            poziomaToolStripMenuItem.Click += poziomaToolStripMenuItem_Click;
             // 
             // beToolStripMenuItem
             // 
             beToolStripMenuItem.Name = "beToolStripMenuItem";
             beToolStripMenuItem.Size = new Size(180, 22);
             beToolStripMenuItem.Text = "Bézier";
+            beToolStripMenuItem.Click += beToolStripMenuItem_Click;
             // 
             // PolygonEditor
             // 
