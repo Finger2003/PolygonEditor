@@ -23,7 +23,7 @@ namespace Lab1.Edges
         {
             Start = start;
             End = end;
-            Start.PositionChanged += StartChanged;
+            SubscribeStart();
         }
 
 
@@ -55,6 +55,21 @@ namespace Lab1.Edges
             return numerator / denominator;
         }
 
+        public void UnsubscribeStart()
+        {
+            Start.PositionChanged -= StartChanged;
+        }
+        public void SubscribeStart()
+        {
+            Start.PositionChanged += StartChanged;
+        }
         public virtual void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
+
+        public virtual void Restore()
+        {
+            Start.Restore();
+        }
+
+        public virtual void OnMoved() { }
     }
 }

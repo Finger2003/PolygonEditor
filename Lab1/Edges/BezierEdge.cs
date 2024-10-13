@@ -2,9 +2,9 @@
 
 namespace Lab1.Edges
 {
-    public class BezierEdge : Edge
+    public class BezierEdge : SpecialEdge
     {
-        public override bool IsBasic { get => false; }
+        //public override bool IsBasic { get => false; }
         public override bool IsBezier { get => true; }
 
         public BezierEdge(Vertex start, Vertex end) : base(start, end) { }

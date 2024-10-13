@@ -18,6 +18,10 @@
         private Point PreviousPosition { get; set; }
         public Point PositionDifference { get => new Point(Position.X - PreviousPosition.X, Position.Y - PreviousPosition.Y); }
 
+        public void ResetPreviousPosition()
+        {
+            PreviousPosition = Position;
+        }
         public void Restore()
         {
             Position = PreviousPosition;

@@ -35,6 +35,7 @@ namespace Lab1.Visitors
             // draw horizontal edge
             //DrawStraightLine(edge.Start.Position, edge.End.Position);
             LineDrawer.DrawHorizontalLine(edge.Start.Position, edge.End.Position);
+            edge.RemoveConstraintButton.BringToFront();
 
         }
 

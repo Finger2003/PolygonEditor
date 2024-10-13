@@ -1,10 +1,11 @@
-﻿using Lab1.Visitors;
+﻿using Lab1.Exceptions;
+using Lab1.Visitors;
 
 namespace Lab1.Edges
 {
-    public class VerticalEdge : Edge
+    public class VerticalEdge : SpecialEdge
     {
-        public override bool IsBasic { get => false; }
+        //public override bool IsBasic { get => false; }
         public override bool IsVertical { get => true; }
 
         public VerticalEdge(Vertex start, Vertex end) : base(start, end)
@@ -16,6 +17,7 @@ namespace Lab1.Edges
 
         public override void StartChanged()
         {
+            //SetButtonPosition();
             Start.WasChecked = true;
 
             if (Start.Position.X == End.Position.X)
@@ -29,13 +31,13 @@ namespace Lab1.Edges
 
 
 
-            if (/*!End.WasMoved*/ Start.WasMoved)
+            if (!End.WasMoved /*Start.WasMoved*/)
             {
                 End.Position = new Point(Start.Position.X, End.Position.Y);
                 End.WasMoved = true;
                 End.NeighbourPositionChanged();
             }
-            else if (/*!Start.WasMoved*/End.WasMoved)
+            else if (!Start.WasMoved/*End.WasMoved*/)
             {
                 Start.Position = new Point(End.Position.X, Start.Position.Y);
                 Start.WasMoved = true;

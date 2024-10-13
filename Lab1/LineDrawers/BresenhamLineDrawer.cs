@@ -7,7 +7,18 @@
 
         public override void DrawHorizontalLine(Point start, Point end)
         {
-            for (int i = start.X; i <= end.X; i++)
+            if(start.Y < 0 || start.Y >= Bitmap.Height)
+                return;
+
+
+            int startX = Math.Min(Math.Max(0, start.X), Bitmap.Width - 1);
+            int endX = Math.Min(Math.Max(0, end.X), Bitmap.Width - 1);
+
+
+            if(startX > endX)
+                (startX, endX) = (endX, startX);
+
+            for (int i = startX; i <= endX; i++)
             {
                 SetBitmapPixel(i, start.Y);
                 //Bitmap.SetPixel(i, start.Y, Color.Black);
@@ -15,7 +26,16 @@
         }
         public override void DrawVerticalLine(Point start, Point end)
         {
-            for (int i = start.Y; i <= end.Y; i++)
+            if(start.X < 0 || start.X >= Bitmap.Width)
+                return;
+
+            int startY = Math.Min(Math.Max(0, start.Y), Bitmap.Height - 1);
+            int endY = Math.Min(Math.Max(0, end.Y), Bitmap.Height - 1);
+
+            if (startY > endY)
+                (startY, endY) = (endY, startY);
+
+            for (int i = startY; i <= endY; i++)
             {
                 SetBitmapPixel(start.X, i);
                 //Bitmap.SetPixel(start.X, i, Color.Black);
@@ -37,9 +57,12 @@
 
             while (true)
             {
-                SetBitmapPixel(x0, y0);
+                if(x0 >= 0 && x0 < Bitmap.Width && y0 >= 0 && y0 < Bitmap.Height)
+                    SetBitmapPixel(x0, y0);
+
                 if (x0 == x1 && y0 == y1)
                     break;
+
                 int e2 = 2 * err;
                 if (e2 >= dy)
                 {
