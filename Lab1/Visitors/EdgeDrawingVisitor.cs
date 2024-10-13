@@ -1,4 +1,7 @@
-﻿namespace Lab1
+﻿using Lab1.Edges;
+using Lab1.LineDrawers;
+
+namespace Lab1.Visitors
 {
     public class EdgeDrawingVisitor : IEdgeVisitor
     {

@@ -1,4 +1,6 @@
-﻿namespace Lab1
+﻿using Lab1.Visitors;
+
+namespace Lab1.Edges
 {
     public class FixedEdge : Edge
     {
@@ -13,8 +15,8 @@
 
         public override void StartChanged()
         {
-            //if (End.WasMoved && Start.WasMoved)
-            //    throw new VertexAlreadyMovedException();
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexAlreadyMovedException();
 
             Start.WasChecked = true;
             Point positionDifference;

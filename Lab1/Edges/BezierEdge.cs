@@ -1,4 +1,6 @@
-﻿namespace Lab1
+﻿using Lab1.Visitors;
+
+namespace Lab1.Edges
 {
     public class BezierEdge : Edge
     {

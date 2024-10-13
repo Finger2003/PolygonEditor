@@ -1,4 +1,6 @@
-﻿namespace Lab1
+﻿using Lab1.Edges;
+
+namespace Lab1.Visitors
 {
     public interface IEdgeVisitor
     {

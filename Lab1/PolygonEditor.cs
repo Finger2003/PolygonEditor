@@ -1,3 +1,8 @@
+using Lab1.Edges;
+using Lab1.Exceptions;
+using Lab1.LineDrawers;
+using Lab1.Visitors;
+
 namespace Lab1
 {
     public partial class PolygonEditor : Form
@@ -106,7 +111,7 @@ namespace Lab1
                 {
                     foreach (Edge edge in Edges)
                         edge.Start.Restore();
-                    //MessageBox.Show("Wierzcho³ek nie mo¿e zostaæ przesuniêty ze wzglêdu na ograniczenia");
+                    MessageBox.Show("Wierzcho³ek nie mo¿e zostaæ przesuniêty ze wzglêdu na ograniczenia");
                 }
                 finally
                 {

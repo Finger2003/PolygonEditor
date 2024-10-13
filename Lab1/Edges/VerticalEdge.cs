@@ -1,4 +1,6 @@
-﻿namespace Lab1
+﻿using Lab1.Visitors;
+
+namespace Lab1.Edges
 {
     public class VerticalEdge : Edge
     {
@@ -14,6 +16,7 @@
 
         public override void StartChanged()
         {
+            Start.WasChecked = true;
 
             if (Start.Position.X == End.Position.X)
             {
@@ -21,11 +24,10 @@
                     End.NeighbourPositionChanged();
                 return;
             }
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexAlreadyMovedException();
 
-            //if (End.WasMoved && Start.WasMoved)
-            //    throw new VertexAlreadyMovedException();
 
-            Start.WasChecked = true;
 
             if (/*!End.WasMoved*/ Start.WasMoved)
             {

@@ -1,4 +1,4 @@
-﻿namespace Lab1
+﻿namespace Lab1.LineDrawers
 {
     public class DefaultLineDrawer : AbstractLineDrawer
     {
