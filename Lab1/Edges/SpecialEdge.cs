@@ -14,12 +14,12 @@ namespace Lab1.Edges
             RemoveConstraintButton.Size = new System.Drawing.Size(15, 15);
             RemoveConstraintButton.Tag = this;
             //RemoveConstraintButton.BackColor = Color.Green;
-            SetButtonPosition();
+            //SetButtonPosition();
         }
         public override bool IsBasic { get => false; }
         public Button RemoveConstraintButton { get; } = new Button();
         protected Point ButtonPreviousPosition { get; set; }
-        protected void SetButtonPosition()
+        protected virtual void SetButtonPosition()
         {
             // Oblicz środek linii
             int centerX = (Start.Position.X + End.Position.X) / 2;

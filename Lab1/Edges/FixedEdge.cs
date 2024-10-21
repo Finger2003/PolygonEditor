@@ -12,6 +12,7 @@ namespace Lab1.Edges
         public FixedEdge(Vertex start, Vertex end) : base(start, end)
         {
             //End.Position
+            SetButtonPosition();
         }
 
         public override void StartChanged()

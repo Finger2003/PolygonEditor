@@ -169,7 +169,16 @@ namespace Lab1
 
         private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            SelectedVertex = Edges.Find(edge => edge.Start.IsHit(e.Location))?.Start;
+            SelectedVertex = null;
+
+            foreach (Edge edge in Edges)
+            {
+                if (edge.TryGetHitOwnedVertex(e.Location, out Vertex? v))
+                {
+                    SelectedVertex = v;
+                    break;
+                }
+            }
             HoldPoint = e.Location;
         }
 
@@ -229,7 +238,7 @@ namespace Lab1
             int rightIndex = index == Edges.Count - 1 ? 0 : index + 1;
 
 
-            if (!SelectedEdge!.IsBasic)                
+            if (!SelectedEdge!.IsBasic)
                 MessageBox.Show("KrawêdŸ mo¿e mieæ tylko jedno ograniczenie. Spróbuj usun¹æ aktualne ograniczenie, a nastêpnie ustawiæ nowe.", "Nieprawid³owa operacja");
             else if (Edges[leftIndex].IsVertical || Edges[rightIndex].IsVertical)
                 MessageBox.Show("Nie mo¿na ustawiæ ograniczenia pionowego dla dwóch s¹siednich krawêdzi");
