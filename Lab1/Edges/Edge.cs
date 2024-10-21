@@ -71,5 +71,18 @@ namespace Lab1.Edges
         }
 
         public virtual void OnMoved() { }
+        public virtual void MoveOwnedVertices(int dx, int dy)
+        {
+            Start.Position = new Point(Start.Position.X + dx, Start.Position.Y + dy);
+        }
+        public virtual bool TryGetHitOwnedVertex(Point p, out Vertex? vertex)
+        {
+            vertex = null;
+
+            if(Start.IsHit(p))
+                vertex = Start;
+
+            return vertex is not null;
+        }
     }
 }

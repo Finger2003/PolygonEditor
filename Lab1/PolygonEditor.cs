@@ -82,6 +82,7 @@ namespace Lab1
                 {
                     //ContextMenuStrip!.Show(drawingPictureBox, e.Location);
                     //drawingPictureBox.ContextMenuStrip = edgesContextMenuStrip;
+                    edgesContextMenuStrip.Items[1].Enabled = SelectedEdge.IsBasic;
                     edgesContextMenuStrip.Show(drawingPictureBox, e.Location);
 
                 }
@@ -128,8 +129,9 @@ namespace Lab1
                 int dy = e.Location.Y - hp.Y;
                 foreach (Edge edge in Edges)
                 {
-                    edge.Start.Position = new Point(edge.Start.Position.X + dx, edge.Start.Position.Y + dy);
+                    //edge.Start.Position = new Point(edge.Start.Position.X + dx, edge.Start.Position.Y + dy);
                     //edge.End.Position = new Point(edge.End.Position.X + dx, edge.End.Position.Y + dy);
+                    edge.MoveOwnedVertices(dx, dy);
                 }
 
                 HoldPoint = e.Location;
@@ -185,7 +187,7 @@ namespace Lab1
                 SelectedEdge.UnsubscribeStart();
                 FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End);
                 fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
-                fixedEdge.RemoveConstraintButton.Parent = this;
+                fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
 
                 int index = Edges.FindIndex(edge => edge == SelectedEdge);
                 Edges[index] = fixedEdge;
@@ -276,12 +278,33 @@ namespace Lab1
 
         private void beToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (SelectedEdge!.IsBasic)
+            {
+                SelectedEdge.UnsubscribeStart();
+                BezierEdge fixedEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
+                fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
+                fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
 
+                int index = Edges.FindIndex(edge => edge == SelectedEdge);
+                Edges[index] = fixedEdge;
+                ResetVertexMovementFlags();
+            }
+            else
+            {
+                MessageBox.Show("KrawêdŸ mo¿e mieæ tylko jedno ograniczenie. Spróbuj usun¹æ aktualne ograniczenie, a nastêpnie ustawiæ nowe.");
+            }
         }
 
         private void dodajWierzcho³ekToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SelectedEdge!.UnsubscribeStart();
+            if (SelectedEdge is SpecialEdge se)
+            {
+                Button button = se.RemoveConstraintButton;
+                button.Click -= removeConstraint!;
+                drawingPictureBox.Controls.Remove(button);
+            }
+
 
             Vertex start = SelectedEdge!.Start;
             Vertex end = SelectedEdge!.End;

@@ -56,6 +56,7 @@ namespace Lab1.Visitors
         public void Visit(BezierEdge edge)
         {
             // draw bezier edge
+            LineDrawer.DrawBezierCurve(edge.Start.Position, edge.End.Position, edge.V1.Position, edge.V2.Position);
         }
     }
 }
