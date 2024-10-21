@@ -9,9 +9,20 @@ namespace Lab1.Edges
         public override bool IsFixed { get => true; }
         public int Length { get; set; }
 
-        public FixedEdge(Vertex start, Vertex end) : base(start, end)
+        public FixedEdge(Vertex start, Vertex end, int length) : base(start, end)
         {
             //End.Position
+            Length = length;
+            int deltaX = End.Position.X - Start.Position.X;
+            int deltaY = End.Position.Y - Start.Position.Y;
+            double lengthRatio = Length / Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+            deltaX = (int)(deltaX * lengthRatio);
+            deltaY = (int)(deltaY * lengthRatio);
+            End.Position = new Point(Start.Position.X + deltaX, Start.Position.Y + deltaY);
+            End.ResetPreviousPosition();
+
+            End.WasMoved = true;
+            End.NeighbourPositionChanged();
             SetButtonPosition();
         }
 

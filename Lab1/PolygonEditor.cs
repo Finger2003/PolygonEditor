@@ -19,6 +19,7 @@ namespace Lab1
         //private IEdgeVisitor[] EdgeDrawingVisitors { get; }
         private ILineDrawer[] LineDrawers { get; }
         Graphics G { get; }
+        private LengthDialogForm LengthDialogForm { get; set; } = new LengthDialogForm();
 
 
         public PolygonEditor()
@@ -191,10 +192,11 @@ namespace Lab1
 
         private void sta³aD³ugoœæToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SelectedEdge!.IsBasic)
+            if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {
+                int length = LengthDialogForm.Length;
                 SelectedEdge.UnsubscribeStart();
-                FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End);
+                FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
                 fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
                 fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
 
