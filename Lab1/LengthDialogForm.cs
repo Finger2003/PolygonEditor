@@ -26,6 +26,10 @@ namespace Lab1
             DialogResult = DialogResult.OK;
             //Close();
         }
+        public void SetStartingValue(int value)
+        {
+            lengthNumericUpDown.Value = value;
+        }
 
     }
 }

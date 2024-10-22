@@ -105,7 +105,8 @@ namespace Lab1
                 {
                     SelectedVertex.Position = e.Location;
                     SelectedVertex.WasMoved = true;
-                    SelectedVertex.NeighbourPositionChanged();
+                    SelectedVertex.InvokeStartPositionChanged();
+                    SelectedVertex.InvokeEndPositionChanged();
                     foreach (Edge edge in Edges)
                         edge.OnMoved();
                     //ResetVertexMovementFlags();
@@ -192,10 +193,16 @@ namespace Lab1
 
         private void sta³aD³ugoœæToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Point p1 = SelectedEdge!.Start.Position;
+            Point p2 = SelectedEdge!.End.Position;
+            int deltaX = p2.X - p1.X;
+            int deltaY = p2.Y - p1.Y;
+            LengthDialogForm.SetStartingValue((int)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+
             if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {
                 int length = LengthDialogForm.Length;
-                SelectedEdge.UnsubscribeStart();
+                SelectedEdge.UnsubscribeVertices();
                 FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
                 fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
                 fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
@@ -227,7 +234,7 @@ namespace Lab1
             //button.Tag = null;
             //edge.RemoveConstraintButton = null;
 
-            edge.UnsubscribeStart();
+            edge.UnsubscribeVertices();
             Edge newEdge = new Edge(edge.Start, edge.End);
             int index = Edges.FindIndex(e => e == edge);
             Edges[index] = newEdge;
@@ -246,7 +253,7 @@ namespace Lab1
                 MessageBox.Show("Nie mo¿na ustawiæ ograniczenia pionowego dla dwóch s¹siednich krawêdzi");
             else if (SelectedEdge!.IsBasic)
             {
-                SelectedEdge.UnsubscribeStart();
+                SelectedEdge.UnsubscribeVertices();
                 VerticalEdge verticalEdge = new VerticalEdge(SelectedEdge!.Start, SelectedEdge!.End);
                 verticalEdge.RemoveConstraintButton.Click += removeConstraint!;
                 verticalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
@@ -273,7 +280,7 @@ namespace Lab1
                 MessageBox.Show("Nie mo¿na ustawiæ ograniczenia poziomego dla dwóch s¹siednich krawêdzi");
             else if (SelectedEdge!.IsBasic)
             {
-                SelectedEdge.UnsubscribeStart();
+                SelectedEdge.UnsubscribeVertices();
                 HorizontalEdge horizontalEdge = new HorizontalEdge(SelectedEdge!.Start, SelectedEdge!.End);
                 horizontalEdge.RemoveConstraintButton.Click += removeConstraint!;
                 horizontalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
@@ -291,7 +298,7 @@ namespace Lab1
         {
             if (SelectedEdge!.IsBasic)
             {
-                SelectedEdge.UnsubscribeStart();
+                SelectedEdge.UnsubscribeVertices();
                 BezierEdge fixedEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
                 fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
                 fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
@@ -308,7 +315,7 @@ namespace Lab1
 
         private void dodajWierzcho³ekToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SelectedEdge!.UnsubscribeStart();
+            SelectedEdge!.UnsubscribeVertices();
             if (SelectedEdge is SpecialEdge se)
             {
                 Button button = se.RemoveConstraintButton;
@@ -337,8 +344,23 @@ namespace Lab1
             {
                 Edge edge1 = Edges[index1];
                 Edge edge2 = Edges[index2];
-                edge1.UnsubscribeStart();
-                edge2.UnsubscribeStart();
+                edge1.UnsubscribeVertices();
+                edge2.UnsubscribeVertices();
+
+                if (edge1 is SpecialEdge se1)
+                {
+                    Button button = se1.RemoveConstraintButton;
+                    button.Click -= removeConstraint!;
+                    drawingPictureBox.Controls.Remove(button);
+                }
+                if (edge2 is SpecialEdge se2)
+                {
+                    Button button = se2.RemoveConstraintButton;
+                    button.Click -= removeConstraint!;
+                    drawingPictureBox.Controls.Remove(button);
+                }
+
+
                 Edge edge = new Edge(edge1.Start, edge2.End);
                 Edges[index1] = edge;
                 Edges.RemoveAt(index2);

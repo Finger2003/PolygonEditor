@@ -12,42 +12,63 @@ namespace Lab1.Edges
         {
             End.Position = new Point(Start.Position.X, End.Position.Y);
             End.WasMoved = true;
-            End.NeighbourPositionChanged();
+            End.InvokeStartPositionChanged();
             SetButtonPosition();
         }
 
         public override void StartChanged()
         {
             //SetButtonPosition();
-            Start.WasChecked = true;
+            //Start.WasChecked = true;
 
             if (Start.Position.X == End.Position.X)
             {
-                if (!End.WasChecked)
-                    End.NeighbourPositionChanged();
+                //if (!End.WasChecked)
+                //    End.NeighbourPositionChanged();
                 return;
             }
             if (End.WasMoved && Start.WasMoved)
                 throw new VertexAlreadyMovedException();
 
 
+            End.Position = new Point(Start.Position.X, End.Position.Y);
+            End.WasMoved = true;
+            End.InvokeStartPositionChanged();
 
-            if (!End.WasMoved /*Start.WasMoved*/)
-            {
-                End.Position = new Point(Start.Position.X, End.Position.Y);
-                End.WasMoved = true;
-                End.NeighbourPositionChanged();
-            }
-            else if (!Start.WasMoved/*End.WasMoved*/)
-            {
-                Start.Position = new Point(End.Position.X, Start.Position.Y);
-                Start.WasMoved = true;
-                //Start.NeighbourPositionChanged();
-            }
+
+            //if (!End.WasMoved /*Start.WasMoved*/)
+            //{
+            //    End.Position = new Point(Start.Position.X, End.Position.Y);
+            //    End.WasMoved = true;
+            //    End.NeighbourPositionChanged();
+            //}
+            //else if (!Start.WasMoved/*End.WasMoved*/)
+            //{
+            //    Start.Position = new Point(End.Position.X, Start.Position.Y);
+            //    Start.WasMoved = true;
+            //    //Start.NeighbourPositionChanged();
+            //}
 
             //End.Position = new Point(Start.Position.X, End.Position.Y);
             //End.WasMoved = true;
             //End.NeighbourPositionChanged();
+        }
+
+        public override void EndChanged()
+        {
+            if (Start.Position.X == End.Position.X)
+            {
+                //if (!End.WasChecked)
+                //    End.NeighbourPositionChanged();
+                return;
+            }
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexAlreadyMovedException();
+
+
+            Start.Position = new Point(End.Position.X, Start.Position.Y);
+            Start.WasMoved = true;
+            Start.InvokeEndPositionChanged();
         }
 
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);

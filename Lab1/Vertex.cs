@@ -12,11 +12,12 @@
                 _position = value;
             }
         }
-        public event Action? PositionChanged;
+        public event Action? StartChanged;
+        public event Action? EndChanged;
         public bool WasMoved { get; set; } = false;
         public bool WasChecked { get; set; } = false;
         private Point PreviousPosition { get; set; }
-        public Point PositionDifference { get => new Point(Position.X - PreviousPosition.X, Position.Y - PreviousPosition.Y); }
+        public Size PositionDifference { get => new Size(Position.X - PreviousPosition.X, Position.Y - PreviousPosition.Y); }
 
         public void ResetPreviousPosition()
         {
@@ -40,9 +41,13 @@
         {
             return (Math.Abs(p.X - Position.X) < 5 && Math.Abs(p.Y - Position.Y) < 5);
         }
-        public void NeighbourPositionChanged()
+        public void InvokeStartPositionChanged()
         {
-            PositionChanged?.Invoke();
+            StartChanged?.Invoke();
+        }
+        public void InvokeEndPositionChanged()
+        {
+            EndChanged?.Invoke();
         }
     }
 }

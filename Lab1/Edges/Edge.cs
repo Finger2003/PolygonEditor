@@ -13,17 +13,19 @@ namespace Lab1.Edges
             //    throw new VertexAlreadyMovedException();
 
             //Start.WasMoved = true;
-            Start.WasChecked = true;
+            
+            //Start.WasChecked = true;
 
-            if (!End.WasChecked)
-                End.NeighbourPositionChanged();
+            //if (!End.WasChecked)
+            //    End.NeighbourPositionChanged();
         }
+        public virtual void EndChanged() { }
 
         public Edge(Vertex start, Vertex end)
         {
             Start = start;
             End = end;
-            SubscribeStart();
+            SubscribeVertices();
         }
 
 
@@ -55,13 +57,15 @@ namespace Lab1.Edges
             return numerator / denominator;
         }
 
-        public void UnsubscribeStart()
+        public void UnsubscribeVertices()
         {
-            Start.PositionChanged -= StartChanged;
+            Start.StartChanged -= StartChanged;
+            End.EndChanged -= EndChanged;
         }
-        public void SubscribeStart()
+        public void SubscribeVertices()
         {
-            Start.PositionChanged += StartChanged;
+            Start.StartChanged += StartChanged;
+            End.EndChanged += EndChanged;
         }
         public virtual void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
 
