@@ -10,7 +10,8 @@ namespace Lab1.Edges
 
         public HorizontalEdge(Vertex start, Vertex end) : base(start, end)
         {
-            End.Position = new Point(End.Position.X, Start.Position.Y);
+            //End.Position = new Point(End.Position.X, Start.Position.Y);
+            End.SetPosition(End.X, Start.Y);
             End.WasMoved = true;
             End.InvokeStartPositionChanged();
             SetButtonPosition();
@@ -32,7 +33,8 @@ namespace Lab1.Edges
                 throw new VertexAlreadyMovedException();
 
 
-            End.Position = new Point(End.Position.X, Start.Position.Y);
+            //End.Position = new Point(End.Position.X, Start.Position.Y);
+            End.SetPosition(End.X, Start.Y);
             End.WasMoved = true;
             End.InvokeStartPositionChanged();
 
@@ -67,7 +69,8 @@ namespace Lab1.Edges
                 throw new VertexAlreadyMovedException();
 
 
-            Start.Position = new Point(Start.Position.X, End.Position.Y);
+            //Start.Position = new Point(Start.Position.X, End.Position.Y);
+            Start.SetPosition(Start.X, End.Y);
             Start.WasMoved = true;
             Start.InvokeStartPositionChanged();
         }

@@ -1,9 +1,11 @@
-﻿namespace Lab1
+﻿using System.Numerics;
+
+namespace Lab1
 {
     public class Vertex
     {
-        private Point _position;
-        public Point Position
+        private Vector2 _position;
+        public Vector2 Position
         {
             get => _position;
             set
@@ -12,12 +14,16 @@
                 _position = value;
             }
         }
+
+        public float X { get => Position.X; }
+        public float Y { get => Position.Y; }
+
         public event Action? StartChanged;
         public event Action? EndChanged;
         public bool WasMoved { get; set; } = false;
         public bool WasChecked { get; set; } = false;
-        private Point PreviousPosition { get; set; }
-        public Size PositionDifference { get => new Size(Position.X - PreviousPosition.X, Position.Y - PreviousPosition.Y); }
+        private Vector2 PreviousPosition { get; set; }
+        public Vector2 PositionDifference { get => Position - PreviousPosition; }
 
         public void ResetPreviousPosition()
         {
@@ -30,11 +36,30 @@
 
         public Vertex(int x, int y)
         {
-            Position = new Point(x, y);
+            Position = new Vector2(x, y);
         }
-        public Vertex(Point p)
+        public Vertex(float x, float y)
         {
-            Position = p;
+            Position = new Vector2(x, y);
+        }
+        public Vertex(Point p) : this(p.X, p.Y) { }
+
+        public void Move(Vector2 delta)
+        {
+            Position += delta;
+        }
+        public void Move(float dx, float dy)
+        {
+            Position += new Vector2(dx, dy);
+        }
+
+        public void SetPosition(float x, float y)
+        {
+            Position = new Vector2(x, y);
+        }
+        public void SetPosition(Point p)
+        {
+            SetPosition(p.X, p.Y);
         }
 
         public bool IsHit(Point p)

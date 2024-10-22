@@ -2,6 +2,7 @@ using Lab1.Edges;
 using Lab1.Exceptions;
 using Lab1.LineDrawers;
 using Lab1.Visitors;
+using System.Numerics;
 
 namespace Lab1
 {
@@ -25,6 +26,7 @@ namespace Lab1
         public PolygonEditor()
         {
             InitializeComponent();
+
             //ContextMenuStrip = edgesContextMenuStrip;
             Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
             drawingPictureBox.Image = Bitmap;
@@ -96,14 +98,14 @@ namespace Lab1
         {
             if (IsDrawing)
             {
-                DrawnEdge!.End.Position = e.Location;
+                DrawnEdge!.End.SetPosition(e.Location);
                 //drawingPictureBox.Invalidate();
             }
             if (SelectedVertex is not null && e.Button == MouseButtons.Left)
             {
                 try
                 {
-                    SelectedVertex.Position = e.Location;
+                    SelectedVertex.SetPosition(e.Location);
                     SelectedVertex.WasMoved = true;
                     SelectedVertex.InvokeStartPositionChanged();
                     SelectedVertex.InvokeEndPositionChanged();
@@ -193,11 +195,11 @@ namespace Lab1
 
         private void sta³aD³ugoœæToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point p1 = SelectedEdge!.Start.Position;
-            Point p2 = SelectedEdge!.End.Position;
-            int deltaX = p2.X - p1.X;
-            int deltaY = p2.Y - p1.Y;
-            LengthDialogForm.SetStartingValue((int)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+            //Point p1 = SelectedEdge!.Start.Position;
+            //Point p2 = SelectedEdge!.End.Position;
+            //int deltaX = p2.X - p1.X;
+            //int deltaY = p2.Y - p1.Y;
+            LengthDialogForm.SetStartingValue((int) Vector2.Distance(SelectedEdge!.Start.Position, SelectedEdge!.End.Position));
 
             if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {

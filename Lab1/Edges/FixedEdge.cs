@@ -1,5 +1,6 @@
 ﻿using Lab1.Exceptions;
 using Lab1.Visitors;
+using System.Numerics;
 
 namespace Lab1.Edges
 {
@@ -8,18 +9,18 @@ namespace Lab1.Edges
         //public override bool IsBasic { get => false; }
         public override bool IsFixed { get => true; }
         public int Length { get; set; }
-        public int RealSquaredLength { get; private set; }
+        public double RealSquaredLength { get; private set; }
 
         public FixedEdge(Vertex start, Vertex end, int length) : base(start, end)
         {
             //End.Position
             Length = length;
-            int deltaX = End.Position.X - Start.Position.X;
-            int deltaY = End.Position.Y - Start.Position.Y;
+            double deltaX = End.Position.X - Start.Position.X;
+            double deltaY = End.Position.Y - Start.Position.Y;
             double lengthRatio = Length / Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-            deltaX = (int)(deltaX * lengthRatio);
-            deltaY = (int)(deltaY * lengthRatio);
-            End.Position = new Point(Start.Position.X + deltaX, Start.Position.Y + deltaY);
+            deltaX = deltaX * lengthRatio;
+            deltaY = deltaY * lengthRatio;
+            End.SetPosition((float)(Start.Position.X + deltaX), (float)(Start.Position.Y + deltaY));
             //End.ResetPreviousPosition();
 
             RealSquaredLength = deltaX * deltaX + deltaY * deltaY;
@@ -40,10 +41,11 @@ namespace Lab1.Edges
                 throw new VertexAlreadyMovedException();
 
             //Start.WasChecked = true;
-            Size positionDifference;
 
-            positionDifference = Start.PositionDifference;
-            End.Position += positionDifference;
+            //Vector2 positionDifference;
+            //positionDifference = Start.PositionDifference;
+
+            End.Move(Start.PositionDifference);
             //End.Position = new Point(End.Position.X + positionDifference.X, End.Position.Y + positionDifference.Y);
             End.WasMoved = true;
             End.InvokeStartPositionChanged();
@@ -77,20 +79,23 @@ namespace Lab1.Edges
                 throw new VertexAlreadyMovedException();
 
             //Start.WasChecked = true;
-            Size positionDifference;
 
-            positionDifference = End.PositionDifference;
-            Start.Position += positionDifference;
+            //Size positionDifference;
+
+            //positionDifference = End.PositionDifference;
+
+            Start.Move(End.PositionDifference);
             //End.Position = new Point(End.Position.X + positionDifference.X, End.Position.Y + positionDifference.Y);
             Start.WasMoved = true;
             Start.InvokeEndPositionChanged();
         }
 
-        private int GetSquaredLength()
+        private float GetSquaredLength()
         {
-            int deltaX = End.Position.X - Start.Position.X;
-            int deltaY = End.Position.Y - Start.Position.Y;
-            return deltaX * deltaX + deltaY * deltaY;
+            //int deltaX = End.Position.X - Start.Position.X;
+            //int deltaY = End.Position.Y - Start.Position.Y;
+            //return deltaX * deltaX + deltaY * deltaY;
+            return Vector2.DistanceSquared(Start.Position, End.Position);
         }
 
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);

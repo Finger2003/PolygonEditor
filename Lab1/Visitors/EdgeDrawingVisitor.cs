@@ -27,15 +27,19 @@ namespace Lab1.Visitors
             //g.DrawLine(Pens.Black, startPoint, e.Location);
             //DrawStraightLine(edge.Start.Position, edge.End.Position);
             //drawingPictureBox.Image = Bitmap;
-            LineDrawer.DrawStraightLine(edge.Start.Position, edge.End.Position);
+            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
+            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            LineDrawer.DrawStraightLine(start, end);
         }
 
         public void Visit(HorizontalEdge edge)
         {
             // draw horizontal edge
             //DrawStraightLine(edge.Start.Position, edge.End.Position);
-            LineDrawer.DrawHorizontalLine(edge.Start.Position, edge.End.Position);
-            edge.RemoveConstraintButton.BringToFront();
+            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
+            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            LineDrawer.DrawHorizontalLine(start, end);
+            //edge.RemoveConstraintButton.BringToFront();
 
         }
 
@@ -43,20 +47,28 @@ namespace Lab1.Visitors
         {
             // draw vertical edge
             //DrawStraightLine(edge.Start.Position, edge.End.Position);
-            LineDrawer.DrawVerticalLine(edge.Start.Position, edge.End.Position);
+            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
+            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            LineDrawer.DrawVerticalLine(start, end);
         }
 
         public void Visit(FixedEdge edge)
         {
             // draw fixed edge
             //DrawStraightLine(edge.Start.Position, edge.End.Position);
-            LineDrawer.DrawStraightLine(edge.Start.Position, edge.End.Position);
+            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
+            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            LineDrawer.DrawStraightLine(start, end);
         }
 
         public void Visit(BezierEdge edge)
         {
             // draw bezier edge
-            LineDrawer.DrawBezierCurve(edge.Start.Position, edge.End.Position, edge.V1.Position, edge.V2.Position);
+            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
+            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            Point v1 = new Point((int)edge.V1.X, (int)edge.V1.Y);
+            Point v2 = new Point((int)edge.V2.X, (int)edge.V2.Y);
+            LineDrawer.DrawBezierCurve(start, end, v1, v2);
         }
     }
 }

@@ -22,26 +22,26 @@ namespace Lab1.Edges
         protected virtual void SetButtonPosition()
         {
             // Oblicz środek linii
-            int centerX = (Start.Position.X + End.Position.X) / 2;
-            int centerY = (Start.Position.Y + End.Position.Y) / 2;
+            double centerX = (Start.Position.X + End.Position.X) / 2;
+            double centerY = (Start.Position.Y + End.Position.Y) / 2;
 
             // Oblicz wektor linii (różnica między Start i End)
-            int deltaX = End.Position.X - Start.Position.X;
-            int deltaY = End.Position.Y - Start.Position.Y;
+            double deltaX = End.Position.X - Start.Position.X;
+            double deltaY = End.Position.Y - Start.Position.Y;
 
             // Oblicz wektor prostopadły do linii (wymiana współrzędnych i zmiana znaku jednej z nich)
-            int perpendicularX = -deltaY;
-            int perpendicularY = deltaX;
+            double perpendicularX = -deltaY;
+            double perpendicularY = deltaX;
 
             // Normalizuj wektor prostopadły, aby miał długość 10 pikseli
             double length = Math.Sqrt(perpendicularX * perpendicularX + perpendicularY * perpendicularY);
             double unitX = perpendicularX / length;
             double unitY = perpendicularY / length;
-            int offsetX = (int)(unitX * 10);  // Przesunięcie w poziomie (nad linią)
-            int offsetY = (int)(unitY * 10);  // Przesunięcie w pionie (nad linią)
+            double offsetX = unitX * 10;  // Przesunięcie w poziomie (nad linią)
+            double offsetY = unitY * 10;  // Przesunięcie w pionie (nad linią)
 
             // Ustawienie pozycji przycisku z przesunięciem o 10 pikseli w górę
-            RemoveConstraintButton.Location = new Point(centerX + offsetX - RemoveConstraintButton.Width/2, centerY + offsetY - RemoveConstraintButton.Height/2);
+            RemoveConstraintButton.Location = new Point((int)(centerX + offsetX - RemoveConstraintButton.Width/2), (int)(centerY + offsetY - RemoveConstraintButton.Height / 2));
 
             ButtonPreviousPosition = RemoveConstraintButton.Location;
         }
