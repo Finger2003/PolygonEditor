@@ -23,6 +23,10 @@ namespace Lab1
         private LengthDialogForm LengthDialogForm { get; set; } = new LengthDialogForm();
 
 
+        private int SelectedVertexIndex { get; set; } = -1;
+        private int SelectedEdgeIndex { get; set; } = -1;
+
+
         public PolygonEditor()
         {
             InitializeComponent();
@@ -73,16 +77,22 @@ namespace Lab1
             //Edge? edge = Edges.Find(edge => edge.IsHit(e.Location));
             else if (e.Button == MouseButtons.Right && !IsDrawing)
             {
-                SelectedVertex = Edges.Find(edge => edge.Start.IsHit(e.Location))?.Start;
-                if (SelectedVertex is not null)
+                SelectedVertex = null;
+                SelectedVertexIndex = Edges.FindIndex(edge => edge.Start.IsHit(e.Location));
+                //SelectedVertex = Edges.Find(edge => edge.Start.IsHit(e.Location))?.Start;
+                if (SelectedVertexIndex >= 0)
                 {
+                    SelectedVertex = Edges[SelectedVertexIndex].Start;
                     verticesContextMenuStrip.Show(drawingPictureBox, e.Location);
                     return;
                 }
 
-                SelectedEdge = Edges.Find(edge => edge.IsHit(e.Location));
-                if (SelectedEdge is not null)
+                SelectedEdge = null;
+                SelectedEdgeIndex = Edges.FindIndex(edge => edge.IsHit(e.Location));
+                //SelectedEdge = Edges.Find(edge => edge.IsHit(e.Location));
+                if (SelectedEdgeIndex >= 0)
                 {
+                    SelectedEdge = Edges[SelectedEdgeIndex];
                     //ContextMenuStrip!.Show(drawingPictureBox, e.Location);
                     //drawingPictureBox.ContextMenuStrip = edgesContextMenuStrip;
                     edgesContextMenuStrip.Items[1].Enabled = SelectedEdge.IsBasic;
@@ -127,7 +137,7 @@ namespace Lab1
                     ResetVertexMovementFlags();
                 }
             }
-            else if (HoldPoint is Point hp && e.Button == MouseButtons.Left)
+            else if (HoldPoint is Point hp && e.Button == MouseButtons.Right)
             {
                 int dx = e.Location.X - hp.X;
                 int dy = e.Location.Y - hp.Y;
@@ -173,12 +183,14 @@ namespace Lab1
 
         private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
         {
+            SelectedVertexIndex = -1;
             SelectedVertex = null;
 
-            foreach (Edge edge in Edges)
+            foreach ((Edge edge, int index) in Edges.Select((edge, index) => (edge, index)))
             {
                 if (edge.TryGetHitOwnedVertex(e.Location, out Vertex? v))
                 {
+                    SelectedVertexIndex = index;
                     SelectedVertex = v;
                     break;
                 }
@@ -189,7 +201,10 @@ namespace Lab1
         private void drawingPictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
+            {
+                SelectedEdgeIndex = -1;
                 SelectedVertex = null;
+            }
             HoldPoint = null;
         }
 
@@ -333,14 +348,15 @@ namespace Lab1
             Edge edge1 = new Edge(start, middle);
             Edge edge2 = new Edge(middle, end);
 
-            int index = Edges.FindIndex(edge => edge == SelectedEdge);
-            Edges.RemoveAt(index);
-            Edges.InsertRange(index, [edge1, edge2]);
+            //int index = Edges.FindIndex(edge => edge == SelectedEdge);
+            Edges.RemoveAt(SelectedEdgeIndex);
+            Edges.InsertRange(SelectedEdgeIndex, [edge1, edge2]);
         }
 
         private void usuñWierczho³ekToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
+            //int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
+            int index1 = SelectedEdgeIndex;
             int index2 = (index1 + 1) % Edges.Count;
             if (index1 != -1)
             {
