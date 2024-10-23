@@ -199,7 +199,7 @@ namespace Lab1
             //Point p2 = SelectedEdge!.End.Position;
             //int deltaX = p2.X - p1.X;
             //int deltaY = p2.Y - p1.Y;
-            LengthDialogForm.SetStartingValue((int) Vector2.Distance(SelectedEdge!.Start.Position, SelectedEdge!.End.Position));
+            LengthDialogForm.SetStartingValue((int) SelectedEdge!.Length);
 
             if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {

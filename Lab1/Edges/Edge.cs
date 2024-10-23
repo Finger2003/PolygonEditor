@@ -7,6 +7,8 @@ namespace Lab1.Edges
         public virtual Vertex Start { get; set; }
         public virtual Vertex End { get; set; }
 
+        public float Length => Vertex.Distance(Start, End);
+
         public virtual void StartChanged()
         {
             //if(Start.WasMoved)

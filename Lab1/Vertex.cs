@@ -66,6 +66,10 @@ namespace Lab1
         {
             return (Math.Abs(p.X - Position.X) < 5 && Math.Abs(p.Y - Position.Y) < 5);
         }
+        public static float Distance(Vertex v1, Vertex v2)
+        {
+            return Vector2.Distance(v1.Position, v2.Position);
+        }
         public void InvokeStartPositionChanged()
         {
             StartChanged?.Invoke();
