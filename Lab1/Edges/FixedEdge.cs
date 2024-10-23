@@ -17,15 +17,19 @@ namespace Lab1.Edges
             //Length = length;
             double deltaX = End.Position.X - Start.Position.X;
             double deltaY = End.Position.Y - Start.Position.Y;
-            double lengthRatio = Length / Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-            deltaX = deltaX * lengthRatio;
-            deltaY = deltaY * lengthRatio;
-            End.SetPosition((float)(Start.Position.X + deltaX), (float)(Start.Position.Y + deltaY));
+            //int currentLength = Length;
+            if ((int)Length != length)
+            {
+                double lengthRatio = length / Length;
+                deltaX *= lengthRatio;
+                deltaY *= lengthRatio;
+                End.SetPosition((float)(Start.Position.X + deltaX), (float)(Start.Position.Y + deltaY));
+                End.WasMoved = true;
+            }
             //End.ResetPreviousPosition();
 
-            RealSquaredLength = deltaX * deltaX + deltaY * deltaY;
+            //RealSquaredLength = deltaX * deltaX + deltaY * deltaY;
 
-            End.WasMoved = true;
             //End.InvokeStartPositionChanged();
             SetButtonPosition();
         }
