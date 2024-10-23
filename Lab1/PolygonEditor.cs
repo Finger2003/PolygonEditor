@@ -329,21 +329,33 @@ namespace Lab1
                 //int selectedIndex = SelectedEdgeIndex;
                 Edges[selectedIndex] = verticalEdge;
 
-                int index = selectedIndex + 1;
-                int i = 0;
-                do
+                try
                 {
+                    int index = selectedIndex + 1;
+                    int i = 0;
+                    do
+                    {
 
-                } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
 
-                //i = index - 1;
-                index = selectedIndex - 1;
-                i = 0;
-                do
+                    //i = index - 1;
+                    index = selectedIndex - 1;
+                    i = 0;
+                    do
+                    {
+                        if (index < 0)
+                            index = Edges.Count - 1;
+                    } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                }
+                catch (VertexCannotBeMoved)
                 {
-                    if (index < 0)
-                        index = Edges.Count - 1;
-                } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                    foreach (Edge edge in Edges)
+                    {
+                        edge.Restore();
+                    }
+                    Edges[selectedIndex] = SelectedEdge!;
+                    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
+                }
 
                 //Edges[index] = verticalEdge;
                 ResetVertexMovementFlags();
