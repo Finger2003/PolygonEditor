@@ -23,11 +23,22 @@ namespace Lab1.Edges
         }
         public virtual void EndChanged() { }
 
+
+        public virtual bool CorrectEndPosition()
+        {
+            return false;
+        }
+
+        public virtual bool CorrectStartPosition()
+        {
+            return false;
+        }
+
         public Edge(Vertex start, Vertex end)
         {
             Start = start;
             End = end;
-            SubscribeVertices();
+            //SubscribeVertices();
         }
 
 

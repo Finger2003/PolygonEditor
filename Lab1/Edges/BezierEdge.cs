@@ -64,6 +64,16 @@ namespace Lab1.Edges
             ButtonPreviousPosition = RemoveConstraintButton.Location;
         }
 
+        public override bool CorrectEndPosition()
+        {
+            return false;
+        }
+
+        public override bool CorrectStartPosition()
+        {
+            return false;
+        }
+
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 }

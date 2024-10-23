@@ -13,7 +13,7 @@ namespace Lab1.Edges
             //End.Position = new Point(End.Position.X, Start.Position.Y);
             End.SetPosition(End.X, Start.Y);
             End.WasMoved = true;
-            End.InvokeStartPositionChanged();
+            //End.InvokeStartPositionChanged();
             SetButtonPosition();
         }
 
@@ -30,7 +30,7 @@ namespace Lab1.Edges
             }
 
             if (End.WasMoved && Start.WasMoved)
-                throw new VertexAlreadyMovedException();
+                throw new VertexCannotBeMoved();
 
 
             //End.Position = new Point(End.Position.X, Start.Position.Y);
@@ -66,13 +66,46 @@ namespace Lab1.Edges
             }
 
             if (End.WasMoved && Start.WasMoved)
-                throw new VertexAlreadyMovedException();
+                throw new VertexCannotBeMoved();
 
 
             //Start.Position = new Point(Start.Position.X, End.Position.Y);
             Start.SetPosition(Start.X, End.Y);
             Start.WasMoved = true;
             Start.InvokeStartPositionChanged();
+        }
+
+
+        public override bool CorrectEndPosition()
+        {
+            if (Start.Position.Y == End.Position.Y)
+            {
+                return false;
+            }
+
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexCannotBeMoved();
+
+
+            End.SetPosition(End.X, Start.Y);
+            End.WasMoved = true;
+            return true;
+        }
+
+        public override bool CorrectStartPosition()
+        {
+            if (Start.Position.Y == End.Position.Y)
+            {
+                return false;
+            }
+
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexCannotBeMoved();
+
+
+            Start.SetPosition(Start.X, End.Y);
+            Start.WasMoved = true;
+            return true;
         }
 
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);

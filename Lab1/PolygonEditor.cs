@@ -117,14 +117,34 @@ namespace Lab1
                 {
                     SelectedVertex.SetPosition(e.Location);
                     SelectedVertex.WasMoved = true;
-                    SelectedVertex.InvokeStartPositionChanged();
-                    SelectedVertex.InvokeEndPositionChanged();
+                    int selectedIndex = SelectedVertexIndex;
+                    int index = selectedIndex;
+                    int i = 0;
+                    do
+                    {
+
+                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+
+                    //i = index - 1;
+                    index = selectedIndex - 1;
+                    i = 0;
+                    do
+                    {
+                        if(index < 0)
+                            index = Edges.Count - 1;
+                    } while(Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+
+
+
+                    //SelectedVertex.InvokeStartPositionChanged();
+                    //SelectedVertex.InvokeEndPositionChanged();
                     foreach (Edge edge in Edges)
                         edge.OnMoved();
                     //ResetVertexMovementFlags();
                     //drawingPictureBox.Invalidate();
                 }
-                catch (VertexAlreadyMovedException)
+                catch (VertexCannotBeMoved)
                 {
                     foreach (Edge edge in Edges)
                         edge.Restore();
@@ -219,13 +239,31 @@ namespace Lab1
             if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {
                 int length = LengthDialogForm.Length;
-                SelectedEdge.UnsubscribeVertices();
+                //SelectedEdge.UnsubscribeVertices();
                 FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
                 fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
                 fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
 
-                int index = Edges.FindIndex(edge => edge == SelectedEdge);
-                Edges[index] = fixedEdge;
+                //int index = Edges.FindIndex(edge => edge == SelectedEdge);
+                int selectedIndex = SelectedEdgeIndex;
+                Edges[selectedIndex] = fixedEdge;
+
+                int index = selectedIndex + 1;
+                int i = 0;
+                do
+                {
+
+                } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+
+                //i = index - 1;
+                index = selectedIndex - 1;
+                i = 0;
+                do
+                {
+                    if (index < 0)
+                        index = Edges.Count - 1;
+                } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
                 ResetVertexMovementFlags();
             }
             else
@@ -259,9 +297,10 @@ namespace Lab1
 
         private void pionowaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int index = Edges.FindIndex(edge => edge == SelectedEdge);
-            int leftIndex = index == 0 ? Edges.Count - 1 : index - 1;
-            int rightIndex = index == Edges.Count - 1 ? 0 : index + 1;
+            //int index = Edges.FindIndex(edge => edge == SelectedEdge);
+            int selectedIndex = SelectedEdgeIndex;
+            int leftIndex = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
+            int rightIndex = selectedIndex == Edges.Count - 1 ? 0 : selectedIndex + 1;
 
 
             if (!SelectedEdge!.IsBasic)
@@ -270,12 +309,32 @@ namespace Lab1
                 MessageBox.Show("Nie mo¿na ustawiæ ograniczenia pionowego dla dwóch s¹siednich krawêdzi");
             else if (SelectedEdge!.IsBasic)
             {
-                SelectedEdge.UnsubscribeVertices();
+                //SelectedEdge.UnsubscribeVertices();
                 VerticalEdge verticalEdge = new VerticalEdge(SelectedEdge!.Start, SelectedEdge!.End);
                 verticalEdge.RemoveConstraintButton.Click += removeConstraint!;
                 verticalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
 
-                Edges[index] = verticalEdge;
+
+                //int selectedIndex = SelectedEdgeIndex;
+                Edges[selectedIndex] = verticalEdge;
+
+                int index = selectedIndex + 1;
+                int i = 0;
+                do
+                {
+
+                } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+
+                //i = index - 1;
+                index = selectedIndex - 1;
+                i = 0;
+                do
+                {
+                    if (index < 0)
+                        index = Edges.Count - 1;
+                } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+                //Edges[index] = verticalEdge;
                 ResetVertexMovementFlags();
             }
             //else
@@ -286,9 +345,9 @@ namespace Lab1
 
         private void poziomaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int index = Edges.FindIndex(edge => edge == SelectedEdge);
-            int leftIndex = index == 0 ? Edges.Count - 1 : index - 1;
-            int rightIndex = index == Edges.Count - 1 ? 0 : index + 1;
+            int selectedIndex = Edges.FindIndex(edge => edge == SelectedEdge);
+            int leftIndex = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
+            int rightIndex = selectedIndex == Edges.Count - 1 ? 0 : selectedIndex + 1;
 
 
             if (!SelectedEdge!.IsBasic)
@@ -302,7 +361,28 @@ namespace Lab1
                 horizontalEdge.RemoveConstraintButton.Click += removeConstraint!;
                 horizontalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 //int index = Edges.FindIndex(edge => edge == SelectedEdge);
-                Edges[index] = horizontalEdge;
+
+                Edges[selectedIndex] = horizontalEdge;
+
+                int index = selectedIndex + 1;
+                int i = 0;
+                do
+                {
+
+                } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+
+                //i = index - 1;
+                index = selectedIndex - 1;
+                i = 0;
+                do
+                {
+                    if (index < 0)
+                        index = Edges.Count - 1;
+                } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+
+
+                //Edges[index] = horizontalEdge;
                 ResetVertexMovementFlags();
             }
             //else
@@ -320,8 +400,30 @@ namespace Lab1
                 fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
                 fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
 
-                int index = Edges.FindIndex(edge => edge == SelectedEdge);
-                Edges[index] = fixedEdge;
+
+
+                int selectedIndex = SelectedEdgeIndex;
+                Edges[selectedIndex] = fixedEdge;
+
+                int index = selectedIndex + 1;
+                int i = 0;
+                do
+                {
+
+                } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+
+                //i = index - 1;
+                index = selectedIndex - 1;
+                i = 0;
+                do
+                {
+                    if (index < 0)
+                        index = Edges.Count - 1;
+                } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+
+                //int index = Edges.FindIndex(edge => edge == SelectedEdge);
+                //Edges[index] = fixedEdge;
                 ResetVertexMovementFlags();
             }
             else
@@ -343,7 +445,7 @@ namespace Lab1
 
             Vertex start = SelectedEdge!.Start;
             Vertex end = SelectedEdge!.End;
-            Vertex middle = new Vertex((start.Position.X + end.Position.X) / 2, (start.Position.Y + end.Position.Y) / 2);
+            Vertex middle = new Vertex((start.X + end.X) / 2, (start.Y + end.Y) / 2);
 
             Edge edge1 = new Edge(start, middle);
             Edge edge2 = new Edge(middle, end);
@@ -362,8 +464,8 @@ namespace Lab1
             {
                 Edge edge1 = Edges[index1];
                 Edge edge2 = Edges[index2];
-                edge1.UnsubscribeVertices();
-                edge2.UnsubscribeVertices();
+                //edge1.UnsubscribeVertices();
+                //edge2.UnsubscribeVertices();
 
                 if (edge1 is SpecialEdge se1)
                 {

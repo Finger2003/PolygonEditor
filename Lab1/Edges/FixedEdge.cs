@@ -8,13 +8,13 @@ namespace Lab1.Edges
     {
         //public override bool IsBasic { get => false; }
         public override bool IsFixed { get => true; }
-        public int Length { get; set; }
+        //public int Length { get; set; }
         public double RealSquaredLength { get; private set; }
 
         public FixedEdge(Vertex start, Vertex end, int length) : base(start, end)
         {
             //End.Position
-            Length = length;
+            //Length = length;
             double deltaX = End.Position.X - Start.Position.X;
             double deltaY = End.Position.Y - Start.Position.Y;
             double lengthRatio = Length / Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -26,7 +26,7 @@ namespace Lab1.Edges
             RealSquaredLength = deltaX * deltaX + deltaY * deltaY;
 
             End.WasMoved = true;
-            End.InvokeStartPositionChanged();
+            //End.InvokeStartPositionChanged();
             SetButtonPosition();
         }
 
@@ -38,7 +38,7 @@ namespace Lab1.Edges
                 return;
 
             if (End.WasMoved && Start.WasMoved)
-                throw new VertexAlreadyMovedException();
+                throw new VertexCannotBeMoved();
 
             //Start.WasChecked = true;
 
@@ -76,7 +76,7 @@ namespace Lab1.Edges
                 return;
 
             if (End.WasMoved && Start.WasMoved)
-                throw new VertexAlreadyMovedException();
+                throw new VertexCannotBeMoved();
 
             //Start.WasChecked = true;
 
@@ -89,6 +89,29 @@ namespace Lab1.Edges
             Start.WasMoved = true;
             Start.InvokeEndPositionChanged();
         }
+
+
+        public override bool CorrectEndPosition()
+        {
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexCannotBeMoved();
+
+            End.Move(Start.PositionDifference);
+            End.WasMoved = true;
+            return true;
+        }
+
+        public override bool CorrectStartPosition()
+        {
+            if (End.WasMoved && Start.WasMoved)
+                throw new VertexCannotBeMoved();
+
+
+            Start.Move(End.PositionDifference);
+            Start.WasMoved = true;
+            return true;
+        }
+
 
         private float GetSquaredLength()
         {
