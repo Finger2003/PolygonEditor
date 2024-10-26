@@ -33,7 +33,7 @@ namespace Lab1.Edges
             //RealSquaredLength = deltaX * deltaX + deltaY * deltaY;
 
             //End.InvokeStartPositionChanged();
-            SetButtonPosition();
+            //SetButtonPosition();
         }
 
         public override void CorrectStartPositionBasically()

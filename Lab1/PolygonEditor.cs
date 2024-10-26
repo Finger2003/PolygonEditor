@@ -98,7 +98,8 @@ namespace Lab1
                     SelectedEdge = Edges[SelectedEdgeIndex];
                     //ContextMenuStrip!.Show(drawingPictureBox, e.Location);
                     //drawingPictureBox.ContextMenuStrip = edgesContextMenuStrip;
-                    dodajOgraniczenieToolStripMenuItem.Enabled = SelectedEdge.IsBasic;
+                    addConstraintToolStripMenuItem.Enabled = SelectedEdge.IsBasic;
+                    removeConstraintToolStripMenuItem.Enabled = !SelectedEdge.IsBasic;
                     //edgesContextMenuStrip.Items[1].Enabled = SelectedEdge.IsBasic;
                     edgesContextMenuStrip.Show(drawingPictureBox, e.Location);
 
@@ -172,8 +173,8 @@ namespace Lab1
 
                     //SelectedVertex.InvokeStartPositionChanged();
                     //SelectedVertex.InvokeEndPositionChanged();
-                    foreach (Edge edge in Edges)
-                        edge.OnMoved();
+                    //foreach (Edge edge in Edges)
+                    //    edge.OnMoved();
                     //ResetVertexMovementFlags();
                     //drawingPictureBox.Invalidate();
                 }
@@ -213,8 +214,8 @@ namespace Lab1
 
                 HoldPoint = e.Location;
 
-                foreach (Edge edge in Edges)
-                    edge.OnMoved();
+                //foreach (Edge edge in Edges)
+                //    edge.OnMoved();
             }
             drawingPictureBox.Invalidate();
 
@@ -336,11 +337,11 @@ namespace Lab1
                     //    if (index < 0)
                     //        index = Edges.Count - 1;
                     //} while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
-                    
+
                     correctEdges(selectedIndex + 1, selectedIndex - 1);
 
-                    fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
-                    fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+                    //fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    //fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -369,20 +370,20 @@ namespace Lab1
                 //edge.Start.WasChecked = false;
             }
         }
-        private void removeConstraint(object sender, EventArgs e)
-        {
-            Button button = (Button)sender;
-            button.Click -= removeConstraint!;
-            drawingPictureBox.Controls.Remove(button);
-            SpecialEdge edge = (SpecialEdge)button.Tag!;
-            //button.Tag = null;
-            //edge.RemoveConstraintButton = null;
+        //private void removeConstraint(object sender, EventArgs e)
+        //{
+        //    Button button = (Button)sender;
+        //    button.Click -= removeConstraint!;
+        //    drawingPictureBox.Controls.Remove(button);
+        //    SpecialEdge edge = (SpecialEdge)button.Tag!;
+        //    //button.Tag = null;
+        //    //edge.RemoveConstraintButton = null;
 
-            //edge.UnsubscribeVertices();
-            Edge newEdge = new Edge(edge.Start, edge.End);
-            int index = Edges.FindIndex(e => e == edge);
-            Edges[index] = newEdge;
-        }
+        //    //edge.UnsubscribeVertices();
+        //    Edge newEdge = new Edge(edge.Start, edge.End);
+        //    int index = Edges.FindIndex(e => e == edge);
+        //    Edges[index] = newEdge;
+        //}
 
         private void pionowaToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -427,8 +428,8 @@ namespace Lab1
 
                     correctEdges(selectedIndex + 1, selectedIndex - 1);
 
-                    verticalEdge.RemoveConstraintButton.Click += removeConstraint!;
-                    verticalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+                    //verticalEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    //verticalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -489,8 +490,8 @@ namespace Lab1
 
                     correctEdges(selectedIndex + 1, selectedIndex - 1);
 
-                    horizontalEdge.RemoveConstraintButton.Click += removeConstraint!;
-                    horizontalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+                    //horizontalEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    //horizontalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -543,8 +544,8 @@ namespace Lab1
 
                     correctEdges(selectedIndex + 1, selectedIndex - 1);
 
-                    fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
-                    fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+                    //fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    //fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -570,12 +571,12 @@ namespace Lab1
         private void dodajWierzcho³ekToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SelectedEdge!.UnsubscribeVertices();
-            if (SelectedEdge is SpecialEdge se)
-            {
-                Button button = se.RemoveConstraintButton;
-                button.Click -= removeConstraint!;
-                drawingPictureBox.Controls.Remove(button);
-            }
+            //if (SelectedEdge is SpecialEdge se)
+            //{
+            //    Button button = se.RemoveConstraintButton;
+            //    button.Click -= removeConstraint!;
+            //    drawingPictureBox.Controls.Remove(button);
+            //}
 
 
             Vertex start = SelectedEdge!.Start;
@@ -639,6 +640,12 @@ namespace Lab1
         private void deleteVertexToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
+            if (Edges.Count <= 3)
+            {
+                Edges.Clear();
+                return;
+            }
+
             int index1 = SelectedVertexIndex;
             int index2 = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
             if (index1 != -1)
@@ -648,18 +655,18 @@ namespace Lab1
                 //edge1.UnsubscribeVertices();
                 //edge2.UnsubscribeVertices();
 
-                if (edge1 is SpecialEdge se1)
-                {
-                    Button button = se1.RemoveConstraintButton;
-                    button.Click -= removeConstraint!;
-                    drawingPictureBox.Controls.Remove(button);
-                }
-                if (edge2 is SpecialEdge se2)
-                {
-                    Button button = se2.RemoveConstraintButton;
-                    button.Click -= removeConstraint!;
-                    drawingPictureBox.Controls.Remove(button);
-                }
+                //if (edge1 is SpecialEdge se1)
+                //{
+                //    Button button = se1.RemoveConstraintButton;
+                //    button.Click -= removeConstraint!;
+                //    drawingPictureBox.Controls.Remove(button);
+                //}
+                //if (edge2 is SpecialEdge se2)
+                //{
+                //    Button button = se2.RemoveConstraintButton;
+                //    button.Click -= removeConstraint!;
+                //    drawingPictureBox.Controls.Remove(button);
+                //}
 
 
                 Edge edge = new Edge(edge1.Start, edge2.End);
@@ -700,6 +707,12 @@ namespace Lab1
             correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
             SelectedVertex!.ContinuityChanged = false;
             ResetVertexMovementFlags();
+        }
+
+        private void removeConstraintToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Edge newEdge = new Edge(SelectedEdge!.Start, SelectedEdge.End);
+            Edges[SelectedEdgeIndex] = newEdge;
         }
     }
 }

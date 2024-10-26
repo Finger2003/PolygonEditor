@@ -13,7 +13,7 @@ namespace Lab1.Edges
             End.SetPosition(Start.X, End.Y);
             End.WasMoved = true;
             //End.InvokeStartPositionChanged();
-            SetButtonPosition();
+            //SetButtonPosition();
         }
 
         public override void StartChanged()

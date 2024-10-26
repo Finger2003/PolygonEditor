@@ -213,7 +213,7 @@ namespace Lab1.Edges
             Start.Restore();
         }
 
-        public virtual void OnMoved() { }
+        //public virtual void OnMoved() { }
         public virtual void MoveOwnedVertices(float dx, float dy)
         {
             Start.Move(dx, dy);
