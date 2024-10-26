@@ -95,7 +95,8 @@ namespace Lab1
                     SelectedEdge = Edges[SelectedEdgeIndex];
                     //ContextMenuStrip!.Show(drawingPictureBox, e.Location);
                     //drawingPictureBox.ContextMenuStrip = edgesContextMenuStrip;
-                    edgesContextMenuStrip.Items[1].Enabled = SelectedEdge.IsBasic;
+                    dodajOgraniczenieToolStripMenuItem.Enabled = SelectedEdge.IsBasic;
+                    //edgesContextMenuStrip.Items[1].Enabled = SelectedEdge.IsBasic;
                     edgesContextMenuStrip.Show(drawingPictureBox, e.Location);
 
                 }
@@ -599,10 +600,6 @@ namespace Lab1
             }
         }
 
-        private void setContinuityInVertexToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void deleteVertexToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -634,6 +631,32 @@ namespace Lab1
                 Edges[index1] = edge;
                 Edges.RemoveAt(index2);
             }
+        }
+
+        private void g0ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            g0ToolStripMenuItem.Checked = true;
+            g1ToolStripMenuItem.Checked = false;
+            c1ToolStripMenuItem.Checked = false;
+            SelectedVertex!.Contuinity = Vertex.ContuinityType.G0;
+        }
+
+        private void g1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            g0ToolStripMenuItem.Checked = false;
+            g1ToolStripMenuItem.Checked = true;
+            c1ToolStripMenuItem.Checked = false;
+            SelectedVertex!.Contuinity = Vertex.ContuinityType.G1;
+            correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
+        }
+
+        private void c1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            g0ToolStripMenuItem.Checked = false;
+            g1ToolStripMenuItem.Checked = false;
+            c1ToolStripMenuItem.Checked = true;
+            SelectedVertex!.Contuinity = Vertex.ContuinityType.C1;
+            correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
         }
     }
 }

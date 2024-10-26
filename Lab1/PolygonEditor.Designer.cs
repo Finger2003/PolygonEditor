@@ -44,6 +44,9 @@
             verticesContextMenuStrip = new ContextMenuStrip(components);
             deleteVertexToolStripMenuItem = new ToolStripMenuItem();
             setContinuityInVertexToolStripMenuItem = new ToolStripMenuItem();
+            g0ToolStripMenuItem = new ToolStripMenuItem();
+            g1ToolStripMenuItem = new ToolStripMenuItem();
+            c1ToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).BeginInit();
             edgesContextMenuStrip.SuspendLayout();
@@ -164,10 +167,33 @@
             // 
             // setContinuityInVertexToolStripMenuItem
             // 
+            setContinuityInVertexToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { g0ToolStripMenuItem, g1ToolStripMenuItem, c1ToolStripMenuItem });
             setContinuityInVertexToolStripMenuItem.Name = "setContinuityInVertexToolStripMenuItem";
             setContinuityInVertexToolStripMenuItem.Size = new Size(270, 22);
             setContinuityInVertexToolStripMenuItem.Text = "Ustaw żądaną ciągłość w wierzchołku";
-            setContinuityInVertexToolStripMenuItem.Click += setContinuityInVertexToolStripMenuItem_Click;
+            // 
+            // g0ToolStripMenuItem
+            // 
+            g0ToolStripMenuItem.Checked = true;
+            g0ToolStripMenuItem.CheckState = CheckState.Checked;
+            g0ToolStripMenuItem.Name = "g0ToolStripMenuItem";
+            g0ToolStripMenuItem.Size = new Size(180, 22);
+            g0ToolStripMenuItem.Text = "G0";
+            g0ToolStripMenuItem.Click += g0ToolStripMenuItem_Click;
+            // 
+            // g1ToolStripMenuItem
+            // 
+            g1ToolStripMenuItem.Name = "g1ToolStripMenuItem";
+            g1ToolStripMenuItem.Size = new Size(180, 22);
+            g1ToolStripMenuItem.Text = "G1";
+            g1ToolStripMenuItem.Click += g1ToolStripMenuItem_Click;
+            // 
+            // c1ToolStripMenuItem
+            // 
+            c1ToolStripMenuItem.Name = "c1ToolStripMenuItem";
+            c1ToolStripMenuItem.Size = new Size(180, 22);
+            c1ToolStripMenuItem.Text = "C1";
+            c1ToolStripMenuItem.Click += c1ToolStripMenuItem_Click;
             // 
             // PolygonEditor
             // 
@@ -209,5 +235,8 @@
         private ContextMenuStrip verticesContextMenuStrip;
         private ToolStripMenuItem deleteVertexToolStripMenuItem;
         private ToolStripMenuItem setContinuityInVertexToolStripMenuItem;
+        private ToolStripMenuItem g0ToolStripMenuItem;
+        private ToolStripMenuItem g1ToolStripMenuItem;
+        private ToolStripMenuItem c1ToolStripMenuItem;
     }
 }
