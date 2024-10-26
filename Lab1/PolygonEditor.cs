@@ -607,8 +607,8 @@ namespace Lab1
         private void deleteVertexToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
-            int index1 = SelectedEdgeIndex;
-            int index2 = (index1 + 1) % Edges.Count;
+            int index1 = SelectedVertexIndex;
+            int index2 = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
             if (index1 != -1)
             {
                 Edge edge1 = Edges[index1];
