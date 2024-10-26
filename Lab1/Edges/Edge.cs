@@ -8,11 +8,11 @@ namespace Lab1.Edges
         public virtual Vertex End { get; set; }
 
         public float Length => Vertex.Distance(Start, End);
-        public virtual double GetControlAngle(Vertex v)
+        protected virtual double GetControlAngle(Vertex v1, Vertex v2)
         { 
             return Math.Atan2(End.Y - Start.Y, End.X - Start.X);
         }
-        public virtual double GetControlLength(Vertex v)
+        protected virtual double GetControlLength(Vertex v1, Vertex v2)
         {
             return Length / 3;
         }
@@ -30,6 +30,16 @@ namespace Lab1.Edges
             //    End.NeighbourPositionChanged();
         }
         public virtual void EndChanged() { }
+
+        public virtual bool IsControlVertex(Vertex v)
+        {
+            return v == Start || v == End;
+        }
+        public virtual void SetVerticesContinuityRelevantProperties(Vertex v)
+        {
+            v.ControlAngle = GetControlAngle(Start, End);
+            v.ControlLength = GetControlLength(Start, End);
+        }
 
 
         public virtual bool CorrectEndPosition()
@@ -109,5 +119,6 @@ namespace Lab1.Edges
 
             return vertex is not null;
         }
+
     }
 }

@@ -117,6 +117,24 @@ namespace Lab1
                 {
                     SelectedVertex.SetPosition(e.Location);
                     SelectedVertex.WasMoved = true;
+                    int selectedIndex = SelectedVertexIndex;
+                    Edge selectedVertexOwner = Edges[selectedIndex];
+
+                    if (selectedVertexOwner.IsBezier)
+                    {
+                        if (selectedVertexOwner.IsControlVertex(SelectedVertex))
+                        {
+                            selectedVertexOwner.SetVerticesContinuityRelevantProperties(SelectedVertex);
+                        }
+                        else
+                        {
+                            int index = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
+                            Edge previousEdge = Edges[index];
+                            previousEdge.SetVerticesContinuityRelevantProperties(SelectedVertex);
+                        }
+                    }
+
+                    //if(SelectedVertex)
 
                     //int selectedIndex = SelectedVertexIndex;
                     //int index = selectedIndex;
@@ -135,7 +153,7 @@ namespace Lab1
                     //        index = Edges.Count - 1;
                     //} while(Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
 
-                    correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
+                    correctEdges(selectedIndex, selectedIndex - 1);
 
 
                     //SelectedVertex.InvokeStartPositionChanged();

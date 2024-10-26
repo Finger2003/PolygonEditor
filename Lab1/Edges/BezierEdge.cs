@@ -74,26 +74,52 @@ namespace Lab1.Edges
             return false;
         }
 
-        public override double GetControlAngle(Vertex v)
+        protected override double GetControlAngle(Vertex v1, Vertex v2)
         {
-            if(v == V1)
-                return Math.Atan2(V1.Position.Y - Start.Position.Y, V1.Position.X - Start.Position.X);
+            return Math.Atan2(v2.Y - v1.Y, v2.X - v1.X);
 
-            if (v == V2)
-                return Math.Atan2(V2.Position.Y - End.Position.Y, V2.Position.X - End.Position.X);
+            //if (v == V1)
+            //    return Math.Atan2(V1.Position.Y - Start.Position.Y, V1.Position.X - Start.Position.X);
 
-            throw new ArgumentException("Vertex is not a control point of this edge");
+            //if (v == V2)
+            //    return Math.Atan2(V2.Position.Y - End.Position.Y, V2.Position.X - End.Position.X);
+
+            //throw new ArgumentException("Vertex is not a control point of this edge");
         }
 
-        public override double GetControlLength(Vertex v)
+        protected override double GetControlLength(Vertex v1, Vertex v2)
         {
-            if (v == V1)
-                return Vertex.Distance(Start, V1);
+            return Vertex.Distance(v1, v2);
+            //if (v == V1)
+            //    return Vertex.Distance(Start, V1);
 
-            if (v == V2)
-                return Vertex.Distance(End, V2);
+            //if (v == V2)
+            //    return Vertex.Distance(End, V2);
 
-            throw new ArgumentException("Vertex is not a control point of this edge");
+            //throw new ArgumentException("Vertex is not a control point of this edge");
+        }
+
+        public override bool IsControlVertex(Vertex v)
+        {
+            return v == V1 || v == V2;
+        }
+
+        public override void SetVerticesContinuityRelevantProperties(Vertex v)
+        {
+            if(v == V1 || v == Start)
+            {
+                Start.ControlAngle = GetControlAngle(Start, V1);
+                Start.ControlLength = GetControlLength(Start, V1);
+            }
+            else if(v == V2 || v == End)
+            {
+                End.ControlAngle = GetControlAngle(V2, End);
+                End.ControlLength = GetControlLength(V2, End);
+            }
+            else
+            {
+                throw new ArgumentException("Vertex is not a control point of this edge");
+            }
         }
 
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
