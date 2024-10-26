@@ -83,6 +83,9 @@ namespace Lab1
                 if (SelectedVertexIndex >= 0)
                 {
                     SelectedVertex = Edges[SelectedVertexIndex].Start;
+                    g0ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G0;
+                    g1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G1;
+                    c1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.C1;
                     verticesContextMenuStrip.Show(drawingPictureBox, e.Location);
                     return;
                 }
