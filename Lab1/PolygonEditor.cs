@@ -39,7 +39,7 @@ namespace Lab1
             LineDrawers = [new DefaultLineDrawer(Bitmap), new BresenhamLineDrawer(Bitmap)];
             //ContextMenuStrip.Enabled = false;
 
-            EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1]);
+            EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
         }
 
         private void drawingPictureBox_MouseClick(object sender, MouseEventArgs e)
