@@ -42,7 +42,8 @@
             poziomaToolStripMenuItem = new ToolStripMenuItem();
             beToolStripMenuItem = new ToolStripMenuItem();
             verticesContextMenuStrip = new ContextMenuStrip(components);
-            usuńWierczhołekToolStripMenuItem = new ToolStripMenuItem();
+            deleteVertexToolStripMenuItem = new ToolStripMenuItem();
+            setContinuityInVertexToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).BeginInit();
             edgesContextMenuStrip.SuspendLayout();
@@ -150,16 +151,23 @@
             // 
             // verticesContextMenuStrip
             // 
-            verticesContextMenuStrip.Items.AddRange(new ToolStripItem[] { usuńWierczhołekToolStripMenuItem });
+            verticesContextMenuStrip.Items.AddRange(new ToolStripItem[] { deleteVertexToolStripMenuItem, setContinuityInVertexToolStripMenuItem });
             verticesContextMenuStrip.Name = "verticesContextMenuStrip";
-            verticesContextMenuStrip.Size = new Size(167, 26);
+            verticesContextMenuStrip.Size = new Size(271, 70);
             // 
-            // usuńWierczhołekToolStripMenuItem
+            // deleteVertexToolStripMenuItem
             // 
-            usuńWierczhołekToolStripMenuItem.Name = "usuńWierczhołekToolStripMenuItem";
-            usuńWierczhołekToolStripMenuItem.Size = new Size(166, 22);
-            usuńWierczhołekToolStripMenuItem.Text = "Usuń wierczhołek";
-            usuńWierczhołekToolStripMenuItem.Click += usuńWierczhołekToolStripMenuItem_Click;
+            deleteVertexToolStripMenuItem.Name = "deleteVertexToolStripMenuItem";
+            deleteVertexToolStripMenuItem.Size = new Size(270, 22);
+            deleteVertexToolStripMenuItem.Text = "Usuń wierczhołek";
+            deleteVertexToolStripMenuItem.Click += deleteVertexToolStripMenuItem_Click;
+            // 
+            // setContinuityInVertexToolStripMenuItem
+            // 
+            setContinuityInVertexToolStripMenuItem.Name = "setContinuityInVertexToolStripMenuItem";
+            setContinuityInVertexToolStripMenuItem.Size = new Size(270, 22);
+            setContinuityInVertexToolStripMenuItem.Text = "Ustaw żądaną ciągłość w wierzchołku";
+            setContinuityInVertexToolStripMenuItem.Click += setContinuityInVertexToolStripMenuItem_Click;
             // 
             // PolygonEditor
             // 
@@ -199,6 +207,7 @@
         private ToolStripMenuItem poziomaToolStripMenuItem;
         private ToolStripMenuItem beToolStripMenuItem;
         private ContextMenuStrip verticesContextMenuStrip;
-        private ToolStripMenuItem usuńWierczhołekToolStripMenuItem;
+        private ToolStripMenuItem deleteVertexToolStripMenuItem;
+        private ToolStripMenuItem setContinuityInVertexToolStripMenuItem;
     }
 }

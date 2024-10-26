@@ -36,7 +36,7 @@ namespace Lab1
         public bool IsControlPoint { get; }
         public double ControlAngle { get; set; }
         public double ControlLength { get; set; }
-        public ContuinityType Contuinity { get; set; }
+        public ContuinityType Contuinity { get; set; } = ContuinityType.G0;
 
 
         private Vertex(bool isControlPoint)

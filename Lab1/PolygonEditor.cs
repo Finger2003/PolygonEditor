@@ -202,7 +202,7 @@ namespace Lab1
             int i = 0;
             do
             {
-                if(index >= Edges.Count)
+                if (index >= Edges.Count)
                 {
                     index = 0;
                 }
@@ -275,7 +275,7 @@ namespace Lab1
             //Point p2 = SelectedEdge!.End.Position;
             //int deltaX = p2.X - p1.X;
             //int deltaY = p2.Y - p1.Y;
-            LengthDialogForm.SetStartingValue((int) SelectedEdge!.Length);
+            LengthDialogForm.SetStartingValue((int)SelectedEdge!.Length);
 
             if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {
@@ -554,7 +554,57 @@ namespace Lab1
             Edges.InsertRange(SelectedEdgeIndex, [edge1, edge2]);
         }
 
-        private void usuñWierczho³ekToolStripMenuItem_Click(object sender, EventArgs e)
+        //private void usuñWierczho³ekToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    //int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
+        //    int index1 = SelectedEdgeIndex;
+        //    int index2 = (index1 + 1) % Edges.Count;
+        //    if (index1 != -1)
+        //    {
+        //        Edge edge1 = Edges[index1];
+        //        Edge edge2 = Edges[index2];
+        //        //edge1.UnsubscribeVertices();
+        //        //edge2.UnsubscribeVertices();
+
+        //        if (edge1 is SpecialEdge se1)
+        //        {
+        //            Button button = se1.RemoveConstraintButton;
+        //            button.Click -= removeConstraint!;
+        //            drawingPictureBox.Controls.Remove(button);
+        //        }
+        //        if (edge2 is SpecialEdge se2)
+        //        {
+        //            Button button = se2.RemoveConstraintButton;
+        //            button.Click -= removeConstraint!;
+        //            drawingPictureBox.Controls.Remove(button);
+        //        }
+
+
+        //        Edge edge = new Edge(edge1.Start, edge2.End);
+        //        Edges[index1] = edge;
+        //        Edges.RemoveAt(index2);
+        //    }
+
+        //}
+
+        private void defaultRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (defaultRadioButton.Checked)
+            {
+                EdgeDrawingVisitor.LineDrawer = LineDrawers[0];
+            }
+            else
+            {
+                EdgeDrawingVisitor.LineDrawer = LineDrawers[1];
+            }
+        }
+
+        private void setContinuityInVertexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void deleteVertexToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //int index1 = Edges.FindIndex(edge => edge.End == SelectedVertex);
             int index1 = SelectedEdgeIndex;
@@ -583,19 +633,6 @@ namespace Lab1
                 Edge edge = new Edge(edge1.Start, edge2.End);
                 Edges[index1] = edge;
                 Edges.RemoveAt(index2);
-            }
-
-        }
-
-        private void defaultRadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (defaultRadioButton.Checked)
-            {
-                EdgeDrawingVisitor.LineDrawer = LineDrawers[0];
-            }
-            else
-            {
-                EdgeDrawingVisitor.LineDrawer = LineDrawers[1];
             }
         }
     }
