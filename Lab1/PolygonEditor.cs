@@ -117,24 +117,25 @@ namespace Lab1
                 {
                     SelectedVertex.SetPosition(e.Location);
                     SelectedVertex.WasMoved = true;
-                    int selectedIndex = SelectedVertexIndex;
-                    int index = selectedIndex;
-                    int i = 0;
-                    do
-                    {
 
-                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+                    //int selectedIndex = SelectedVertexIndex;
+                    //int index = selectedIndex;
+                    //int i = 0;
+                    //do
+                    //{
 
-                    //i = index - 1;
-                    index = selectedIndex - 1;
-                    i = 0;
-                    do
-                    {
-                        if(index < 0)
-                            index = Edges.Count - 1;
-                    } while(Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                    //} while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
 
+                    ////i = index - 1;
+                    //index = selectedIndex - 1;
+                    //i = 0;
+                    //do
+                    //{
+                    //    if(index < 0)
+                    //        index = Edges.Count - 1;
+                    //} while(Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
 
+                    correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
 
 
                     //SelectedVertex.InvokeStartPositionChanged();
@@ -175,6 +176,28 @@ namespace Lab1
             }
             drawingPictureBox.Invalidate();
 
+        }
+
+        private void correctEdges(int startingIndexForward, int startingIndexBackward)
+        {
+            int index = startingIndexForward;
+            int i = 0;
+            do
+            {
+                if(index >= Edges.Count)
+                {
+                    index = 0;
+                }
+
+            } while (Edges[index++].CorrectEndPosition() && i++ < Edges.Count);
+
+            index = startingIndexBackward;
+            i = 0;
+            do
+            {
+                if (index < 0)
+                    index = Edges.Count - 1;
+            } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
         }
 
         private void drawingPictureBox_Paint(object sender, PaintEventArgs e)
@@ -241,29 +264,33 @@ namespace Lab1
                 int length = LengthDialogForm.Length;
                 //SelectedEdge.UnsubscribeVertices();
                 FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
-                fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
-                fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+
 
                 //int index = Edges.FindIndex(edge => edge == SelectedEdge);
                 int selectedIndex = SelectedEdgeIndex;
                 Edges[selectedIndex] = fixedEdge;
                 try
                 {
-                    int index = selectedIndex + 1;
-                    int i = 0;
-                    do
-                    {
+                    //int index = selectedIndex + 1;
+                    //int i = 0;
+                    //do
+                    //{
 
-                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+                    //} while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
 
-                    //i = index - 1;
-                    index = selectedIndex - 1;
-                    i = 0;
-                    do
-                    {
-                        if (index < 0)
-                            index = Edges.Count - 1;
-                    } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                    ////i = index - 1;
+                    //index = selectedIndex - 1;
+                    //i = 0;
+                    //do
+                    //{
+                    //    if (index < 0)
+                    //        index = Edges.Count - 1;
+                    //} while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+                    correctEdges(selectedIndex + 1, selectedIndex - 1);
+
+                    fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -322,8 +349,7 @@ namespace Lab1
             {
                 //SelectedEdge.UnsubscribeVertices();
                 VerticalEdge verticalEdge = new VerticalEdge(SelectedEdge!.Start, SelectedEdge!.End);
-                verticalEdge.RemoveConstraintButton.Click += removeConstraint!;
-                verticalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+
 
 
                 //int selectedIndex = SelectedEdgeIndex;
@@ -331,21 +357,26 @@ namespace Lab1
 
                 try
                 {
-                    int index = selectedIndex + 1;
-                    int i = 0;
-                    do
-                    {
+                    //int index = selectedIndex + 1;
+                    //int i = 0;
+                    //do
+                    //{
 
-                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+                    //} while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
 
-                    //i = index - 1;
-                    index = selectedIndex - 1;
-                    i = 0;
-                    do
-                    {
-                        if (index < 0)
-                            index = Edges.Count - 1;
-                    } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                    ////i = index - 1;
+                    //index = selectedIndex - 1;
+                    //i = 0;
+                    //do
+                    //{
+                    //    if (index < 0)
+                    //        index = Edges.Count - 1;
+                    //} while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+                    correctEdges(selectedIndex + 1, selectedIndex - 1);
+
+                    verticalEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    verticalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -381,28 +412,32 @@ namespace Lab1
             {
                 SelectedEdge.UnsubscribeVertices();
                 HorizontalEdge horizontalEdge = new HorizontalEdge(SelectedEdge!.Start, SelectedEdge!.End);
-                horizontalEdge.RemoveConstraintButton.Click += removeConstraint!;
-                horizontalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
+
                 //int index = Edges.FindIndex(edge => edge == SelectedEdge);
 
                 Edges[selectedIndex] = horizontalEdge;
                 try
                 {
-                    int index = selectedIndex + 1;
-                    int i = 0;
-                    do
-                    {
+                    //int index = selectedIndex + 1;
+                    //int i = 0;
+                    //do
+                    //{
 
-                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+                    //} while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
 
-                    //i = index - 1;
-                    index = selectedIndex - 1;
-                    i = 0;
-                    do
-                    {
-                        if (index < 0)
-                            index = Edges.Count - 1;
-                    } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                    ////i = index - 1;
+                    //index = selectedIndex - 1;
+                    //i = 0;
+                    //do
+                    //{
+                    //    if (index < 0)
+                    //        index = Edges.Count - 1;
+                    //} while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+                    correctEdges(selectedIndex + 1, selectedIndex - 1);
+
+                    horizontalEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    horizontalEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -429,9 +464,6 @@ namespace Lab1
             {
                 SelectedEdge.UnsubscribeVertices();
                 BezierEdge fixedEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
-                fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
-                fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
-
 
 
                 int selectedIndex = SelectedEdgeIndex;
@@ -439,21 +471,26 @@ namespace Lab1
 
                 try
                 {
-                    int index = selectedIndex + 1;
-                    int i = 0;
-                    do
-                    {
+                    //int index = selectedIndex + 1;
+                    //int i = 0;
+                    //do
+                    //{
 
-                    } while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
+                    //} while (Edges[index++ % Edges.Count].CorrectEndPosition() && i++ < Edges.Count);
 
-                    //i = index - 1;
-                    index = selectedIndex - 1;
-                    i = 0;
-                    do
-                    {
-                        if (index < 0)
-                            index = Edges.Count - 1;
-                    } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                    ////i = index - 1;
+                    //index = selectedIndex - 1;
+                    //i = 0;
+                    //do
+                    //{
+                    //    if (index < 0)
+                    //        index = Edges.Count - 1;
+                    //} while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+
+                    correctEdges(selectedIndex + 1, selectedIndex - 1);
+
+                    fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
+                    fixedEdge.RemoveConstraintButton.Parent = drawingPictureBox;
                 }
                 catch (VertexCannotBeMoved)
                 {
