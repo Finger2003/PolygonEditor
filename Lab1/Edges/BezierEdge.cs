@@ -16,7 +16,7 @@ namespace Lab1.Edges
             SetButtonPosition();
         }
 
-        public override void MoveOwnedVertices(int dx, int dy)
+        public override void MoveOwnedVertices(float dx, float dy)
         {
             base.MoveOwnedVertices(dx, dy);
             V1.Move(dx, dy);
@@ -27,9 +27,9 @@ namespace Lab1.Edges
         {
             vertex = null;
 
-            if(Start.IsHit(p))
+            if (Start.IsHit(p))
                 vertex = Start;
-            else if(V1.IsHit(p))
+            else if (V1.IsHit(p))
                 vertex = V1;
             else if (V2.IsHit(p))
                 vertex = V2;
@@ -59,26 +59,27 @@ namespace Lab1.Edges
             double offsetY = unitY * 10;  // Przesunięcie w pionie (nad linią)
 
             // Ustawienie pozycji przycisku z przesunięciem o 10 pikseli w górę
-            RemoveConstraintButton.Location = new Point((int) (centerX + offsetX - RemoveConstraintButton.Width / 2), (int) (centerY + offsetY - RemoveConstraintButton.Height / 2));
+            RemoveConstraintButton.Location = new Point((int)(centerX + offsetX - RemoveConstraintButton.Width / 2), (int)(centerY + offsetY - RemoveConstraintButton.Height / 2));
 
             ButtonPreviousPosition = RemoveConstraintButton.Location;
         }
 
         public override bool CorrectEndPosition()
         {
-                if (Start.Continuity != Vertex.ContuinityType.G0)
+            if (Start.Continuity != Vertex.ContuinityType.G0 && !V1.WasMoved && Start.ContinuityPropertiesChanged)
+            {
+                double length = length = Start.ControlLength;
+                if (Start.Continuity == Vertex.ContuinityType.G1)
                 {
-                    double length = length = Start.ControlLength;
-                    if (Start.Continuity == Vertex.ContuinityType.G1)
-                    {
-                        length = Vertex.Distance(Start.PreviousPosition, V1.Position);
-                    }
-
-                    double newX = Start.X + length * Math.Cos(Start.ControlAngle);
-                    double newY = Start.Y + length * Math.Sin(Start.ControlAngle);
-                    V1.SetPosition((float)newX, (float)newY);
+                    length = Vertex.Distance(Start.PreviousPosition, V1.Position);
                 }
-            
+
+                double newX = Start.X + length * Math.Cos(Start.ControlAngle);
+                double newY = Start.Y + length * Math.Sin(Start.ControlAngle);
+                V1.SetPosition((float)newX, (float)newY);
+                V1.WasMoved = true;
+            }
+
             if (V2.WasMoved)
             {
                 End.ControlAngle = GetControlAngle(V2, End);
@@ -90,18 +91,19 @@ namespace Lab1.Edges
 
         public override bool CorrectStartPosition()
         {
-                if(End.Continuity != Vertex.ContuinityType.G0)
+            if (End.Continuity != Vertex.ContuinityType.G0 && !V2.WasMoved && End.ContinuityPropertiesChanged)
+            {
+                double length = length = End.ControlLength;
+                if (End.Continuity == Vertex.ContuinityType.G1)
                 {
-                    double length = length = End.ControlLength;
-                    if (End.Continuity == Vertex.ContuinityType.G1)
-                    {
-                        length = Vertex.Distance(V2.Position, End.PreviousPosition);
-                    }
-
-                    double newX = End.X - length * Math.Cos(End.ControlAngle);
-                    double newY = End.Y - length * Math.Sin(End.ControlAngle);
-                    V2.SetPosition((float)newX, (float)newY);
+                    length = Vertex.Distance(V2.Position, End.PreviousPosition);
                 }
+
+                double newX = End.X - length * Math.Cos(End.ControlAngle);
+                double newY = End.Y - length * Math.Sin(End.ControlAngle);
+                V2.SetPosition((float)newX, (float)newY);
+                V2.WasMoved = true;
+            }
 
             if (V1.WasMoved)
             {
@@ -144,12 +146,12 @@ namespace Lab1.Edges
 
         public override void SetVerticesContinuityRelevantProperties(Vertex v)
         {
-            if(v == V1 || v == Start)
+            if (v == V1 || v == Start)
             {
                 Start.ControlAngle = GetControlAngle(Start, V1);
                 Start.ControlLength = GetControlLength(Start, V1);
             }
-            else if(v == V2 || v == End)
+            else if (v == V2 || v == End)
             {
                 End.ControlAngle = GetControlAngle(V2, End);
                 End.ControlLength = GetControlLength(V2, End);
@@ -165,16 +167,27 @@ namespace Lab1.Edges
             base.ResetOwnedVerticesMovementFlags();
             V1.WasMoved = false;
             V2.WasMoved = false;
+            //V1.ContinuityPropertiesChanged = false;
+            //V2.ContinuityPropertiesChanged = false;
         }
 
         public override void ResetOwnedMovedVerticesPreviousPositions()
         {
             base.ResetOwnedMovedVerticesPreviousPositions();
-            if(V1.WasMoved)
+            //if (V1.WasMoved)
                 V1.ResetPreviousPosition();
-            if (V2.WasMoved)
+            //if (V2.WasMoved)
                 V2.ResetPreviousPosition();
         }
+
+        public override void Restore()
+        {
+            base.Restore();
+            V1.Restore();
+            V2.Restore();
+        }
+
+        public override void CorrectStartPositionBasically() { }
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 }

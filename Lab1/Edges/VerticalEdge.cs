@@ -163,6 +163,24 @@ namespace Lab1.Edges
             }
         }
 
+        public override void CorrectStartPositionBasically()
+        {
+            if (Start.X == End.X)
+            {
+                Start.WasMoved = false;
+            }
+            else
+            {
+                Start.SetPosition(End.X, Start.Y);
+                Start.WasMoved = true;
+            }        
+
+            Start.ControlAngle = GetControlAngle(Start, End);
+            Start.ControlLength = GetControlLength(Start, End);
+            //Start.WasMoved = true;
+            //return true;
+        }
+
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 }

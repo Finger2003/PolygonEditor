@@ -126,6 +126,12 @@ namespace Lab1.Edges
             //return true;
         }
 
+        public virtual void CorrectStartPositionBasically()
+        {
+            Start.ControlAngle = GetControlAngle(Start, End);
+            Start.ControlLength = GetControlLength(Start, End);
+        }
+
         private bool CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
             float newX, newY;
@@ -208,7 +214,7 @@ namespace Lab1.Edges
         }
 
         public virtual void OnMoved() { }
-        public virtual void MoveOwnedVertices(int dx, int dy)
+        public virtual void MoveOwnedVertices(float dx, float dy)
         {
             Start.Move(dx, dy);
         }
@@ -224,10 +230,11 @@ namespace Lab1.Edges
         public virtual void ResetOwnedVerticesMovementFlags()
         {
             Start.WasMoved = false;
+            Start.ContinuityPropertiesChanged = false;
         }
         public virtual void ResetOwnedMovedVerticesPreviousPositions()
         {
-            if (Start.WasMoved)
+            //if (Start.WasMoved)
                 Start.ResetPreviousPosition();
         }
     }

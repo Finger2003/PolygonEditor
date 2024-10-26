@@ -114,25 +114,34 @@ namespace Lab1
             }
             if (SelectedVertex is not null && e.Button == MouseButtons.Left)
             {
+                ResetVerticesPreviousPositions();
+                ResetVertexMovementFlags();
+                SelectedVertex.SetPosition(e.Location);
+                Vector2 delta = SelectedVertex.PositionDifference;
                 try
                 {
-                    ResetVerticesPreviousPositions();
-                    SelectedVertex.SetPosition(e.Location);
+
+
                     SelectedVertex.WasMoved = true;
                     int selectedIndex = SelectedVertexIndex;
                     Edge selectedVertexOwner = Edges[selectedIndex];
 
+                    int startingIndexForward = selectedIndex;
+                    int startingIndexBackward = selectedIndex - 1;
                     if (selectedVertexOwner.IsBezier)
                     {
                         if (selectedVertexOwner.IsControlVertex(SelectedVertex))
                         {
                             selectedVertexOwner.SetVerticesContinuityRelevantProperties(SelectedVertex);
+                            ++startingIndexForward;
                         }
                         else
                         {
                             int index = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
                             Edge previousEdge = Edges[index];
+                            previousEdge.CorrectStartPositionBasically();
                             previousEdge.SetVerticesContinuityRelevantProperties(SelectedVertex);
+                            --startingIndexBackward;
                         }
                     }
 
@@ -155,7 +164,7 @@ namespace Lab1
                     //        index = Edges.Count - 1;
                     //} while(Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
 
-                    correctEdges(selectedIndex, selectedIndex - 1);
+                    correctEdges(startingIndexForward, startingIndexBackward);
 
 
                     //SelectedVertex.InvokeStartPositionChanged();
@@ -167,14 +176,24 @@ namespace Lab1
                 }
                 catch (VertexCannotBeMoved)
                 {
+                    //Vector2 delta = SelectedVertex.PositionDifference;
+
                     foreach (Edge edge in Edges)
                         edge.Restore();
-                    MessageBox.Show("Wierzcho³ek nie mo¿e zostaæ przesuniêty ze wzglêdu na ograniczenia");
+
+                    foreach (Edge edge in Edges)
+                    {
+                        //edge.Start.Position = new Point(edge.Start.Position.X + dx, edge.Start.Position.Y + dy);
+                        //edge.End.Position = new Point(edge.End.Position.X + dx, edge.End.Position.Y + dy);
+                        edge.MoveOwnedVertices(delta.X, delta.Y);
+                    }
+                    //MessageBox.Show("Wierzcho³ek nie mo¿e zostaæ przesuniêty ze wzglêdu na ograniczenia");
                 }
                 finally
                 {
-                    foreach (Edge edge in Edges)
-                        edge.Start.ResetPreviousPosition();
+                    //foreach (Edge edge in Edges)
+                    //    edge.Start.ResetPreviousPosition();
+                    ResetVerticesPreviousPositions();
                     ResetVertexMovementFlags();
                 }
             }
@@ -202,7 +221,7 @@ namespace Lab1
         {
             foreach (Edge edge in Edges)
             {
-
+                edge.ResetOwnedMovedVerticesPreviousPositions();
             }
         }
 

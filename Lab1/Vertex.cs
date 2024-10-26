@@ -34,11 +34,33 @@ namespace Lab1
         public Vector2 PositionDifference { get => Position - PreviousPosition; }
 
         public bool IsControlPoint { get; }
-        public double ControlAngle { get; set; }
-        public double ControlLength { get; set; }
+        private double _controlAngle;
+        private double _controlLength;
+        public double ControlAngle
+        {
+            get => _controlAngle;
+            set
+            {
+                PreviousControlAngle = ControlAngle;
+                _controlAngle = value;
+                ContinuityPropertiesChanged = true;
+            }
+        }
+        public double ControlLength
+        {
+            get => _controlLength;
+            set
+            {
+                PreviousControlLength = ControlLength;
+                _controlLength = value;
+                ContinuityPropertiesChanged = true;
+            }
+        }
         public ContuinityType Continuity { get; set; } = ContuinityType.G0;
         public bool ContinuityChanged { get; set; }
-
+        public bool ContinuityPropertiesChanged { get; set; }
+        public double PreviousControlAngle { get; set; }
+        public double PreviousControlLength { get; set; }
 
         private Vertex(bool isControlPoint)
         {
@@ -47,20 +69,26 @@ namespace Lab1
         public Vertex(int x, int y, bool isControlPoint = false) : this(isControlPoint)
         {
             Position = new Vector2(x, y);
+            PreviousPosition = Position; 
         }
         public Vertex(float x, float y, bool isControlPoint = false) : this(isControlPoint)
         {
             Position = new Vector2(x, y);
+            PreviousPosition = Position;
         }
         public Vertex(Point p, bool isControlPoint = false) : this(p.X, p.Y, isControlPoint) { }
 
         public void ResetPreviousPosition()
         {
             PreviousPosition = Position;
+            PreviousControlAngle = ControlAngle;
+            PreviousControlLength = ControlLength;
         }
         public void Restore()
         {
             Position = PreviousPosition;
+            ControlAngle = PreviousControlAngle;
+            ControlLength = PreviousControlLength;
         }
 
 

@@ -10,11 +10,13 @@ namespace Lab1.Edges
         public override bool IsFixed { get => true; }
         //public int Length { get; set; }
         public double RealSquaredLength { get; private set; }
+        private int SetLength { get; }
 
         public FixedEdge(Vertex start, Vertex end, int length) : base(start, end)
         {
             //End.Position
             //Length = length;
+            SetLength = length;
             double deltaX = End.Position.X - Start.Position.X;
             double deltaY = End.Position.Y - Start.Position.Y;
             //int currentLength = Length;
@@ -32,6 +34,15 @@ namespace Lab1.Edges
 
             //End.InvokeStartPositionChanged();
             SetButtonPosition();
+        }
+
+        public override void CorrectStartPositionBasically()
+        {
+            Start.Move(End.PositionDifference);
+            Start.WasMoved = true;
+            Start.ControlAngle = GetControlAngle(Start, End);
+            Start.ControlLength = GetControlLength(Start, End);
+            //return true;
         }
 
         public override void StartChanged()
@@ -150,8 +161,8 @@ namespace Lab1.Edges
             {
                 //double angle = firstVertex.ControlAngle;
 
-                double newX = firstVertex.X + Length * Math.Cos(angle);
-                double newY = firstVertex.Y + Length * Math.Sin(angle);
+                double newX = firstVertex.X + SetLength * Math.Cos(angle);
+                double newY = firstVertex.Y + SetLength * Math.Sin(angle);
 
                 secondVertex.SetPosition((float)newX, (float)newY);
                 secondVertex.WasMoved = true;
