@@ -8,6 +8,14 @@ namespace Lab1.Edges
         public virtual Vertex End { get; set; }
 
         public float Length => Vertex.Distance(Start, End);
+        public virtual double GetControlAngle(Vertex v)
+        { 
+            return Math.Atan2(End.Y - Start.Y, End.X - Start.X);
+        }
+        public virtual double GetControlLength(Vertex v)
+        {
+            return Length / 3;
+        }
 
         public virtual void StartChanged()
         {

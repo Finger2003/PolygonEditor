@@ -11,8 +11,8 @@ namespace Lab1.Edges
 
         public BezierEdge(Vertex start, Vertex end) : base(start, end)
         {
-            V1 = new Vertex((Start.X + End.X) / 2, Start.Y);
-            V2 = new Vertex((Start.X + End.X) / 2, End.Y);
+            V1 = new Vertex((Start.X + End.X) / 2, Start.Y, true);
+            V2 = new Vertex((Start.X + End.X) / 2, End.Y, true);
             SetButtonPosition();
         }
 
@@ -72,6 +72,28 @@ namespace Lab1.Edges
         public override bool CorrectStartPosition()
         {
             return false;
+        }
+
+        public override double GetControlAngle(Vertex v)
+        {
+            if(v == V1)
+                return Math.Atan2(V1.Position.Y - Start.Position.Y, V1.Position.X - Start.Position.X);
+
+            if (v == V2)
+                return Math.Atan2(V2.Position.Y - End.Position.Y, V2.Position.X - End.Position.X);
+
+            throw new ArgumentException("Vertex is not a control point of this edge");
+        }
+
+        public override double GetControlLength(Vertex v)
+        {
+            if (v == V1)
+                return Vertex.Distance(Start, V1);
+
+            if (v == V2)
+                return Vertex.Distance(End, V2);
+
+            throw new ArgumentException("Vertex is not a control point of this edge");
         }
 
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);

@@ -4,6 +4,14 @@ namespace Lab1
 {
     public class Vertex
     {
+        public enum ContuinityType
+        {
+            G0,
+            G1,
+            C1
+        }
+
+
         private Vector2 _position;
         public Vector2 Position
         {
@@ -25,6 +33,26 @@ namespace Lab1
         private Vector2 PreviousPosition { get; set; }
         public Vector2 PositionDifference { get => Position - PreviousPosition; }
 
+        public bool IsControlPoint { get; }
+        public double ControlAngle { get; set; }
+        public double ControlLength { get; set; }
+        public ContuinityType Contuinity { get; set; }
+
+
+        private Vertex(bool isControlPoint)
+        {
+            IsControlPoint = isControlPoint;
+        }
+        public Vertex(int x, int y, bool isControlPoint = false) : this(isControlPoint)
+        {
+            Position = new Vector2(x, y);
+        }
+        public Vertex(float x, float y, bool isControlPoint = false) : this(isControlPoint)
+        {
+            Position = new Vector2(x, y);
+        }
+        public Vertex(Point p, bool isControlPoint = false) : this(p.X, p.Y, isControlPoint) { }
+
         public void ResetPreviousPosition()
         {
             PreviousPosition = Position;
@@ -34,15 +62,7 @@ namespace Lab1
             Position = PreviousPosition;
         }
 
-        public Vertex(int x, int y)
-        {
-            Position = new Vector2(x, y);
-        }
-        public Vertex(float x, float y)
-        {
-            Position = new Vector2(x, y);
-        }
-        public Vertex(Point p) : this(p.X, p.Y) { }
+
 
         public void Move(Vector2 delta)
         {
