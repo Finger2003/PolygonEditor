@@ -104,6 +104,65 @@ namespace Lab1.Edges
             return true;
         }
 
+
+        private bool CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex)
+        {
+            if ((firstVertex.Continuity != Vertex.ContuinityType.G0 && firstVertex.ControlAngle != Math.PI/2 && firstVertex.ControlAngle != 3*Math.PI/2 && !firstVertex.ContinuityChanged) || secondVertex.WasMoved)
+            {
+                throw new VertexCannotBeMoved();
+            }
+
+            if (firstVertex.Continuity == Vertex.ContuinityType.G0)
+            {
+                if (firstVertex.X == secondVertex.X)
+                {
+                    secondVertex.ControlLength = GetControlLength(Start, End);
+                    return secondVertex.Continuity == Vertex.ContuinityType.C1;
+                }
+
+                secondVertex.SetPosition(firstVertex.X, secondVertex.Y);
+                secondVertex.WasMoved = true;
+                secondVertex.ControlAngle = GetControlAngle(Start, End);
+                secondVertex.ControlLength = GetControlLength(Start, End);
+                return true;
+            }
+            else if(firstVertex.Continuity == Vertex.ContuinityType.G1)
+            {
+                if (secondVertex.Y > firstVertex.Y == (firstVertex.ControlAngle == Math.PI/2) && firstVertex.Y == secondVertex.Y)
+                {
+                    secondVertex.ControlAngle = GetControlAngle(Start, End);
+                    secondVertex.ControlLength = GetControlLength(Start, End);
+                    return secondVertex.Continuity != Vertex.ContuinityType.G0;
+                }
+
+                float newY = firstVertex.Y + (secondVertex.Y > firstVertex.Y ? 1 : -1) * Length;
+
+                secondVertex.SetPosition(firstVertex.X, newY);
+                secondVertex.WasMoved = true;
+                secondVertex.ControlAngle = GetControlAngle(Start, End);
+                secondVertex.ControlLength = GetControlLength(Start, End);
+                return true;
+            }
+            else if (firstVertex.Continuity == Vertex.ContuinityType.C1)
+            {
+                double angle = firstVertex.ControlAngle;
+                double length = firstVertex.ControlLength * 3;
+
+                double newX = firstVertex.X;
+                double newY = firstVertex.Y + length * (angle == Math.PI / 2 ? 1 : -1);
+
+                secondVertex.SetPosition((float)newX, (float)newY);
+                secondVertex.WasMoved = true;
+                secondVertex.ControlAngle = GetControlAngle(Start, End);
+                secondVertex.ControlLength = GetControlLength(Start, End);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 }

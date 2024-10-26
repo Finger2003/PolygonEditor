@@ -66,11 +66,49 @@ namespace Lab1.Edges
 
         public override bool CorrectEndPosition()
         {
+                if (Start.Continuity != Vertex.ContuinityType.G0)
+                {
+                    double length = length = Start.ControlLength;
+                    if (Start.Continuity == Vertex.ContuinityType.G1)
+                    {
+                        length = Vertex.Distance(Start.PreviousPosition, V1.Position);
+                    }
+
+                    double newX = Start.X + length * Math.Cos(Start.ControlAngle);
+                    double newY = Start.Y + length * Math.Sin(Start.ControlAngle);
+                    V1.SetPosition((float)newX, (float)newY);
+                }
+            
+            if (V2.WasMoved)
+            {
+                End.ControlAngle = GetControlAngle(V2, End);
+                End.ControlLength = GetControlLength(V2, End);
+                return true;
+            }
             return false;
         }
 
         public override bool CorrectStartPosition()
         {
+                if(End.Continuity != Vertex.ContuinityType.G0)
+                {
+                    double length = length = End.ControlLength;
+                    if (End.Continuity == Vertex.ContuinityType.G1)
+                    {
+                        length = Vertex.Distance(V2.Position, End.PreviousPosition);
+                    }
+
+                    double newX = End.X - length * Math.Cos(End.ControlAngle);
+                    double newY = End.Y - length * Math.Sin(End.ControlAngle);
+                    V2.SetPosition((float)newX, (float)newY);
+                }
+
+            if (V1.WasMoved)
+            {
+                Start.ControlAngle = GetControlAngle(Start, V1);
+                Start.ControlLength = GetControlLength(Start, V1);
+                return true;
+            }
             return false;
         }
 
@@ -122,6 +160,21 @@ namespace Lab1.Edges
             }
         }
 
+        public override void ResetOwnedVerticesMovementFlags()
+        {
+            base.ResetOwnedVerticesMovementFlags();
+            V1.WasMoved = false;
+            V2.WasMoved = false;
+        }
+
+        public override void ResetOwnedMovedVerticesPreviousPositions()
+        {
+            base.ResetOwnedMovedVerticesPreviousPositions();
+            if(V1.WasMoved)
+                V1.ResetPreviousPosition();
+            if (V2.WasMoved)
+                V2.ResetPreviousPosition();
+        }
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 }

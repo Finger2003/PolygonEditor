@@ -116,6 +116,7 @@ namespace Lab1
             {
                 try
                 {
+                    ResetVerticesPreviousPositions();
                     SelectedVertex.SetPosition(e.Location);
                     SelectedVertex.WasMoved = true;
                     int selectedIndex = SelectedVertexIndex;
@@ -195,6 +196,14 @@ namespace Lab1
             }
             drawingPictureBox.Invalidate();
 
+        }
+
+        private void ResetVerticesPreviousPositions()
+        {
+            foreach (Edge edge in Edges)
+            {
+
+            }
         }
 
         private void correctEdges(int startingIndexForward, int startingIndexBackward)
@@ -284,7 +293,7 @@ namespace Lab1
                 //SelectedEdge.UnsubscribeVertices();
                 FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
 
-
+                ResetVerticesPreviousPositions();
                 //int index = Edges.FindIndex(edge => edge == SelectedEdge);
                 int selectedIndex = SelectedEdgeIndex;
                 Edges[selectedIndex] = fixedEdge;
@@ -305,7 +314,7 @@ namespace Lab1
                     //    if (index < 0)
                     //        index = Edges.Count - 1;
                     //} while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
-
+                    
                     correctEdges(selectedIndex + 1, selectedIndex - 1);
 
                     fixedEdge.RemoveConstraintButton.Click += removeConstraint!;
@@ -313,11 +322,11 @@ namespace Lab1
                 }
                 catch (VertexCannotBeMoved)
                 {
+                    Edges[selectedIndex] = SelectedEdge!;
                     foreach (Edge edge in Edges)
                     {
                         edge.Restore();
                     }
-                    Edges[selectedIndex] = SelectedEdge!;
                     MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
                 }
 
@@ -333,8 +342,9 @@ namespace Lab1
         {
             foreach (Edge edge in Edges)
             {
-                edge.Start.WasMoved = false;
-                edge.Start.WasChecked = false;
+                edge.ResetOwnedVerticesMovementFlags();
+                //edge.Start.WasMoved = false;
+                //edge.Start.WasChecked = false;
             }
         }
         private void removeConstraint(object sender, EventArgs e)
@@ -366,6 +376,7 @@ namespace Lab1
                 MessageBox.Show("Nie mo¿na ustawiæ ograniczenia pionowego dla dwóch s¹siednich krawêdzi");
             else if (SelectedEdge!.IsBasic)
             {
+                ResetVerticesPreviousPositions();
                 //SelectedEdge.UnsubscribeVertices();
                 VerticalEdge verticalEdge = new VerticalEdge(SelectedEdge!.Start, SelectedEdge!.End);
 
@@ -399,11 +410,11 @@ namespace Lab1
                 }
                 catch (VertexCannotBeMoved)
                 {
+                    Edges[selectedIndex] = SelectedEdge!;
                     foreach (Edge edge in Edges)
                     {
                         edge.Restore();
                     }
-                    Edges[selectedIndex] = SelectedEdge!;
                     MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
                 }
 
@@ -429,6 +440,7 @@ namespace Lab1
                 MessageBox.Show("Nie mo¿na ustawiæ ograniczenia poziomego dla dwóch s¹siednich krawêdzi");
             else if (SelectedEdge!.IsBasic)
             {
+                ResetVerticesPreviousPositions();
                 SelectedEdge.UnsubscribeVertices();
                 HorizontalEdge horizontalEdge = new HorizontalEdge(SelectedEdge!.Start, SelectedEdge!.End);
 
@@ -460,11 +472,11 @@ namespace Lab1
                 }
                 catch (VertexCannotBeMoved)
                 {
+                    Edges[selectedIndex] = SelectedEdge!;
                     foreach (Edge edge in Edges)
                     {
                         edge.Restore();
                     }
-                    Edges[selectedIndex] = SelectedEdge!;
                     MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
                 }
 
@@ -481,6 +493,7 @@ namespace Lab1
         {
             if (SelectedEdge!.IsBasic)
             {
+                ResetVerticesPreviousPositions();
                 SelectedEdge.UnsubscribeVertices();
                 BezierEdge fixedEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
 
@@ -513,11 +526,11 @@ namespace Lab1
                 }
                 catch (VertexCannotBeMoved)
                 {
+                    Edges[selectedIndex] = SelectedEdge!;
                     foreach (Edge edge in Edges)
                     {
                         edge.Restore();
                     }
-                    Edges[selectedIndex] = SelectedEdge!;
                     MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
                 }
 
@@ -635,28 +648,36 @@ namespace Lab1
 
         private void g0ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            g0ToolStripMenuItem.Checked = true;
-            g1ToolStripMenuItem.Checked = false;
-            c1ToolStripMenuItem.Checked = false;
-            SelectedVertex!.Contuinity = Vertex.ContuinityType.G0;
+            //g0ToolStripMenuItem.Checked = true;
+            //g1ToolStripMenuItem.Checked = false;
+            //c1ToolStripMenuItem.Checked = false;
+            SelectedVertex!.Continuity = Vertex.ContuinityType.G0;
         }
 
         private void g1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            g0ToolStripMenuItem.Checked = false;
-            g1ToolStripMenuItem.Checked = true;
-            c1ToolStripMenuItem.Checked = false;
-            SelectedVertex!.Contuinity = Vertex.ContuinityType.G1;
+            //g0ToolStripMenuItem.Checked = false;
+            //g1ToolStripMenuItem.Checked = true;
+            //c1ToolStripMenuItem.Checked = false;
+            ResetVerticesPreviousPositions();
+            SelectedVertex!.Continuity = Vertex.ContuinityType.G1;
+            SelectedVertex!.ContinuityChanged = true;
             correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
+            SelectedVertex!.ContinuityChanged = false;
+            ResetVertexMovementFlags();
         }
 
         private void c1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            g0ToolStripMenuItem.Checked = false;
-            g1ToolStripMenuItem.Checked = false;
-            c1ToolStripMenuItem.Checked = true;
-            SelectedVertex!.Contuinity = Vertex.ContuinityType.C1;
+            //g0ToolStripMenuItem.Checked = false;
+            //g1ToolStripMenuItem.Checked = false;
+            //c1ToolStripMenuItem.Checked = true;
+            ResetVerticesPreviousPositions();
+            SelectedVertex!.Continuity = Vertex.ContuinityType.C1;
+            SelectedVertex!.ContinuityChanged = true;
             correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
+            SelectedVertex!.ContinuityChanged = false;
+            ResetVertexMovementFlags();
         }
     }
 }

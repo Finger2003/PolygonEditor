@@ -30,13 +30,14 @@ namespace Lab1
         public event Action? EndChanged;
         public bool WasMoved { get; set; } = false;
         public bool WasChecked { get; set; } = false;
-        private Vector2 PreviousPosition { get; set; }
+        public Vector2 PreviousPosition { get; set; }
         public Vector2 PositionDifference { get => Position - PreviousPosition; }
 
         public bool IsControlPoint { get; }
         public double ControlAngle { get; set; }
         public double ControlLength { get; set; }
-        public ContuinityType Contuinity { get; set; } = ContuinityType.G0;
+        public ContuinityType Continuity { get; set; } = ContuinityType.G0;
+        public bool ContinuityChanged { get; set; }
 
 
         private Vertex(bool isControlPoint)
@@ -88,7 +89,12 @@ namespace Lab1
         }
         public static float Distance(Vertex v1, Vertex v2)
         {
-            return Vector2.Distance(v1.Position, v2.Position);
+            return Distance(v1.Position, v2.Position);
+        }
+
+        public static float Distance(Vector2 v1, Vector2 v2)
+        {
+            return Vector2.Distance(v1, v2);
         }
         public void InvokeStartPositionChanged()
         {
