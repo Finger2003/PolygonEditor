@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1.Visitors
+namespace Lab1.Visitors.VoidVisitors
 {
-    public class SetVerticesControlValuesEdgeVisitor : PolygonShapeKeepingEdgeVisitor, IEdgeVisitor
+    public class SetVerticesControlValuesEdgeVisitor : PolygonShapeKeepingEdgeVisitor, IEdgeVoidVisitor
     {
         public Vertex? Vertex { get; set; }
         private void SetStraightEdgeControlValues(Edge edge)
@@ -35,7 +35,7 @@ namespace Lab1.Visitors
                 v0.ControlAngle = GetControlAngle(v0, v1);
                 v0.ControlLength = GetControlLength(v0, v1);
             }
-            else if(Vertex == v2 || Vertex == v3)
+            else if (Vertex == v2 || Vertex == v3)
             {
                 v3.ControlAngle = GetControlAngle(v2, v3);
                 v3.ControlLength = GetControlLength(v2, v3);

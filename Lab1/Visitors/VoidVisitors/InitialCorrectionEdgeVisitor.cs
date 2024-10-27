@@ -1,9 +1,9 @@
 ﻿using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
 
-namespace Lab1.Visitors
+namespace Lab1.Visitors.VoidVisitors
 {
-    public class InitialCorrectionEdgeVisitor : PolygonShapeKeepingEdgeVisitor, IEdgeVisitor
+    public class InitialCorrectionEdgeVisitor : PolygonShapeKeepingEdgeVisitor, IEdgeVoidVisitor
     {
         public bool Forwards { get; set; }
         public void Visit(Edge edge)
@@ -91,6 +91,6 @@ namespace Lab1.Visitors
             }
         }
 
-        public void Visit(BezierEdge edge) { }    
+        public void Visit(BezierEdge edge) { }
     }
 }

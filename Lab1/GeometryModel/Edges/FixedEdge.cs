@@ -1,5 +1,6 @@
 ﻿using Lab1.Exceptions;
-using Lab1.Visitors;
+using Lab1.Visitors.CorrectionStatusVisitors;
+using Lab1.Visitors.VoidVisitors;
 using System.Numerics;
 
 namespace Lab1.GeometryModel.Edges
@@ -27,39 +28,39 @@ namespace Lab1.GeometryModel.Edges
             }
         }
 
-        public override void CorrectStartPositionBasically()
-        {
-            Start.Move(End.PositionDifference);
-            Start.WasMoved = true;
-            Start.ControlAngle = GetControlAngle(Start, End);
-            Start.ControlLength = GetControlLength(Start, End);
-        }
-        public override void CorrectEndPositionBasically()
-        {
-            End.Move(Start.PositionDifference);
-            End.WasMoved = true;
-            End.ControlAngle = GetControlAngle(Start, End);
-            End.ControlLength = GetControlLength(Start, End);
-        }
+        //public override void CorrectStartPositionBasically()
+        //{
+        //    Start.Move(End.PositionDifference);
+        //    Start.WasMoved = true;
+        //    Start.ControlAngle = GetControlAngle(Start, End);
+        //    Start.ControlLength = GetControlLength(Start, End);
+        //}
+        //public override void CorrectEndPositionBasically()
+        //{
+        //    End.Move(Start.PositionDifference);
+        //    End.WasMoved = true;
+        //    End.ControlAngle = GetControlAngle(Start, End);
+        //    End.ControlLength = GetControlLength(Start, End);
+        //}
 
 
-        public override correctingStatus CorrectEndPosition()
+        public override CorrectionStatus CorrectEndPosition()
         {
             double angle = Start.ControlAngle;
             return CorrectSecondVertex(Start, End, angle);
         }
 
-        public override correctingStatus CorrectStartPosition()
+        public override CorrectionStatus CorrectStartPosition()
         {
             double angle = End.ControlAngle + Math.PI;
             return CorrectSecondVertex(End, Start, angle);
         }
 
-        private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
+        private CorrectionStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
             if (firstVertex.Continuity == Vertex.ContuinityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged && firstVertex.ContinuityPropertiesChanged || secondVertex.WasMoved)
             {
-                return correctingStatus.CorrectionFailed;
+                return CorrectionStatus.CorrectionFailed;
             }
 
             if (firstVertex.WasMoved)
@@ -68,7 +69,7 @@ namespace Lab1.GeometryModel.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.G1)
             {
@@ -79,11 +80,12 @@ namespace Lab1.GeometryModel.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
-            return correctingStatus.FurtherCorrectionNotNeeded;
+            return CorrectionStatus.FurtherCorrectionNotNeeded;
         }
 
-        public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
+        public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => base.Accept(visitor);
     }
 }

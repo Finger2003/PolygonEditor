@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1.Visitors
+namespace Lab1.Visitors.VoidVisitors
 {
-    public class ResetVerticesFlagsEdgeVisitor : IEdgeVisitor
+    public class ResetVerticesFlagsEdgeVisitor : IEdgeVoidVisitor
     {
         private void ResetVertex(Vertex vertex)
         {

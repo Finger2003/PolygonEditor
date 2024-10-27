@@ -1,8 +1,8 @@
 ﻿using Lab1.GeometryModel.Edges;
 
-namespace Lab1.Visitors
+namespace Lab1.Visitors.VoidVisitors
 {
-    public interface IEdgeVisitor
+    public interface IEdgeVoidVisitor
     {
         void Visit(Edge edge);
         void Visit(HorizontalEdge edge);

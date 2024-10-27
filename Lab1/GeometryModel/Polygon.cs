@@ -1,6 +1,6 @@
 ﻿using Lab1.GeometryModel.EdgeFactories;
 using Lab1.GeometryModel.Edges;
-using Lab1.Visitors;
+using Lab1.Visitors.VoidVisitors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,7 +132,7 @@ namespace Lab1.GeometryModel
         {
             int index = startingIndexForward;
             int i = 0;
-            Edge.correctingStatus correctingStatus;
+            Edge.CorrectionStatus correctingStatus;
             do
             {
                 if (index >= Edges.Count)
@@ -141,9 +141,9 @@ namespace Lab1.GeometryModel
                 }
                 correctingStatus = Edges[index++].CorrectEndPosition();
 
-            } while (correctingStatus == Edge.correctingStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
+            } while (correctingStatus == Edge.CorrectionStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
 
-            if (correctingStatus == Edge.correctingStatus.CorrectionFailed)
+            if (correctingStatus == Edge.CorrectionStatus.CorrectionFailed)
                 return false;
 
             index = startingIndexBackward;
@@ -153,9 +153,9 @@ namespace Lab1.GeometryModel
                 if (index < 0)
                     index = Edges.Count - 1;
                 correctingStatus = Edges[index--].CorrectStartPosition();
-            } while (correctingStatus == Edge.correctingStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
+            } while (correctingStatus == Edge.CorrectionStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
 
-            return correctingStatus != Edge.correctingStatus.CorrectionFailed;
+            return correctingStatus != Edge.CorrectionStatus.CorrectionFailed;
         }
 
         public (int, Vertex?) GetHitVertexWithIndex(float x, float y)

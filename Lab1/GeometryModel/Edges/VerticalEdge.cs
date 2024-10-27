@@ -1,5 +1,6 @@
 ﻿using Lab1.Exceptions;
-using Lab1.Visitors;
+using Lab1.Visitors.CorrectionStatusVisitors;
+using Lab1.Visitors.VoidVisitors;
 
 namespace Lab1.GeometryModel.Edges
 {
@@ -15,22 +16,22 @@ namespace Lab1.GeometryModel.Edges
 
 
 
-        public override correctingStatus CorrectEndPosition()
+        public override CorrectionStatus CorrectEndPosition()
         {
             return CorrectSecondVertex(Start, End);
         }
 
-        public override correctingStatus CorrectStartPosition()
+        public override CorrectionStatus CorrectStartPosition()
         {
             return CorrectSecondVertex(End, Start);
         }
 
 
-        private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex)
+        private CorrectionStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex)
         {
             if (firstVertex.Continuity != Vertex.ContuinityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 && !firstVertex.ContinuityChanged || secondVertex.WasMoved)
             {
-                return correctingStatus.CorrectionFailed;
+                return CorrectionStatus.CorrectionFailed;
             }
 
             if (firstVertex.Continuity == Vertex.ContuinityType.G0)
@@ -40,16 +41,16 @@ namespace Lab1.GeometryModel.Edges
                     secondVertex.ControlLength = GetControlLength(Start, End);
                     if (secondVertex.Continuity == Vertex.ContuinityType.C1)
                     {
-                        return correctingStatus.FurtherCorrectionNeeded;
+                        return CorrectionStatus.FurtherCorrectionNeeded;
                     }
-                    return correctingStatus.FurtherCorrectionNotNeeded;
+                    return CorrectionStatus.FurtherCorrectionNotNeeded;
                 }
 
                 secondVertex.SetPosition(firstVertex.X, secondVertex.Y);
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.G1)
             {
@@ -59,9 +60,9 @@ namespace Lab1.GeometryModel.Edges
                     secondVertex.ControlLength = GetControlLength(Start, End);
                     if (secondVertex.Continuity == Vertex.ContuinityType.G0)
                     {
-                        return correctingStatus.FurtherCorrectionNotNeeded;
+                        return CorrectionStatus.FurtherCorrectionNotNeeded;
                     }
-                    return correctingStatus.FurtherCorrectionNeeded;
+                    return CorrectionStatus.FurtherCorrectionNeeded;
                 }
 
                 float newY = firstVertex.Y + Length * (secondVertex.Y > firstVertex.Y ? 1 : -1);
@@ -70,7 +71,7 @@ namespace Lab1.GeometryModel.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.C1)
             {
@@ -84,44 +85,45 @@ namespace Lab1.GeometryModel.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
             else
             {
-                return correctingStatus.FurtherCorrectionNotNeeded;
+                return CorrectionStatus.FurtherCorrectionNotNeeded;
             }
         }
 
-        public override void CorrectStartPositionBasically()
-        {
-            if (Start.X == End.X)
-            {
-                Start.WasMoved = false;
-            }
-            else
-            {
-                Start.SetPosition(End.X, Start.Y);
-                Start.WasMoved = true;
-            }
+        //public override void CorrectStartPositionBasically()
+        //{
+        //    if (Start.X == End.X)
+        //    {
+        //        Start.WasMoved = false;
+        //    }
+        //    else
+        //    {
+        //        Start.SetPosition(End.X, Start.Y);
+        //        Start.WasMoved = true;
+        //    }
 
-            Start.ControlAngle = GetControlAngle(Start, End);
-            Start.ControlLength = GetControlLength(Start, End);
-        }
-        public override void CorrectEndPositionBasically()
-        {
-            if (Start.X == End.X)
-            {
-                End.WasMoved = false;
-            }
-            else
-            {
-                End.SetPosition(Start.X, End.Y);
-            }
+        //    Start.ControlAngle = GetControlAngle(Start, End);
+        //    Start.ControlLength = GetControlLength(Start, End);
+        //}
+        //public override void CorrectEndPositionBasically()
+        //{
+        //    if (Start.X == End.X)
+        //    {
+        //        End.WasMoved = false;
+        //    }
+        //    else
+        //    {
+        //        End.SetPosition(Start.X, End.Y);
+        //    }
 
-            End.ControlAngle = GetControlAngle(Start, End);
-            End.ControlLength = GetControlLength(Start, End);
-        }
+        //    End.ControlAngle = GetControlAngle(Start, End);
+        //    End.ControlLength = GetControlLength(Start, End);
+        //}
 
-        public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
+        public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => base.Accept(visitor);
     }
 }

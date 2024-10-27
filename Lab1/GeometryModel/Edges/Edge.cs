@@ -1,10 +1,11 @@
-﻿using Lab1.Visitors;
+﻿using Lab1.Visitors.CorrectionStatusVisitors;
+using Lab1.Visitors.VoidVisitors;
 
 namespace Lab1.GeometryModel.Edges
 {
-    public class Edge : IEdgeVisitable
+    public class Edge : IEdgeVoidVisitable, IEdgeCorrectionStatusVisitable
     {
-        public enum correctingStatus
+        public enum CorrectionStatus
         {
             FurtherCorrectionNeeded,
             FurtherCorrectionNotNeeded,
@@ -36,31 +37,31 @@ namespace Lab1.GeometryModel.Edges
         //}
 
 
-        public virtual correctingStatus CorrectEndPosition()
+        public virtual CorrectionStatus CorrectEndPosition()
         {
             double angle = Start.ControlAngle;
             return CorrectSecondVertex(Start, End, angle);
         }
 
-        public virtual correctingStatus CorrectStartPosition()
+        public virtual CorrectionStatus CorrectStartPosition()
         {
             double angle = End.ControlAngle + Math.PI;
             return CorrectSecondVertex(End, Start, angle);
         }
 
-        public virtual void CorrectStartPositionBasically()
-        {
-            Start.ControlAngle = GetControlAngle(Start, End);
-            Start.ControlLength = GetControlLength(Start, End);
-        }
+        //public virtual void CorrectStartPositionBasically()
+        //{
+        //    Start.ControlAngle = GetControlAngle(Start, End);
+        //    Start.ControlLength = GetControlLength(Start, End);
+        //}
 
-        public virtual void CorrectEndPositionBasically()
-        {
-            End.ControlAngle = GetControlAngle(Start, End);
-            End.ControlLength = GetControlLength(Start, End);
-        }
+        //public virtual void CorrectEndPositionBasically()
+        //{
+        //    End.ControlAngle = GetControlAngle(Start, End);
+        //    End.ControlLength = GetControlLength(Start, End);
+        //}
 
-        private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
+        private CorrectionStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
             float newX, newY;
 
@@ -70,9 +71,9 @@ namespace Lab1.GeometryModel.Edges
                 secondVertex.ControlLength = GetControlLength(Start, End);
                 if (secondVertex.Continuity == Vertex.ContuinityType.G0)
                 {
-                    return correctingStatus.FurtherCorrectionNotNeeded;
+                    return CorrectionStatus.FurtherCorrectionNotNeeded;
                 }
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
 
             double length = Length;
@@ -88,7 +89,7 @@ namespace Lab1.GeometryModel.Edges
             secondVertex.WasMoved = true;
             secondVertex.ControlAngle = GetControlAngle(Start, End);
             secondVertex.ControlLength = GetControlLength(Start, End);
-            return correctingStatus.FurtherCorrectionNeeded;
+            return CorrectionStatus.FurtherCorrectionNeeded;
         }
 
         public Edge(Vertex start, Vertex end)
@@ -126,7 +127,8 @@ namespace Lab1.GeometryModel.Edges
             return numerator / denominator;
         }
 
-        public virtual void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
+        public virtual void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
+        public virtual CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => visitor.Visit(this);
 
         //public virtual void Restore()
         //{

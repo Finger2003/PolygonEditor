@@ -3,9 +3,9 @@ using Lab1.GeometryModel.Edges;
 using Lab1.LineDrawers;
 using System.Net;
 
-namespace Lab1.Visitors
+namespace Lab1.Visitors.VoidVisitors
 {
-    public class EdgeDrawingVisitor : IEdgeVisitor
+    public class EdgeDrawingVisitor : IEdgeVoidVisitor
     {
         //Bitmap Bitmap { get; }
         //Graphics G { get; }
@@ -51,7 +51,7 @@ namespace Lab1.Visitors
             Vertex startPoint = edge.Start;
             Vertex endPoint = edge.End;
 
-            PointF midPoint = new PointF((startPoint.X + endPoint.X) / 2,(startPoint.Y + endPoint.Y) / 2);
+            PointF midPoint = new PointF((startPoint.X + endPoint.X) / 2, (startPoint.Y + endPoint.Y) / 2);
             Font font = new Font("Arial", 16, FontStyle.Bold);
             SizeF textSize = G.MeasureString("H", font);
             G.DrawString("H", font, Brushes.LightBlue, midPoint.X - textSize.Width / 2, midPoint.Y - textSize.Height - 5);
@@ -72,7 +72,7 @@ namespace Lab1.Visitors
             PointF midPoint = new PointF((startPoint.X + endPoint.X) / 2, (startPoint.Y + endPoint.Y) / 2);
             Font font = new Font("Arial", 16, FontStyle.Bold);
             SizeF textSize = G.MeasureString("V", font);
-            G.DrawString("V", font, Brushes.LightBlue, midPoint.X + 5, midPoint.Y - textSize.Height/2);
+            G.DrawString("V", font, Brushes.LightBlue, midPoint.X + 5, midPoint.Y - textSize.Height / 2);
         }
 
         public void Visit(FixedEdge edge)
@@ -88,8 +88,8 @@ namespace Lab1.Visitors
             Vertex endPoint = edge.End;
 
             double length = edge.Length;
-            double angle = Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 /Math.PI;
-            bool isTextAbove= true;
+            double angle = Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI;
+            bool isTextAbove = true;
 
             if (angle > 90)
             {
@@ -144,7 +144,7 @@ namespace Lab1.Visitors
             G.DrawEllipse(Pens.Black, v2.X - 5, v2.Y - 5, 10, 10);
 
 
-            if(edge.Start.Continuity != Vertex.ContuinityType.G0)
+            if (edge.Start.Continuity != Vertex.ContuinityType.G0)
             {
                 drawContinuity(edge.Start);
             }

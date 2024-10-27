@@ -1,4 +1,5 @@
-﻿using Lab1.Visitors;
+﻿using Lab1.Visitors.CorrectionStatusVisitors;
+using Lab1.Visitors.VoidVisitors;
 
 namespace Lab1.GeometryModel.Edges
 {
@@ -50,7 +51,7 @@ namespace Lab1.GeometryModel.Edges
             return vertex is not null;
         }
 
-        public override correctingStatus CorrectEndPosition()
+        public override CorrectionStatus CorrectEndPosition()
         {
             if (Start.Continuity != Vertex.ContuinityType.G0 && !V1.WasMoved && Start.ContinuityPropertiesChanged)
             {
@@ -70,12 +71,12 @@ namespace Lab1.GeometryModel.Edges
             {
                 End.ControlAngle = GetControlAngle(V2, End);
                 End.ControlLength = GetControlLength(V2, End);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
-            return correctingStatus.FurtherCorrectionNotNeeded;
+            return CorrectionStatus.FurtherCorrectionNotNeeded;
         }
 
-        public override correctingStatus CorrectStartPosition()
+        public override CorrectionStatus CorrectStartPosition()
         {
             if (End.Continuity != Vertex.ContuinityType.G0 && !V2.WasMoved && End.ContinuityPropertiesChanged)
             {
@@ -95,9 +96,9 @@ namespace Lab1.GeometryModel.Edges
             {
                 Start.ControlAngle = GetControlAngle(Start, V1);
                 Start.ControlLength = GetControlLength(Start, V1);
-                return correctingStatus.FurtherCorrectionNeeded;
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
-            return correctingStatus.FurtherCorrectionNotNeeded;
+            return CorrectionStatus.FurtherCorrectionNotNeeded;
         }
 
         protected override double GetControlAngle(Vertex v1, Vertex v2)
@@ -154,8 +155,9 @@ namespace Lab1.GeometryModel.Edges
         //    V2.Restore();
         //}
 
-        public override void CorrectStartPositionBasically() { }
-        public override void CorrectEndPositionBasically() { }
-        public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
+        //public override void CorrectStartPositionBasically() { }
+        //public override void CorrectEndPositionBasically() { }
+        public override void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
+        public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => base.Accept(visitor);
     }
 }

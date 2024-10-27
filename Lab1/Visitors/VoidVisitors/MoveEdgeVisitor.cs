@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1.Visitors
+namespace Lab1.Visitors.VoidVisitors
 {
-    public class MoveEdgeVisitor: IEdgeVisitor
+    public class MoveEdgeVisitor : IEdgeVoidVisitor
     {
         public float Dx { get; set; }
         public float Dy { get; set; }

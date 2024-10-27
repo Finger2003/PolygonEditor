@@ -1,7 +1,7 @@
 using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
 using Lab1.LineDrawers;
-using Lab1.Visitors;
+using Lab1.Visitors.VoidVisitors;
 
 namespace Lab1
 {
