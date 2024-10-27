@@ -141,6 +141,32 @@ namespace Lab1.Visitors
 
             G.DrawEllipse(Pens.Black, v1.X - 5, v1.Y - 5, 10, 10);
             G.DrawEllipse(Pens.Black, v2.X - 5, v2.Y - 5, 10, 10);
+
+
+            if(edge.Start.Continuity != Vertex.ContuinityType.G0)
+            {
+                drawContinuity(edge.Start);
+            }
+            if (edge.End.Continuity != Vertex.ContuinityType.G0)
+            {
+                drawContinuity(edge.End);
+            }
+
+
+            void drawContinuity(Vertex vertex)
+            {
+                string text = vertex.Continuity.ToString();
+
+                // Ustalanie czcionki
+                Font font = new Font("Arial", 12);
+                SizeF textSize = G.MeasureString(text, font);
+
+                // Pozycjonowanie tekstu w okolicy wierzchołka (np. nad nim, przesunięte w prawo)
+                PointF textPosition = new PointF(vertex.X + 5, vertex.Y - textSize.Height - 5);
+
+                // Rysowanie literki klasy ciągłości
+                G.DrawString(text, font, Brushes.LightBlue, textPosition);
+            }
         }
     }
 }
