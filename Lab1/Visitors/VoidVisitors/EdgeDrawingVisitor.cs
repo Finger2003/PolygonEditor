@@ -7,13 +7,6 @@ namespace Lab1.Visitors.VoidVisitors
 {
     public class EdgeDrawingVisitor : IEdgeVoidVisitor
     {
-        //Bitmap Bitmap { get; }
-        //Graphics G { get; }
-        ////public EdgeDrawingVisitor(Bitmap bitmap)
-        ////{
-        ////    Bitmap = bitmap;
-        ////}
-        //public EdgeDrawingVisitor(Graphics g) => G = g;
         private Graphics G { get; }
         public ILineDrawer LineDrawer { get; set; }
         public EdgeDrawingVisitor(ILineDrawer lineDrawer, Graphics g)
@@ -22,18 +15,8 @@ namespace Lab1.Visitors.VoidVisitors
             G = g;
         }
 
-        //private void DrawStraightLine(Point start, Point end)
-        //{
-        //    G.DrawLine(Pens.Black, start, end);
-        //}
         public void Visit(Edge edge)
         {
-            //Pen pen = new Pen(Color.Black);
-            //using Graphics g = Graphics.FromImage(Bitmap);
-
-            //g.DrawLine(Pens.Black, startPoint, e.Location);
-            //DrawStraightLine(edge.Start.Position, edge.End.Position);
-            //drawingPictureBox.Image = Bitmap;
             Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
             Point end = new Point((int)edge.End.X, (int)edge.End.Y);
             LineDrawer.DrawStraightLine(start, end);
@@ -41,12 +24,10 @@ namespace Lab1.Visitors.VoidVisitors
 
         public void Visit(HorizontalEdge edge)
         {
-            // draw horizontal edge
-            //DrawStraightLine(edge.Start.Position, edge.End.Position);
+
             Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
             Point end = new Point((int)edge.End.X, (int)edge.End.Y);
             LineDrawer.DrawHorizontalLine(start, end);
-            //edge.RemoveConstraintButton.BringToFront();
 
             Vertex startPoint = edge.Start;
             Vertex endPoint = edge.End;
@@ -60,8 +41,7 @@ namespace Lab1.Visitors.VoidVisitors
 
         public void Visit(VerticalEdge edge)
         {
-            // draw vertical edge
-            //DrawStraightLine(edge.Start.Position, edge.End.Position);
+
             Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
             Point end = new Point((int)edge.End.X, (int)edge.End.Y);
             LineDrawer.DrawVerticalLine(start, end);
@@ -77,8 +57,6 @@ namespace Lab1.Visitors.VoidVisitors
 
         public void Visit(FixedEdge edge)
         {
-            // draw fixed edge
-            //DrawStraightLine(edge.Start.Position, edge.End.Position);
             Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
             Point end = new Point((int)edge.End.X, (int)edge.End.Y);
             LineDrawer.DrawStraightLine(start, end);

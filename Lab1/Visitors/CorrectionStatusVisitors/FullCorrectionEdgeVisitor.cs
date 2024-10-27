@@ -54,7 +54,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
-                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != 0 && firstVertex.ControlAngle != Math.PI /*&& !firstVertex.ContinuityChanged */|| secondVertex.WasMoved)
+                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != 0 && firstVertex.ControlAngle != Math.PI || secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
@@ -109,7 +109,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
-                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 /*&& !firstVertex.ContinuityChanged*/ || secondVertex.WasMoved)
+                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 || secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
@@ -164,7 +164,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
-                if (firstVertex.Continuity == Vertex.ContinuityType.C1 && !firstVertex.WasMoved && /*!firstVertex.ContinuityChanged &&*/ firstVertex.ContinuityPropertiesChanged || secondVertex.WasMoved)
+                if (firstVertex.Continuity == Vertex.ContinuityType.C1 && !firstVertex.WasMoved && firstVertex.ContinuityPropertiesChanged || secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
@@ -216,10 +216,9 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
             Vertex v1 = edge.V1;
             Vertex v2 = edge.V2;
 
-            if (Forward)
-                return CorrectVertices(end, v2, v1, start, -1);
-            else
-                return CorrectVertices(start, v1, v2, end, 1);
+            return Forward ? CorrectVertices(end, v2, v1, start, -1) : CorrectVertices(start, v1, v2, end, 1);
+
+
 
             CorrectionStatus CorrectVertices(Vertex firstVertex, Vertex secondVertex, Vertex thirdVertex, Vertex fourthVertex, int angleMultiplier)
             {

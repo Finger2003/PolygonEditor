@@ -2,8 +2,6 @@
 {
     public abstract class AbstractLineDrawer : ILineDrawer
     {
-        //protected Graphics G { get; }
-        //public AbstractLineDrawer(Graphics g) => G = g;
         private Pen DottedPen { get; } = new Pen(Color.Black) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot };
         protected Graphics G;
         protected AbstractLineDrawer(Graphics g) => G = g;
@@ -12,8 +10,6 @@
         public abstract void DrawStraightLine(Point start, Point end);
         public void DrawBezierCurve(Point v0, Point v3, Point v1, Point v2)
         {
-            //int a0x = v0.X;
-            //int a0y = v0.Y;
             int a1x = 3 * (v1.X - v0.X);
             int a1y = 3 * (v1.Y - v0.Y);
             int a2x = 3 * (v2.X - 2 * v1.X + v0.X);
@@ -51,8 +47,7 @@
                 dY += ddY;
                 ddX += dddX;
                 ddY += dddY;
-                //double x = ((a3x * t + a2x) * t + a1x) * t + a0x;
-                //double y = ((a3y * t + a2y) * t + a1y) * t + a0y;
+
                 G.DrawLine(Pens.Black, (float)oldX, (float)oldY, (float)x, (float)y);
                 oldX = x;
                 oldY = y;

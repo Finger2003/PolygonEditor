@@ -9,7 +9,6 @@ namespace Lab1
     public partial class PolygonEditor : Form
     {
         private Bitmap Bitmap { get; set; }
-        //private List<Edge> Edges { get; } = [];
         private Vertex? SelectedVertex { get; set; }
         private Edge? SelectedEdge { get; set; }
         private Edge? DrawnEdge { get; set; }
@@ -17,7 +16,6 @@ namespace Lab1
         private Point? HoldPoint { get; set; }
 
         private EdgeDrawingVisitor EdgeDrawingVisitor { get; set; }
-        //private IEdgeVisitor[] EdgeDrawingVisitors { get; }
         private ILineDrawer[] LineDrawers { get; }
         Graphics G { get; set; }
         private LengthDialogForm LengthDialogForm { get; set; } = new LengthDialogForm();
@@ -27,7 +25,7 @@ namespace Lab1
         private int SelectedEdgeIndex { get; set; } = -1;
 
         private Vertex.ContinuityType DefaultContinuity { get; set; } = Vertex.ContinuityType.C1;
-        private Polygon Polygon { get; }/* = new Polygon();*/
+        private Polygon Polygon { get; }
 
         private string ConstraintErrorMessage { get; } = "Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.";
 
@@ -39,12 +37,10 @@ namespace Lab1
             PolygonExample.Init();
             Polygon = PolygonExample.GetPolygon()!;
 
-            //Icon icon = new("icon.png");
             ResourceManager resourceManager = new("Lab1.Properties.Resources", typeof(PolygonEditor).Assembly);
             Icon = resourceManager.GetObject("Icon") as Icon;
 
             drawingPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
-            //Bitmap.
 
 
             Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
@@ -294,50 +290,6 @@ namespace Lab1
             }
         }
 
-        //private void drawingPictureBox_Resize(object sender, EventArgs e)
-        //{
-        //    Bitmap oldBitmap = Bitmap;
-        //    Graphics oldGraphics = G;
-
-        //    Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
-        //    G = Graphics.FromImage(Bitmap);
-        //    drawingPictureBox.Image = Bitmap;
-
-        //    LineDrawers[0] = new DefaultLineDrawer(G);
-        //    LineDrawers[1] = new BresenhamLineDrawer(Bitmap, G);
-        //    EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
-        //    //EdgeDrawingVisitor.LineDrawer = LineDrawers[defaultRadioButton.Checked ? 0 : 1];
-        //    //EdgeDrawingVisitor.G = G;
-
-        //    oldGraphics.Dispose();
-        //    oldBitmap.Dispose();
-
-        //    drawingPictureBox.Invalidate();
-        //    //LineDrawers = [new DefaultLineDrawer(G), new BresenhamLineDrawer(Bitmap, G)];
-
-        //    //EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
-        //}
-
-        private void drawingPictureBox_Resize_1(object sender, EventArgs e)
-        {
-            Bitmap oldBitmap = Bitmap;
-            Graphics oldGraphics = G;
-
-            Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
-            G = Graphics.FromImage(Bitmap);
-            drawingPictureBox.Image = Bitmap;
-
-            LineDrawers[0] = new DefaultLineDrawer(G);
-            LineDrawers[1] = new BresenhamLineDrawer(Bitmap, G);
-            EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
-            //EdgeDrawingVisitor.LineDrawer = LineDrawers[defaultRadioButton.Checked ? 0 : 1];
-            //EdgeDrawingVisitor.G = G;
-
-            oldGraphics.Dispose();
-            oldBitmap.Dispose();
-
-            drawingPictureBox.Invalidate();
-        }
 
         private void drawingPictureBox_SizeChanged(object sender, EventArgs e)
         {

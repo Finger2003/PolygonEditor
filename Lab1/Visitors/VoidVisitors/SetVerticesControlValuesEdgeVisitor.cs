@@ -40,9 +40,6 @@ namespace Lab1.Visitors.VoidVisitors
                 v3.ControlAngle = GetControlAngle(v2, v3);
                 v3.ControlLength = GetBezierControlLength(v2, v3);
             }
-
-            //double getControlAngle(Vertex v, Vertex w) => Math.Atan2(w.Y - v.Y, w.X - v.X);
-            //double getControlLength(Vertex v, Vertex w) => Vertex.Distance(v, w);
         }
     }
 }
