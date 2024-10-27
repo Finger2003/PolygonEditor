@@ -24,19 +24,6 @@ namespace Lab1.Edges
             return Length / 3;
         }
 
-        public virtual void StartChanged()
-        {
-            //if(Start.WasMoved)
-            //    throw new VertexAlreadyMovedException();
-
-            //Start.WasMoved = true;
-
-            //Start.WasChecked = true;
-
-            //if (!End.WasChecked)
-            //    End.NeighbourPositionChanged();
-        }
-        public virtual void EndChanged() { }
 
         public virtual bool IsControlVertex(Vertex v)
         {
@@ -53,84 +40,12 @@ namespace Lab1.Edges
         {
             double angle = Start.ControlAngle;
             return CorrectSecondVertex(Start, End, angle);
-
-
-
-            //float newX, newY;
-
-            //if (Start.Contuinity == Vertex.ContuinityType.G0)
-            //{
-            //    End.ControlAngle = GetControlAngle(Start, End);
-            //    End.ControlLength = GetControlLength(Start, End);
-            //    return End.Contuinity != Vertex.ContuinityType.G0;
-            //}
-
-            //double length = Length;
-            //double angle = Start.ControlAngle;
-            //if(Start.Contuinity == Vertex.ContuinityType.C1)
-            //{
-            //    length = Start.ControlLength * 3;
-            //}
-
-            //newX = (float)(Start.X + length * Math.Cos(angle));
-            //newY = (float)(Start.Y + length * Math.Sin(angle));
-
-            //End.SetPosition(newX, newY);
-            //End.WasMoved = true;
-            //End.ControlAngle = GetControlAngle(Start, End);
-            //End.ControlLength = GetControlLength(Start, End);
-            //return true;
-
-
-
-
-            //if (Start.Contuinity == Vertex.ContuinityType.G1)
-            //{
-            //    newX = (float)(Start.X + Length * Math.Cos(Start.ControlAngle));
-            //    newY = (float)(Start.Y + Length * Math.Sin(Start.ControlAngle));
-            //}
-            //else if (Start.Contuinity == Vertex.ContuinityType.C1)
-            //{
-            //    newX = (float)(Start.X + Start.ControlLength * Math.Cos(Start.ControlAngle));
-            //    newY = (float)(Start.Y + Start.ControlLength * Math.Sin(Start.ControlAngle));
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-
-            //End.SetPosition(newX, newY);
-            //End.WasMoved = true;
-            //return true;
         }
 
         public virtual correctingStatus CorrectStartPosition()
         {
             double angle = End.ControlAngle + Math.PI;
             return CorrectSecondVertex(End, Start, angle);
-
-
-
-            //double newX, newY;
-
-            //if (End.Contuinity == Vertex.ContuinityType.G1)
-            //{
-            //    newX = End.X - Length * Math.Cos(End.ControlAngle);
-            //    newY = End.Y - Length * Math.Sin(End.ControlAngle);
-            //}
-            //else if (End.Contuinity == Vertex.ContuinityType.C1)
-            //{
-            //    newX = End.X - End.ControlLength * Math.Cos(End.ControlAngle);
-            //    newY = End.Y - End.ControlLength * Math.Sin(End.ControlAngle);
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-
-            //Start.SetPosition((float)newX, (float)newY);
-            //Start.WasMoved = true;
-            //return true;
         }
 
         public virtual void CorrectStartPositionBasically()
@@ -158,11 +73,9 @@ namespace Lab1.Edges
                     return correctingStatus.FurtherCorrectionNotNeeded;
                 }
                 return correctingStatus.FurtherCorrectionNeeded;
-                //return secondVertex.Continuity != Vertex.ContuinityType.G0;
             }
 
             double length = Length;
-            //double angle = firstVertex.ControlAngle;
             if (firstVertex.Continuity == Vertex.ContuinityType.C1)
             {
                 length = firstVertex.ControlLength * 3;
@@ -182,7 +95,6 @@ namespace Lab1.Edges
         {
             Start = start;
             End = end;
-            //SubscribeVertices();
         }
 
 
@@ -214,16 +126,6 @@ namespace Lab1.Edges
             return numerator / denominator;
         }
 
-        public void UnsubscribeVertices()
-        {
-            Start.StartChanged -= StartChanged;
-            End.EndChanged -= EndChanged;
-        }
-        public void SubscribeVertices()
-        {
-            Start.StartChanged += StartChanged;
-            End.EndChanged += EndChanged;
-        }
         public virtual void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
 
         public virtual void Restore()
@@ -231,7 +133,6 @@ namespace Lab1.Edges
             Start.Restore();
         }
 
-        //public virtual void OnMoved() { }
         public virtual void MoveOwnedVertices(float dx, float dy)
         {
             Start.Move(dx, dy);
@@ -252,7 +153,6 @@ namespace Lab1.Edges
         }
         public virtual void ResetOwnedMovedVerticesPreviousPositions()
         {
-            //if (Start.WasMoved)
                 Start.ResetPreviousPosition();
         }
     }

@@ -13,7 +13,6 @@ namespace Lab1.Edges
         {
             V1 = new Vertex((Start.X + End.X) / 2, Start.Y, true);
             V2 = new Vertex((Start.X + End.X) / 2, End.Y, true);
-            //SetButtonPosition();
         }
 
         public override void MoveOwnedVertices(float dx, float dy)
@@ -36,33 +35,6 @@ namespace Lab1.Edges
 
             return vertex is not null;
         }
-
-        //protected override void SetButtonPosition()
-        //{
-        //    // Oblicz środek linii
-        //    double centerX = (V1.Position.X + V2.Position.X) / 2;
-        //    double centerY = (V1.Position.Y + V2.Position.Y) / 2;
-
-        //    // Oblicz wektor linii (różnica między V1 i V2)
-        //    double deltaX = V2.Position.X - V1.Position.X;
-        //    double deltaY = V2.Position.Y - V1.Position.Y;
-
-        //    // Oblicz wektor prostopadły do linii (wymiana współrzędnych i zmiana znaku jednej z nich)
-        //    double perpendicularX = -deltaY;
-        //    double perpendicularY = deltaX;
-
-        //    // Normalizuj wektor prostopadły, aby miał długość 10 pikseli
-        //    double length = Math.Sqrt(perpendicularX * perpendicularX + perpendicularY * perpendicularY);
-        //    double unitX = perpendicularX / length;
-        //    double unitY = perpendicularY / length;
-        //    double offsetX = unitX * 10;  // Przesunięcie w poziomie (nad linią)
-        //    double offsetY = unitY * 10;  // Przesunięcie w pionie (nad linią)
-
-        //    // Ustawienie pozycji przycisku z przesunięciem o 10 pikseli w górę
-        //    RemoveConstraintButton.Location = new Point((int)(centerX + offsetX - RemoveConstraintButton.Width / 2), (int)(centerY + offsetY - RemoveConstraintButton.Height / 2));
-
-        //    ButtonPreviousPosition = RemoveConstraintButton.Location;
-        //}
 
         public override correctingStatus CorrectEndPosition()
         {
@@ -117,26 +89,11 @@ namespace Lab1.Edges
         protected override double GetControlAngle(Vertex v1, Vertex v2)
         {
             return Math.Atan2(v2.Y - v1.Y, v2.X - v1.X);
-
-            //if (v == V1)
-            //    return Math.Atan2(V1.Position.Y - Start.Position.Y, V1.Position.X - Start.Position.X);
-
-            //if (v == V2)
-            //    return Math.Atan2(V2.Position.Y - End.Position.Y, V2.Position.X - End.Position.X);
-
-            //throw new ArgumentException("Vertex is not a control point of this edge");
         }
 
         protected override double GetControlLength(Vertex v1, Vertex v2)
         {
             return Vertex.Distance(v1, v2);
-            //if (v == V1)
-            //    return Vertex.Distance(Start, V1);
-
-            //if (v == V2)
-            //    return Vertex.Distance(End, V2);
-
-            //throw new ArgumentException("Vertex is not a control point of this edge");
         }
 
         public override bool IsControlVertex(Vertex v)
@@ -167,16 +124,12 @@ namespace Lab1.Edges
             base.ResetOwnedVerticesMovementFlags();
             V1.WasMoved = false;
             V2.WasMoved = false;
-            //V1.ContinuityPropertiesChanged = false;
-            //V2.ContinuityPropertiesChanged = false;
         }
 
         public override void ResetOwnedMovedVerticesPreviousPositions()
         {
             base.ResetOwnedMovedVerticesPreviousPositions();
-            //if (V1.WasMoved)
             V1.ResetPreviousPosition();
-            //if (V2.WasMoved)
             V2.ResetPreviousPosition();
         }
 
