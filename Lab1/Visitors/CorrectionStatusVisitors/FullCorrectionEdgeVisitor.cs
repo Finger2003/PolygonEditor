@@ -1,11 +1,6 @@
 ﻿using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
 using Lab1.Visitors.VoidVisitors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Lab1.GeometryModel.Edges.Edge;
 
 namespace Lab1.Visitors.CorrectionStatusVisitors
@@ -18,20 +13,11 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
             Vertex start = edge.Start;
             Vertex end = edge.End;
 
-            if (Forward)
-            {
-                double angle = start.ControlAngle;
-                return correctSecondVertex(start, end, angle);
-            }
-            else
-            {
-                double angle = end.ControlAngle + Math.PI;
-                return correctSecondVertex(end, start, angle);
-            }
+            return CorrectStraightEdge(edge, correctSecondVertex);
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
-                float newX, newY;
+                double newX, newY;
 
                 if (firstVertex.Continuity == Vertex.ContinuityType.G0)
                 {
@@ -46,14 +32,12 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
                 double length = edge.Length;
                 if (firstVertex.Continuity == Vertex.ContinuityType.C1)
-                {
                     length = firstVertex.ControlLength * 3;
-                }
 
-                newX = (float)(firstVertex.X + length * Math.Cos(angle));
-                newY = (float)(firstVertex.Y + length * Math.Sin(angle));
+                newX = firstVertex.X + length * Math.Cos(angle);
+                newY = firstVertex.Y + length * Math.Sin(angle);
 
-                secondVertex.SetPosition(newX, newY);
+                secondVertex.SetPosition((float)newX, (float)newY);
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(start, end);
                 secondVertex.ControlLength = GetControlLength(edge);
@@ -65,40 +49,27 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
         {
             Vertex start = edge.Start;
             Vertex end = edge.End;
-            if (Forward)
-            {
-                return correctSecondVertex(start, end);
-            }
-            else
-            {
-                return correctSecondVertex(end, start);
-            }
 
+            return CorrectStraightEdge(edge, correctSecondVertex);
 
-            CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex)
+            CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
                 if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != 0 && firstVertex.ControlAngle != Math.PI /*&& !firstVertex.ContinuityChanged */|| secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
 
+                double newX, newY = firstVertex.Y;
+
                 if (firstVertex.Continuity == Vertex.ContinuityType.G0)
                 {
                     if (firstVertex.Position.Y == secondVertex.Position.Y)
                     {
                         secondVertex.ControlLength = GetControlLength(edge);
-                        if (secondVertex.Continuity == Vertex.ContinuityType.C1)
-                        {
-                            return CorrectionStatus.FurtherCorrectionNeeded;
-                        }
-                        return CorrectionStatus.FurtherCorrectionNotNeeded;
+                        return secondVertex.Continuity == Vertex.ContinuityType.C1 ? CorrectionStatus.FurtherCorrectionNeeded : CorrectionStatus.FurtherCorrectionNotNeeded;
                     }
 
-                    secondVertex.SetPosition(secondVertex.X, firstVertex.Y);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    newX = secondVertex.X;
                 }
                 else if (firstVertex.Continuity == Vertex.ContinuityType.G1)
                 {
@@ -106,39 +77,26 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
                     {
                         secondVertex.ControlAngle = GetControlAngle(start, end);
                         secondVertex.ControlLength = GetControlLength(edge);
-                        if (secondVertex.Continuity == Vertex.ContinuityType.G0)
-                        {
-                            return CorrectionStatus.FurtherCorrectionNotNeeded;
-                        }
-                        return CorrectionStatus.FurtherCorrectionNeeded;
+
+                        return secondVertex.Continuity == Vertex.ContinuityType.G0 ? CorrectionStatus.FurtherCorrectionNotNeeded : CorrectionStatus.FurtherCorrectionNeeded;
                     }
 
-                    float newX = firstVertex.X + edge.Length * (secondVertex.X > firstVertex.X ? 1 : -1);
-
-                    secondVertex.SetPosition(newX, firstVertex.Y);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    newX = firstVertex.X + Math.Cos(angle) * edge.Length;
                 }
                 else if (firstVertex.Continuity == Vertex.ContinuityType.C1)
                 {
-                    double angle = firstVertex.ControlAngle;
                     double length = firstVertex.ControlLength * 3;
-
-                    double newX = firstVertex.X + (secondVertex.X > firstVertex.X ? 1 : -1) * length;
-                    double newY = firstVertex.Y;
-
-                    secondVertex.SetPosition((float)newX, (float)newY);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    newX = firstVertex.X + Math.Cos(angle) * length;
                 }
                 else
-                {
-                    return CorrectionStatus.FurtherCorrectionNotNeeded;
-                }
+                    throw new NotImplementedException();
+
+
+                secondVertex.SetPosition((float)newX, (float)newY);
+                secondVertex.WasMoved = true;
+                secondVertex.ControlAngle = GetControlAngle(start, end);
+                secondVertex.ControlLength = GetControlLength(edge);
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
         }
 
@@ -146,39 +104,27 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
         {
             Vertex start = edge.Start;
             Vertex end = edge.End;
-            if (Forward)
-            {
-                return correctSecondVertex(start, end);
-            }
-            else
-            {
-                return correctSecondVertex(end, start);
-            }
 
-            CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex)
+            return CorrectStraightEdge(edge, correctSecondVertex);
+
+            CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
                 if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 /*&& !firstVertex.ContinuityChanged*/ || secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
 
+                double newX = firstVertex.X, newY;
+
                 if (firstVertex.Continuity == Vertex.ContinuityType.G0)
                 {
                     if (firstVertex.X == secondVertex.X)
                     {
                         secondVertex.ControlLength = GetControlLength(edge);
-                        if (secondVertex.Continuity == Vertex.ContinuityType.C1)
-                        {
-                            return CorrectionStatus.FurtherCorrectionNeeded;
-                        }
-                        return CorrectionStatus.FurtherCorrectionNotNeeded;
+                        return secondVertex.Continuity == Vertex.ContinuityType.C1 ? CorrectionStatus.FurtherCorrectionNeeded : CorrectionStatus.FurtherCorrectionNotNeeded;
                     }
 
-                    secondVertex.SetPosition(firstVertex.X, secondVertex.Y);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    newY = secondVertex.Y;
                 }
                 else if (firstVertex.Continuity == Vertex.ContinuityType.G1)
                 {
@@ -186,39 +132,24 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
                     {
                         secondVertex.ControlAngle = GetControlAngle(start, end);
                         secondVertex.ControlLength = GetControlLength(edge);
-                        if (secondVertex.Continuity == Vertex.ContinuityType.G0)
-                        {
-                            return CorrectionStatus.FurtherCorrectionNotNeeded;
-                        }
-                        return CorrectionStatus.FurtherCorrectionNeeded;
+                        return secondVertex.Continuity == Vertex.ContinuityType.G0 ? CorrectionStatus.FurtherCorrectionNotNeeded : CorrectionStatus.FurtherCorrectionNeeded;
                     }
 
-                    float newY = firstVertex.Y + edge.Length * (secondVertex.Y > firstVertex.Y ? 1 : -1);
-
-                    secondVertex.SetPosition(firstVertex.X, newY);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    newY = firstVertex.Y + Math.Sin(angle) * edge.Length;
                 }
                 else if (firstVertex.Continuity == Vertex.ContinuityType.C1)
                 {
-                    double angle = firstVertex.ControlAngle;
                     double length = firstVertex.ControlLength * 3;
-
-                    double newX = firstVertex.X;
-                    double newY = firstVertex.Y + length * (secondVertex.Y > firstVertex.Y ? 1 : -1);
-
-                    secondVertex.SetPosition((float)newX, (float)newY);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    newY = firstVertex.Y + Math.Sin(angle) * length;
                 }
                 else
-                {
-                    return CorrectionStatus.FurtherCorrectionNotNeeded;
-                }
+                    throw new NotImplementedException();
+
+                secondVertex.SetPosition((float)newX, (float)newY);
+                secondVertex.WasMoved = true;
+                secondVertex.ControlAngle = GetControlAngle(start, end);
+                secondVertex.ControlLength = GetControlLength(edge);
+                return CorrectionStatus.FurtherCorrectionNeeded;
             }
         }
 
@@ -227,16 +158,9 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
         {
             Vertex start = edge.Start;
             Vertex end = edge.End;
-            if (Forward)
-            {
-                double angle = start.ControlAngle;
-                return correctSecondVertex(start, end, angle);
-            }
-            else
-            {
-                double angle = end.ControlAngle + Math.PI;
-                return correctSecondVertex(end, start, angle);
-            }
+
+            return CorrectStraightEdge(edge, correctSecondVertex);
+
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
@@ -245,28 +169,43 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
                     return CorrectionStatus.CorrectionFailed;
                 }
 
-                if (firstVertex.WasMoved)
-                {
-                    secondVertex.Move(firstVertex.PositionDifference);
-                    secondVertex.WasMoved = true;
-                    secondVertex.ControlAngle = GetControlAngle(start, end);
-                    secondVertex.ControlLength = GetControlLength(edge);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
-                }
-                else if (firstVertex.Continuity == Vertex.ContinuityType.G1)
-                {
-                    double newX = firstVertex.X + edge.SetLength * Math.Cos(angle);
-                    double newY = firstVertex.Y + edge.SetLength * Math.Sin(angle);
+                bool wasMoved = firstVertex.WasMoved;
+                bool isG1 = firstVertex.Continuity == Vertex.ContinuityType.G1;
 
-                    secondVertex.SetPosition((float)newX, (float)newY);
+                if (wasMoved || isG1)
+                {
+                    if (wasMoved)
+                        secondVertex.Move(firstVertex.PositionDifference);
+                    else
+                    {
+                        double newX = firstVertex.X + edge.SetLength * Math.Cos(angle);
+                        double newY = firstVertex.Y + edge.SetLength * Math.Sin(angle);
+                        secondVertex.SetPosition((float)newX, (float)newY);
+                    }
                     secondVertex.WasMoved = true;
                     secondVertex.ControlAngle = GetControlAngle(start, end);
                     secondVertex.ControlLength = GetControlLength(edge);
                     return CorrectionStatus.FurtherCorrectionNeeded;
                 }
+
                 return CorrectionStatus.FurtherCorrectionNotNeeded;
             }
+        }
 
+        private CorrectionStatus CorrectStraightEdge(Edge edge, Func<Vertex, Vertex, double, CorrectionStatus> func)
+        {
+            Vertex start = edge.Start;
+            Vertex end = edge.End;
+            if (Forward)
+            {
+                double angle = start.ControlAngle;
+                return func(start, end, angle);
+            }
+            else
+            {
+                double angle = end.ControlAngle + Math.PI;
+                return func(end, start, angle);
+            }
         }
 
 
@@ -278,49 +217,30 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
             Vertex v2 = edge.V2;
 
             if (Forward)
-            {
-                if (start.Continuity != Vertex.ContinuityType.G0 && !v1.WasMoved && start.ContinuityPropertiesChanged)
-                {
-                    double length = start.ControlLength;
-                    if (start.Continuity == Vertex.ContinuityType.G1)
-                    {
-                        length = Vertex.Distance(start.PreviousPosition, v1.Position);
-                    }
-
-                    double newX = start.X + length * Math.Cos(start.ControlAngle);
-                    double newY = start.Y + length * Math.Sin(start.ControlAngle);
-                    v1.SetPosition((float)newX, (float)newY);
-                    //v1.WasMoved = true;
-                }
-
-                if (v2.WasMoved)
-                {
-                    end.ControlAngle = GetControlAngle(v2, end);
-                    end.ControlLength = GetBezierControlLength(v2, end);
-                    return CorrectionStatus.FurtherCorrectionNeeded;
-                }
-                return CorrectionStatus.FurtherCorrectionNotNeeded;
-            }
+                return CorrectVertices(end, v2, v1, start, -1);
             else
+                return CorrectVertices(start, v1, v2, end, 1);
+
+            CorrectionStatus CorrectVertices(Vertex firstVertex, Vertex secondVertex, Vertex thirdVertex, Vertex fourthVertex, int angleMultiplier)
             {
-                if (end.Continuity != Vertex.ContinuityType.G0 && !v2.WasMoved && end.ContinuityPropertiesChanged)
+                if (fourthVertex.Continuity != Vertex.ContinuityType.G0 && !thirdVertex.WasMoved && fourthVertex.ContinuityPropertiesChanged)
                 {
-                    double length = end.ControlLength;
-                    if (end.Continuity == Vertex.ContinuityType.G1)
+                    double length = fourthVertex.ControlLength;
+                    if (fourthVertex.Continuity == Vertex.ContinuityType.G1)
                     {
-                        length = Vertex.Distance(v2.Position, end.PreviousPosition);
+                        length = Vertex.Distance(thirdVertex.Position, fourthVertex.PreviousPosition);
                     }
 
-                    double newX = end.X - length * Math.Cos(end.ControlAngle);
-                    double newY = end.Y - length * Math.Sin(end.ControlAngle);
-                    v2.SetPosition((float)newX, (float)newY);
-                    //v2.WasMoved = true;
+                    double newX = fourthVertex.X - length * Math.Cos(fourthVertex.ControlAngle) * angleMultiplier;
+                    double newY = fourthVertex.Y - length * Math.Sin(fourthVertex.ControlAngle) * angleMultiplier;
+                    thirdVertex.SetPosition((float)newX, (float)newY);
+                    thirdVertex.WasMoved = true;
                 }
 
-                if (v1.WasMoved)
+                if (secondVertex.WasMoved)
                 {
-                    start.ControlAngle = GetControlAngle(start, v1);
-                    start.ControlLength = GetBezierControlLength(start, v1);
+                    firstVertex.ControlAngle = GetControlAngle(firstVertex, secondVertex) * angleMultiplier;
+                    firstVertex.ControlLength = GetBezierControlLength(firstVertex, secondVertex);
                     return CorrectionStatus.FurtherCorrectionNeeded;
                 }
                 return CorrectionStatus.FurtherCorrectionNotNeeded;
