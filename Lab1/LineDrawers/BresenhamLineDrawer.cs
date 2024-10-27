@@ -3,7 +3,7 @@
     public class BresenhamLineDrawer : AbstractLineDrawer
     {
         private Bitmap Bitmap { get; }
-        public BresenhamLineDrawer(Bitmap bitmap) : base(Graphics.FromImage(bitmap)) => Bitmap = bitmap;
+        public BresenhamLineDrawer(Bitmap bitmap, Graphics g) : base(g) => Bitmap = bitmap;
 
         public override void DrawHorizontalLine(Point start, Point end)
         {

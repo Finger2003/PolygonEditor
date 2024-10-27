@@ -36,7 +36,7 @@ namespace Lab1
             drawingPictureBox.Image = Bitmap;
             G = Graphics.FromImage(Bitmap);
             G.Clear(Color.White);
-            LineDrawers = [new DefaultLineDrawer(Bitmap), new BresenhamLineDrawer(Bitmap)];
+            LineDrawers = [new DefaultLineDrawer(G), new BresenhamLineDrawer(Bitmap, G)];
             //ContextMenuStrip.Enabled = false;
 
             EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);

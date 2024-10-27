@@ -2,7 +2,7 @@
 {
     public class DefaultLineDrawer : AbstractLineDrawer
     {
-        public DefaultLineDrawer(Bitmap bitmap) : base(Graphics.FromImage(bitmap)) { }
+        public DefaultLineDrawer(Graphics g) : base(g) { }
 
         public override void DrawHorizontalLine(Point start, Point end)
         {
