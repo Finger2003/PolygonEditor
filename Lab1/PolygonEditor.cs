@@ -381,7 +381,7 @@ namespace Lab1
             if (SelectedEdge!.IsBasic)
             {
                 ResetVerticesPreviousPositions();
-                if(SelectedEdge!.Start.Continuity == Vertex.ContuinityType.G0)
+                if (SelectedEdge!.Start.Continuity == Vertex.ContuinityType.G0)
                 {
                     SelectedEdge!.Start.Continuity = DefaultContuinity;
                 }
@@ -452,7 +452,7 @@ namespace Lab1
             {
                 start.Continuity = Vertex.ContuinityType.G0;
             }
-            if(!Edges[nextIndex].IsBezier)
+            if (!Edges[nextIndex].IsBezier)
             {
                 end.Continuity = Vertex.ContuinityType.G0;
             }
@@ -552,6 +552,12 @@ namespace Lab1
             }
             Edge newEdge = new Edge(SelectedEdge!.Start, SelectedEdge.End);
             Edges[index] = newEdge;
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HelpForm helpForm = new HelpForm();
+            helpForm.Show();
         }
     }
 }

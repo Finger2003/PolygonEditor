@@ -41,13 +41,13 @@
             pionowaToolStripMenuItem = new ToolStripMenuItem();
             poziomaToolStripMenuItem = new ToolStripMenuItem();
             beToolStripMenuItem = new ToolStripMenuItem();
+            removeConstraintToolStripMenuItem = new ToolStripMenuItem();
             verticesContextMenuStrip = new ContextMenuStrip(components);
             deleteVertexToolStripMenuItem = new ToolStripMenuItem();
             setContinuityInVertexToolStripMenuItem = new ToolStripMenuItem();
             g0ToolStripMenuItem = new ToolStripMenuItem();
             g1ToolStripMenuItem = new ToolStripMenuItem();
             c1ToolStripMenuItem = new ToolStripMenuItem();
-            removeConstraintToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).BeginInit();
             edgesContextMenuStrip.SuspendLayout();
@@ -68,6 +68,7 @@
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(57, 20);
             helpToolStripMenuItem.Text = "Pomoc";
+            helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
             // 
             // defaultRadioButton
             // 
@@ -109,12 +110,12 @@
             // 
             edgesContextMenuStrip.Items.AddRange(new ToolStripItem[] { dodajWierzchołekToolStripMenuItem, addConstraintToolStripMenuItem, removeConstraintToolStripMenuItem });
             edgesContextMenuStrip.Name = "contextMenuStrip1";
-            edgesContextMenuStrip.Size = new Size(181, 92);
+            edgesContextMenuStrip.Size = new Size(176, 70);
             // 
             // dodajWierzchołekToolStripMenuItem
             // 
             dodajWierzchołekToolStripMenuItem.Name = "dodajWierzchołekToolStripMenuItem";
-            dodajWierzchołekToolStripMenuItem.Size = new Size(180, 22);
+            dodajWierzchołekToolStripMenuItem.Size = new Size(175, 22);
             dodajWierzchołekToolStripMenuItem.Text = "Dodaj wierzchołek";
             dodajWierzchołekToolStripMenuItem.Click += dodajWierzchołekToolStripMenuItem_Click;
             // 
@@ -122,36 +123,43 @@
             // 
             addConstraintToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { stałaDługośćToolStripMenuItem, pionowaToolStripMenuItem, poziomaToolStripMenuItem, beToolStripMenuItem });
             addConstraintToolStripMenuItem.Name = "addConstraintToolStripMenuItem";
-            addConstraintToolStripMenuItem.Size = new Size(180, 22);
+            addConstraintToolStripMenuItem.Size = new Size(175, 22);
             addConstraintToolStripMenuItem.Text = "Dodaj ograniczenie";
             // 
             // stałaDługośćToolStripMenuItem
             // 
             stałaDługośćToolStripMenuItem.Name = "stałaDługośćToolStripMenuItem";
-            stałaDługośćToolStripMenuItem.Size = new Size(180, 22);
+            stałaDługośćToolStripMenuItem.Size = new Size(144, 22);
             stałaDługośćToolStripMenuItem.Text = "Stała długość";
             stałaDługośćToolStripMenuItem.Click += stałaDługośćToolStripMenuItem_Click;
             // 
             // pionowaToolStripMenuItem
             // 
             pionowaToolStripMenuItem.Name = "pionowaToolStripMenuItem";
-            pionowaToolStripMenuItem.Size = new Size(180, 22);
+            pionowaToolStripMenuItem.Size = new Size(144, 22);
             pionowaToolStripMenuItem.Text = "Pionowa";
             pionowaToolStripMenuItem.Click += pionowaToolStripMenuItem_Click;
             // 
             // poziomaToolStripMenuItem
             // 
             poziomaToolStripMenuItem.Name = "poziomaToolStripMenuItem";
-            poziomaToolStripMenuItem.Size = new Size(180, 22);
+            poziomaToolStripMenuItem.Size = new Size(144, 22);
             poziomaToolStripMenuItem.Text = "Pozioma";
             poziomaToolStripMenuItem.Click += poziomaToolStripMenuItem_Click;
             // 
             // beToolStripMenuItem
             // 
             beToolStripMenuItem.Name = "beToolStripMenuItem";
-            beToolStripMenuItem.Size = new Size(180, 22);
+            beToolStripMenuItem.Size = new Size(144, 22);
             beToolStripMenuItem.Text = "Bézier";
             beToolStripMenuItem.Click += beToolStripMenuItem_Click;
+            // 
+            // removeConstraintToolStripMenuItem
+            // 
+            removeConstraintToolStripMenuItem.Name = "removeConstraintToolStripMenuItem";
+            removeConstraintToolStripMenuItem.Size = new Size(175, 22);
+            removeConstraintToolStripMenuItem.Text = "Usuń ograniczenie";
+            removeConstraintToolStripMenuItem.Click += removeConstraintToolStripMenuItem_Click;
             // 
             // verticesContextMenuStrip
             // 
@@ -195,13 +203,6 @@
             c1ToolStripMenuItem.Size = new Size(88, 22);
             c1ToolStripMenuItem.Text = "C1";
             c1ToolStripMenuItem.Click += c1ToolStripMenuItem_Click;
-            // 
-            // removeConstraintToolStripMenuItem
-            // 
-            removeConstraintToolStripMenuItem.Name = "removeConstraintToolStripMenuItem";
-            removeConstraintToolStripMenuItem.Size = new Size(180, 22);
-            removeConstraintToolStripMenuItem.Text = "Usuń ograniczenie";
-            removeConstraintToolStripMenuItem.Click += removeConstraintToolStripMenuItem_Click;
             // 
             // PolygonEditor
             // 
