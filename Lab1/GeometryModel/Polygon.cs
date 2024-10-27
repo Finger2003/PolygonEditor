@@ -1,5 +1,6 @@
 ﻿using Lab1.GeometryModel.EdgeFactories;
 using Lab1.GeometryModel.Edges;
+using Lab1.Visitors.CorrectionStatusVisitors;
 using Lab1.Visitors.VoidVisitors;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Lab1.GeometryModel
         private MoveEdgeVisitor MoveEdgeVisitor { get; } = new();
         private SetVerticesControlValuesEdgeVisitor SetVerticesControlValuesEdgeVisitor { get; } = new();
         private InitialCorrectionEdgeVisitor InitialCorrectionEdgeVisitor { get; } = new();
+        private FullCorrectionEdgeVisitor FullCorrectionEdgeVisitor { get; } = new();
 
         public void SetVertexPosition( int vertexIndex, Vertex vertex, float x, float y)
         {
@@ -133,13 +135,15 @@ namespace Lab1.GeometryModel
             int index = startingIndexForward;
             int i = 0;
             Edge.CorrectionStatus correctingStatus;
+            FullCorrectionEdgeVisitor.Forward = true;
             do
             {
                 if (index >= Edges.Count)
                 {
                     index = 0;
                 }
-                correctingStatus = Edges[index++].CorrectEndPosition();
+                correctingStatus = Edges[index++].Accept(FullCorrectionEdgeVisitor);
+                //correctingStatus = Edges[index++].CorrectEndPosition();
 
             } while (correctingStatus == Edge.CorrectionStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
 
@@ -148,11 +152,13 @@ namespace Lab1.GeometryModel
 
             index = startingIndexBackward;
             i = 0;
+            FullCorrectionEdgeVisitor.Forward = false;
             do
             {
                 if (index < 0)
                     index = Edges.Count - 1;
-                correctingStatus = Edges[index--].CorrectStartPosition();
+                correctingStatus = Edges[index--].Accept(FullCorrectionEdgeVisitor);
+                //correctingStatus = Edges[index--].CorrectStartPosition();
             } while (correctingStatus == Edge.CorrectionStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
 
             return correctingStatus != Edge.CorrectionStatus.CorrectionFailed;

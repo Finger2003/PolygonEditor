@@ -11,7 +11,7 @@ namespace Lab1.GeometryModel.Edges
         public override bool IsFixed { get => true; }
         //public int Length { get; set; }
         public double RealSquaredLength { get; private set; }
-        private int SetLength { get; }
+        public int SetLength { get; }
 
         public FixedEdge(Vertex start, Vertex end, int length) : base(start, end)
         {

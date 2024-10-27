@@ -33,12 +33,12 @@ namespace Lab1.Visitors.VoidVisitors
             if (Vertex == v0 || Vertex == v1)
             {
                 v0.ControlAngle = GetControlAngle(v0, v1);
-                v0.ControlLength = GetControlLength(v0, v1);
+                v0.ControlLength = GetBezierControlLength(v0, v1);
             }
             else if (Vertex == v2 || Vertex == v3)
             {
                 v3.ControlAngle = GetControlAngle(v2, v3);
-                v3.ControlLength = GetControlLength(v2, v3);
+                v3.ControlLength = GetBezierControlLength(v2, v3);
             }
 
             //double getControlAngle(Vertex v, Vertex w) => Math.Atan2(w.Y - v.Y, w.X - v.X);

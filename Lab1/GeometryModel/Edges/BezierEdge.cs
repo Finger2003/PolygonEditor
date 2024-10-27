@@ -158,6 +158,6 @@ namespace Lab1.GeometryModel.Edges
         //public override void CorrectStartPositionBasically() { }
         //public override void CorrectEndPositionBasically() { }
         public override void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
-        public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => base.Accept(visitor);
+        public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => visitor.Visit(this);
     }
 }
