@@ -82,7 +82,9 @@ namespace Lab1
                 //SelectedVertex = Edges.Find(edge => edge.Start.IsHit(e.Location))?.Start;
                 if (SelectedVertexIndex >= 0)
                 {
+                    int previousIndex = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
                     SelectedVertex = Edges[SelectedVertexIndex].Start;
+                    setContinuityInVertexToolStripMenuItem.Enabled = Edges[SelectedVertexIndex].IsBezier || Edges[previousIndex].IsBezier;
                     g0ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G0;
                     g1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G1;
                     c1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.C1;
