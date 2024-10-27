@@ -77,7 +77,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex)
             {
-                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != 0 && firstVertex.ControlAngle != Math.PI && !firstVertex.ContinuityChanged || secondVertex.WasMoved)
+                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != 0 && firstVertex.ControlAngle != Math.PI /*&& !firstVertex.ContinuityChanged */|| secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
@@ -157,7 +157,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex)
             {
-                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 && !firstVertex.ContinuityChanged || secondVertex.WasMoved)
+                if (firstVertex.Continuity != Vertex.ContinuityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 /*&& !firstVertex.ContinuityChanged*/ || secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }
@@ -240,7 +240,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
-                if (firstVertex.Continuity == Vertex.ContinuityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged && firstVertex.ContinuityPropertiesChanged || secondVertex.WasMoved)
+                if (firstVertex.Continuity == Vertex.ContinuityType.C1 && !firstVertex.WasMoved && /*!firstVertex.ContinuityChanged &&*/ firstVertex.ContinuityPropertiesChanged || secondVertex.WasMoved)
                 {
                     return CorrectionStatus.CorrectionFailed;
                 }

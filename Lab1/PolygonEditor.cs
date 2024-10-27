@@ -341,6 +341,9 @@ namespace Lab1
 
         private void drawingPictureBox_SizeChanged(object sender, EventArgs e)
         {
+            if (drawingPictureBox.Height <= 0 || drawingPictureBox.Width <= 0)
+                return;
+
             Bitmap oldBitmap = Bitmap;
             Graphics oldGraphics = G;
 
