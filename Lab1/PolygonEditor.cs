@@ -390,20 +390,24 @@ namespace Lab1
                     SelectedEdge!.End.Continuity = DefaultContuinity;
                 }
 
-                BezierEdge fixedEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
+                BezierEdge bezierEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
 
 
 
                 int selectedIndex = SelectedEdgeIndex;
+                int previousIndex = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
+                int nextIndex = selectedIndex == Edges.Count - 1 ? 0 : selectedIndex + 1;
+                Edges[previousIndex].SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
+                Edges[nextIndex].SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
 
 
-                Edges[selectedIndex] = fixedEdge;
+                Edges[selectedIndex] = bezierEdge;
 
                 try
                 {
 
 
-                    correctEdges(selectedIndex + 1, selectedIndex - 1);
+                    correctEdges(selectedIndex, selectedIndex);
 
 
                 }
@@ -513,6 +517,8 @@ namespace Lab1
             ResetVerticesPreviousPositions();
             SelectedVertex!.Continuity = Vertex.ContuinityType.G1;
             SelectedVertex!.ContinuityChanged = true;
+            int previousIndex = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
+            Edges[previousIndex].SetVerticesContinuityRelevantProperties(SelectedVertex);
             correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
             SelectedVertex!.ContinuityChanged = false;
             ResetVertexMovementFlags();
@@ -524,6 +530,8 @@ namespace Lab1
             ResetVerticesPreviousPositions();
             SelectedVertex!.Continuity = Vertex.ContuinityType.C1;
             SelectedVertex!.ContinuityChanged = true;
+            int previousIndex = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
+            Edges[previousIndex].SetVerticesContinuityRelevantProperties(SelectedVertex);
             correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
             SelectedVertex!.ContinuityChanged = false;
             ResetVertexMovementFlags();
