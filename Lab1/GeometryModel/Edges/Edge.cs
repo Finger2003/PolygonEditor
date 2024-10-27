@@ -16,80 +16,12 @@ namespace Lab1.GeometryModel.Edges
         public virtual Vertex End { get; set; }
 
         public float Length => Vertex.Distance(Start, End);
-        protected virtual double GetControlAngle(Vertex v1, Vertex v2)
-        {
-            return Math.Atan2(End.Y - Start.Y, End.X - Start.X);
-        }
-        protected virtual double GetControlLength(Vertex v1, Vertex v2)
-        {
-            return Length / 3;
-        }
+
 
 
         public virtual bool IsControlVertex(Vertex v)
         {
             return v == Start || v == End;
-        }
-        //public virtual void SetVerticesContinuityRelevantProperties(Vertex v)
-        //{
-        //    v.ControlAngle = GetControlAngle(Start, End);
-        //    v.ControlLength = GetControlLength(Start, End);
-        //}
-
-
-        public virtual CorrectionStatus CorrectEndPosition()
-        {
-            double angle = Start.ControlAngle;
-            return CorrectSecondVertex(Start, End, angle);
-        }
-
-        public virtual CorrectionStatus CorrectStartPosition()
-        {
-            double angle = End.ControlAngle + Math.PI;
-            return CorrectSecondVertex(End, Start, angle);
-        }
-
-        //public virtual void CorrectStartPositionBasically()
-        //{
-        //    Start.ControlAngle = GetControlAngle(Start, End);
-        //    Start.ControlLength = GetControlLength(Start, End);
-        //}
-
-        //public virtual void CorrectEndPositionBasically()
-        //{
-        //    End.ControlAngle = GetControlAngle(Start, End);
-        //    End.ControlLength = GetControlLength(Start, End);
-        //}
-
-        private CorrectionStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
-        {
-            float newX, newY;
-
-            if (firstVertex.Continuity == Vertex.ContuinityType.G0)
-            {
-                secondVertex.ControlAngle = GetControlAngle(Start, End);
-                secondVertex.ControlLength = GetControlLength(Start, End);
-                if (secondVertex.Continuity == Vertex.ContuinityType.G0)
-                {
-                    return CorrectionStatus.FurtherCorrectionNotNeeded;
-                }
-                return CorrectionStatus.FurtherCorrectionNeeded;
-            }
-
-            double length = Length;
-            if (firstVertex.Continuity == Vertex.ContuinityType.C1)
-            {
-                length = firstVertex.ControlLength * 3;
-            }
-
-            newX = (float)(firstVertex.X + length * Math.Cos(angle));
-            newY = (float)(firstVertex.Y + length * Math.Sin(angle));
-
-            secondVertex.SetPosition(newX, newY);
-            secondVertex.WasMoved = true;
-            secondVertex.ControlAngle = GetControlAngle(Start, End);
-            secondVertex.ControlLength = GetControlLength(Start, End);
-            return CorrectionStatus.FurtherCorrectionNeeded;
         }
 
         public Edge(Vertex start, Vertex end)
@@ -130,15 +62,6 @@ namespace Lab1.GeometryModel.Edges
         public virtual void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
         public virtual CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => visitor.Visit(this);
 
-        //public virtual void Restore()
-        //{
-        //    Start.Restore();
-        //}
-
-        //public virtual void MoveOwnedVertices(float dx, float dy)
-        //{
-        //    Start.Move(dx, dy);
-        //}
         public virtual bool TryGetHitOwnedVertex(Point p, out Vertex? vertex)
         {
             vertex = null;
@@ -157,14 +80,5 @@ namespace Lab1.GeometryModel.Edges
 
             return vertex is not null;
         }
-        //public virtual void ResetOwnedVerticesMovementFlags()
-        //{
-        //    Start.WasMoved = false;
-        //    Start.ContinuityPropertiesChanged = false;
-        //}
-        //public virtual void ResetOwnedMovedVerticesPreviousPositions()
-        //{
-        //    Start.ResetPreviousPosition();
-        //}
     }
 }
