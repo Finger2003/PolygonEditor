@@ -1,9 +1,7 @@
-using Lab1.Exceptions;
 using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
 using Lab1.LineDrawers;
 using Lab1.Visitors;
-using System.Numerics;
 
 namespace Lab1
 {
@@ -76,13 +74,14 @@ namespace Lab1
                 SelectedVertexIndex = Polygon.Edges.FindIndex(edge => edge.Start.IsHit(e.Location));
                 if (SelectedVertexIndex >= 0)
                 {
-                    //int previousIndex = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
                     int previousIndex = Polygon.GetPreviousIndex(SelectedVertexIndex);
                     SelectedVertex = Polygon.Edges[SelectedVertexIndex].Start;
                     setContinuityInVertexToolStripMenuItem.Enabled = Polygon.Edges[SelectedVertexIndex].IsBezier || Polygon.Edges[previousIndex].IsBezier;
+
                     g0ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G0;
                     g1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G1;
                     c1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.C1;
+
                     verticesContextMenuStrip.Show(drawingPictureBox, e.Location);
                     return;
                 }
@@ -111,83 +110,12 @@ namespace Lab1
             if (SelectedVertex is not null && e.Button == MouseButtons.Left)
             {
                 Polygon.SetVertexPosition(SelectedVertexIndex, SelectedVertex, e.Location.X, e.Location.Y);
-                //ResetVerticesPreviousPositions();
-                //ResetVertexMovementFlags();
-                //SelectedVertex.SetPosition(e.Location);
-                //Vector2 delta = SelectedVertex.PositionDifference;
-                //try
-                //{
-
-
-                //    SelectedVertex.WasMoved = true;
-                //    int selectedIndex = SelectedVertexIndex;
-                //    Edge selectedVertexOwner = Edges[selectedIndex];
-
-                //    int startingIndexForward = selectedIndex;
-                //    int startingIndexBackward = selectedIndex - 1;
-                //    if (selectedVertexOwner.IsBezier)
-                //    {
-                //        if (selectedVertexOwner.IsControlVertex(SelectedVertex))
-                //        {
-                //            selectedVertexOwner.SetVerticesContinuityRelevantProperties(SelectedVertex);
-                //            ++startingIndexForward;
-                //        }
-                //        else
-                //        {
-                //            int index = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
-                //            Edge previousEdge = Edges[index];
-                //            previousEdge.CorrectStartPositionBasically();
-                //            previousEdge.SetVerticesContinuityRelevantProperties(SelectedVertex);
-                //            --startingIndexBackward;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        selectedVertexOwner.CorrectEndPositionBasically();
-                //        ++startingIndexForward;
-                //        selectedVertexOwner.SetVerticesContinuityRelevantProperties(SelectedVertex);
-                //    }
-
-
-                //    bool correctionSucceeded = correctEdges(startingIndexForward, startingIndexBackward);
-
-                //    if (!correctionSucceeded)
-                //    {
-                //        foreach (Edge edge in Edges)
-                //            edge.Restore();
-
-                //        foreach (Edge edge in Edges)
-                //        {
-                //            edge.MoveOwnedVertices(delta.X, delta.Y);
-                //        }
-                //    }
-                //}
-                //catch (VertexCannotBeMoved)
-                //{
-
-                //    foreach (Edge edge in Edges)
-                //        edge.Restore();
-
-                //    foreach (Edge edge in Edges)
-                //    {
-                //        edge.MoveOwnedVertices(delta.X, delta.Y);
-                //    }
-                //}
-                //finally
-                //{
-                //    ResetVerticesPreviousPositions();
-                //    ResetVertexMovementFlags();
-                //}
             }
             else if (HoldPoint is Point hp && e.Button == MouseButtons.Right)
             {
                 int dx = e.Location.X - hp.X;
                 int dy = e.Location.Y - hp.Y;
                 Polygon.Move(dx, dy);
-                //foreach (Edge edge in Edges)
-                //{
-                //    edge.MoveOwnedVertices(dx, dy);
-                //}
 
                 HoldPoint = e.Location;
             }
@@ -195,43 +123,7 @@ namespace Lab1
 
         }
 
-        //private void ResetVerticesPreviousPositions()
-        //{
-        //    foreach (Edge edge in Edges)
-        //    {
-        //        edge.ResetOwnedMovedVerticesPreviousPositions();
-        //    }
-        //}
 
-        //private bool correctEdges(int startingIndexForward, int startingIndexBackward)
-        //{
-        //    int index = startingIndexForward;
-        //    int i = 0;
-        //    Edge.correctingStatus correctingStatus;
-        //    do
-        //    {
-        //        if (index >= Edges.Count)
-        //        {
-        //            index = 0;
-        //        }
-        //        correctingStatus = Edges[index++].CorrectEndPosition();
-
-        //    } while (correctingStatus == Edge.correctingStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
-
-        //    if (correctingStatus == Edge.correctingStatus.CorrectionFailed)
-        //        return false;
-
-        //    index = startingIndexBackward;
-        //    i = 0;
-        //    do
-        //    {
-        //        if (index < 0)
-        //            index = Edges.Count - 1;
-        //        correctingStatus = Edges[index--].CorrectStartPosition();
-        //    } while (correctingStatus == Edge.correctingStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
-
-        //    return correctingStatus != Edge.correctingStatus.CorrectionFailed;
-        //}
 
         private void drawingPictureBox_Paint(object sender, PaintEventArgs e)
         {
@@ -255,15 +147,6 @@ namespace Lab1
 
             (SelectedVertexIndex, SelectedVertex) = Polygon.GetHitVertexWithIndex(e.X, e.Y);
 
-            //foreach ((Edge edge, int index) in Edges.Select((edge, index) => (edge, index)))
-            //{
-            //    if (edge.TryGetHitOwnedVertex(e.Location, out Vertex? v))
-            //    {
-            //        SelectedVertexIndex = index;
-            //        SelectedVertex = v;
-            //        break;
-            //    }
-            //}
             HoldPoint = e.Location;
         }
 
@@ -281,229 +164,54 @@ namespace Lab1
         {
             LengthDialogForm.SetStartingValue((int)Math.Round(SelectedEdge!.Length));
 
-            if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
+            if (LengthDialogForm.ShowDialog() == DialogResult.OK)
             {
                 if (!Polygon.TrySetFixedEdge(SelectedEdgeIndex, SelectedEdge, LengthDialogForm.Length))
                 {
                     MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
                 }
-                //ResetVerticesPreviousPositions();
-                //int length = LengthDialogForm.Length;
-                //FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
-                //fixedEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
-                //fixedEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
-
-
-                //int selectedIndex = SelectedEdgeIndex;
-                //Edges[selectedIndex] = fixedEdge;
-                //try
-                //{
-
-                //    correctEdges(selectedIndex + 1, selectedIndex - 1);
-
-                //}
-                //catch (VertexCannotBeMoved)
-                //{
-                //    Edges[selectedIndex] = SelectedEdge!;
-                //    foreach (Edge edge in Edges)
-                //    {
-                //        edge.Restore();
-                //    }
-                //    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                //}
-
-                //ResetVertexMovementFlags();
-            }
-            else
-            {
-                MessageBox.Show("KrawêdŸ mo¿e mieæ tylko jedno ograniczenie. Spróbuj usun¹æ aktualne ograniczenie, a nastêpnie ustawiæ nowe.");
             }
         }
 
-        //private void ResetVertexMovementFlags()
-        //{
-        //    foreach (Edge edge in Edges)
-        //    {
-        //        edge.ResetOwnedVerticesMovementFlags();
-        //    }
-        //}
         private void pionowaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int selectedIndex = SelectedEdgeIndex;
-            int leftIndex = Polygon.GetPreviousIndex(selectedIndex);
-            int rightIndex = Polygon.GetNextIndex(selectedIndex);
-
-
-            if (!SelectedEdge!.IsBasic)
-                MessageBox.Show("KrawêdŸ mo¿e mieæ tylko jedno ograniczenie. Spróbuj usun¹æ aktualne ograniczenie, a nastêpnie ustawiæ nowe.", "Nieprawid³owa operacja");
-            else if (Polygon.Edges[leftIndex].IsVertical || Polygon.Edges[rightIndex].IsVertical)
-                MessageBox.Show("Nie mo¿na ustawiæ ograniczenia pionowego dla dwóch s¹siednich krawêdzi");
-            else if (SelectedEdge!.IsBasic)
-            {
-                if (!Polygon.TrySetVerticalEdge(SelectedEdgeIndex, SelectedEdge))
-                {
-                    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                }
-
-                //ResetVerticesPreviousPositions();
-                //VerticalEdge verticalEdge = new VerticalEdge(SelectedEdge!.Start, SelectedEdge!.End);
-                //verticalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
-                //verticalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
-
-
-                //Edges[selectedIndex] = verticalEdge;
-
-                //try
-                //{
-
-                //    correctEdges(selectedIndex + 1, selectedIndex - 1);
-
-                //}
-                //catch (VertexCannotBeMoved)
-                //{
-                //    Edges[selectedIndex] = SelectedEdge!;
-                //    foreach (Edge edge in Edges)
-                //    {
-                //        edge.Restore();
-                //    }
-                //    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                //}
-
-                //ResetVertexMovementFlags();
-            }
+            SetVerticalOrHorizontalEdge(SelectedEdgeIndex, SelectedEdge!, "pionowego", IsEdgeVertical, Polygon.TrySetVerticalEdge);
         }
 
         private void poziomaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int selectedIndex = SelectedEdgeIndex;
-            int leftIndex = Polygon.GetPreviousIndex(selectedIndex);
-            int rightIndex = Polygon.GetNextIndex(selectedIndex);
+            SetVerticalOrHorizontalEdge(SelectedEdgeIndex, SelectedEdge!, "poziomego", IsEdgeHorizontal, Polygon.TrySetHorizontalEdge);
+        }
 
+        private bool IsEdgeVertical(Edge edge) => edge.IsVertical;
+        private bool IsEdgeHorizontal(Edge edge) => edge.IsHorizontal;
+        private void SetVerticalOrHorizontalEdge(int index, Edge edge, string orientationNameForErrorMessage, Func<Edge, bool> orientationPredicate, Func<int, Edge, bool> settingFunc)
+        {
+            int leftIndex = Polygon.GetPreviousIndex(index);
+            int rightIndex = Polygon.GetNextIndex(index);
 
-            if (!SelectedEdge!.IsBasic)
-                MessageBox.Show("KrawêdŸ mo¿e mieæ tylko jedno ograniczenie. Spróbuj usun¹æ aktualne ograniczenie, a nastêpnie ustawiæ nowe.");
-            else if (Polygon.Edges[leftIndex].IsHorizontal || Polygon.Edges[rightIndex].IsHorizontal)
-                MessageBox.Show("Nie mo¿na ustawiæ ograniczenia poziomego dla dwóch s¹siednich krawêdzi");
-            else if (SelectedEdge!.IsBasic)
+            if (orientationPredicate(Polygon.Edges[leftIndex]) || orientationPredicate(Polygon.Edges[rightIndex]))
+                MessageBox.Show($"Nie mo¿na ustawiæ ograniczenia {orientationNameForErrorMessage} dla dwóch s¹siednich krawêdzi");
+            else
             {
-                if (!Polygon.TrySetHorizontalEdge(SelectedEdgeIndex, SelectedEdge))
+                if (!settingFunc(index, edge))
                 {
                     MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
                 }
-
-                //ResetVerticesPreviousPositions();
-                //HorizontalEdge horizontalEdge = new HorizontalEdge(SelectedEdge!.Start, SelectedEdge!.End);
-                //horizontalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
-                //horizontalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
-
-                //Edges[selectedIndex] = horizontalEdge;
-                //try
-                //{
-
-                //    correctEdges(selectedIndex + 1, selectedIndex - 1);
-
-                //}
-                //catch (VertexCannotBeMoved)
-                //{
-                //    Edges[selectedIndex] = SelectedEdge!;
-                //    foreach (Edge edge in Edges)
-                //    {
-                //        edge.Restore();
-                //    }
-                //    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                //}
-
-                //ResetVertexMovementFlags();
             }
-
         }
 
         private void beToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SelectedEdge!.IsBasic)
+            if (!Polygon.TrySetBezierCurve(SelectedEdgeIndex, SelectedEdge!))
             {
-                if (!Polygon.TrySetBezierCurve(SelectedEdgeIndex, SelectedEdge))
-                {
-                    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                }
-                //ResetVerticesPreviousPositions();
-                //if (SelectedEdge!.Start.Continuity == Vertex.ContuinityType.G0)
-                //{
-                //    SelectedEdge!.Start.Continuity = DefaultContuinity;
-                //}
-                //if (SelectedEdge!.End.Continuity == Vertex.ContuinityType.G0)
-                //{
-                //    SelectedEdge!.End.Continuity = DefaultContuinity;
-                //}
-
-                //BezierEdge bezierEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
-
-
-
-                //int selectedIndex = SelectedEdgeIndex;
-                //int previousIndex = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
-                //int nextIndex = selectedIndex == Edges.Count - 1 ? 0 : selectedIndex + 1;
-                //Edges[previousIndex].SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
-                //Edges[nextIndex].SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
-
-
-                //Edges[selectedIndex] = bezierEdge;
-
-                //try
-                //{
-
-
-                //    correctEdges(selectedIndex, selectedIndex);
-
-
-                //}
-                //catch (VertexCannotBeMoved)
-                //{
-                //    Edges[selectedIndex] = SelectedEdge!;
-                //    foreach (Edge edge in Edges)
-                //    {
-                //        edge.Restore();
-                //    }
-                //    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                //}
-
-
-
-                //ResetVertexMovementFlags();
-            }
-            else
-            {
-                MessageBox.Show("KrawêdŸ mo¿e mieæ tylko jedno ograniczenie. Spróbuj usun¹æ aktualne ograniczenie, a nastêpnie ustawiæ nowe.");
+                MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
             }
         }
 
         private void dodajWierzcho³ekToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Polygon.AddVertexInEdge(SelectedEdgeIndex, SelectedEdge!);
-
-            //Vertex start = SelectedEdge!.Start;
-            //Vertex end = SelectedEdge!.End;
-            //Vertex middle = new Vertex((start.X + end.X) / 2, (start.Y + end.Y) / 2);
-
-            //Edge edge1 = new Edge(start, middle);
-            //Edge edge2 = new Edge(middle, end);
-
-            ////int index = Edges.FindIndex(edge => edge == SelectedEdge);
-            //int index = SelectedEdgeIndex;
-            //int previousIndex = index == 0 ? Edges.Count - 1 : index - 1;
-            //int nextIndex = index == Edges.Count - 1 ? 0 : index + 1;
-
-            //if (!Edges[previousIndex].IsBezier)
-            //{
-            //    start.Continuity = Vertex.ContuinityType.G0;
-            //}
-            //if (!Edges[nextIndex].IsBezier)
-            //{
-            //    end.Continuity = Vertex.ContuinityType.G0;
-            //}
-
-            //Edges.RemoveAt(index);
-            //Edges.InsertRange(index, [edge1, edge2]);
         }
 
 
@@ -523,95 +231,34 @@ namespace Lab1
         private void deleteVertexToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Polygon.DeleteVertex(SelectedVertexIndex, SelectedVertex!);
-            //if (Edges.Count <= 3)
-            //{
-            //    Edges.Clear();
-            //    return;
-            //}
-
-            //int selectedIndex = SelectedVertexIndex;
-            //int previousIndex = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
-            //int previousIndex2 = previousIndex == 0 ? Edges.Count - 1 : previousIndex - 1;
-            //int nextIndex1 = selectedIndex == Edges.Count - 1 ? 0 : selectedIndex + 1;
-            //if (!Edges[previousIndex2].IsBezier)
-            //{
-            //    Edges[previousIndex2].End.Continuity = Vertex.ContuinityType.G0;
-            //}
-            //if (!Edges[nextIndex1].IsBezier)
-            //{
-            //    Edges[nextIndex1].Start.Continuity = Vertex.ContuinityType.G0;
-            //}
-            //if (selectedIndex != -1)
-            //{
-            //    Edge edge1 = Edges[previousIndex];
-            //    Edge edge2 = Edges[selectedIndex];
-
-
-            //    Edge edge = new Edge(edge1.Start, edge2.End);
-            //    Edges[previousIndex] = edge;
-            //    Edges.RemoveAt(selectedIndex);
-            //}
         }
 
         private void g0ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(!Polygon.TrySetContinuityInVertex(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.G0))
-            {
-                MessageBox.Show("Nie mo¿na ustawiæ ograniczenia G0 dla tego wierzcho³ka");
-            }
+
+            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.G0);
         }
 
         private void g1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Polygon.TrySetContinuityInVertex(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.G1))
-            {
-                MessageBox.Show("Nie mo¿na ustawiæ ograniczenia G1 dla tego wierzcho³ka");
-            }
-            //SelectedVertex!.Continuity = Vertex.ContuinityType.G1;
-            //ResetVerticesPreviousPositions();
-            //SelectedVertex!.Continuity = Vertex.ContuinityType.G1;
-            //SelectedVertex!.ContinuityChanged = true;
-            //int previousIndex = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
-            //Edges[previousIndex].SetVerticesContinuityRelevantProperties(SelectedVertex);
-            //correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
-            //SelectedVertex!.ContinuityChanged = false;
-            //ResetVertexMovementFlags();
+            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.G1);
         }
 
         private void c1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(!Polygon.TrySetContinuityInVertex(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.C1))
-            {
-                MessageBox.Show("Nie mo¿na ustawiæ ograniczenia C1 dla tego wierzcho³ka");
-            }
-
-            //ResetVerticesPreviousPositions();
-            //SelectedVertex!.Continuity = Vertex.ContuinityType.C1;
-            //SelectedVertex!.ContinuityChanged = true;
-            //int previousIndex = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
-            //Edges[previousIndex].SetVerticesContinuityRelevantProperties(SelectedVertex);
-            //correctEdges(SelectedVertexIndex, SelectedVertexIndex - 1);
-            //SelectedVertex!.ContinuityChanged = false;
-            //ResetVertexMovementFlags();
+            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.C1);
         }
 
+        private void SetContinuity(int index, Vertex vertex, Vertex.ContuinityType contuinity)
+        {
+            if (!Polygon.TrySetContinuityInVertex(index, vertex, contuinity))
+            {
+                MessageBox.Show($"Nie mo¿na ustawiæ ograniczenia {contuinity} dla tego wierzcho³ka");
+            }
+        }
         private void removeConstraintToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Polygon.RemoveConstraint(SelectedEdgeIndex, SelectedEdge!);
-
-            //int index = SelectedEdgeIndex;
-            //int previousIndex = index == 0 ? Edges.Count - 1 : index - 1;
-            //int nextIndex = index == Edges.Count - 1 ? 0 : index + 1;
-            //if (!Edges[previousIndex].IsBezier)
-            //{
-            //    Edges[previousIndex].End.Continuity = Vertex.ContuinityType.G0;
-            //}
-            //if (!Edges[nextIndex].IsBezier)
-            //{
-            //    Edges[nextIndex].Start.Continuity = Vertex.ContuinityType.G0;
-            //}
-            //Edge newEdge = new Edge(SelectedEdge!.Start, SelectedEdge.End);
-            //Edges[index] = newEdge;
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
