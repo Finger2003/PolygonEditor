@@ -151,7 +151,7 @@ namespace Lab1.Edges
 
         private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
-            if ((firstVertex.Continuity == Vertex.ContuinityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged) || secondVertex.WasMoved)
+            if ((firstVertex.Continuity == Vertex.ContuinityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged && firstVertex.ContinuityPropertiesChanged) || secondVertex.WasMoved)
             {
                 //throw new VertexCannotBeMoved();
                 return correctingStatus.CorrectionFailed;
