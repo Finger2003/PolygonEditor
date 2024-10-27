@@ -35,12 +35,12 @@
             bresenhamRadioButton = new RadioButton();
             drawingPictureBox = new PictureBox();
             edgesContextMenuStrip = new ContextMenuStrip(components);
-            dodajWierzchołekToolStripMenuItem = new ToolStripMenuItem();
+            addVertexToolStripMenuItem = new ToolStripMenuItem();
             addConstraintToolStripMenuItem = new ToolStripMenuItem();
-            stałaDługośćToolStripMenuItem = new ToolStripMenuItem();
-            pionowaToolStripMenuItem = new ToolStripMenuItem();
-            poziomaToolStripMenuItem = new ToolStripMenuItem();
-            beToolStripMenuItem = new ToolStripMenuItem();
+            fixedLengthToolStripMenuItem = new ToolStripMenuItem();
+            verticalToolStripMenuItem = new ToolStripMenuItem();
+            horizontalToolStripMenuItem = new ToolStripMenuItem();
+            bezierToolStripMenuItem = new ToolStripMenuItem();
             removeConstraintToolStripMenuItem = new ToolStripMenuItem();
             verticesContextMenuStrip = new ContextMenuStrip(components);
             deleteVertexToolStripMenuItem = new ToolStripMenuItem();
@@ -48,6 +48,7 @@
             g0ToolStripMenuItem = new ToolStripMenuItem();
             g1ToolStripMenuItem = new ToolStripMenuItem();
             c1ToolStripMenuItem = new ToolStripMenuItem();
+            clearButton = new Button();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)drawingPictureBox).BeginInit();
             edgesContextMenuStrip.SuspendLayout();
@@ -92,6 +93,7 @@
             bresenhamRadioButton.TabStop = true;
             bresenhamRadioButton.Text = "Algorytm Bresenhama";
             bresenhamRadioButton.UseVisualStyleBackColor = true;
+            bresenhamRadioButton.CheckedChanged += bresenhamRadioButton_CheckedChanged;
             // 
             // drawingPictureBox
             // 
@@ -108,56 +110,56 @@
             // 
             // edgesContextMenuStrip
             // 
-            edgesContextMenuStrip.Items.AddRange(new ToolStripItem[] { dodajWierzchołekToolStripMenuItem, addConstraintToolStripMenuItem, removeConstraintToolStripMenuItem });
+            edgesContextMenuStrip.Items.AddRange(new ToolStripItem[] { addVertexToolStripMenuItem, addConstraintToolStripMenuItem, removeConstraintToolStripMenuItem });
             edgesContextMenuStrip.Name = "contextMenuStrip1";
-            edgesContextMenuStrip.Size = new Size(176, 70);
+            edgesContextMenuStrip.Size = new Size(185, 92);
             // 
-            // dodajWierzchołekToolStripMenuItem
+            // addVertexToolStripMenuItem
             // 
-            dodajWierzchołekToolStripMenuItem.Name = "dodajWierzchołekToolStripMenuItem";
-            dodajWierzchołekToolStripMenuItem.Size = new Size(175, 22);
-            dodajWierzchołekToolStripMenuItem.Text = "Dodaj wierzchołek";
-            dodajWierzchołekToolStripMenuItem.Click += dodajWierzchołekToolStripMenuItem_Click;
+            addVertexToolStripMenuItem.Name = "addVertexToolStripMenuItem";
+            addVertexToolStripMenuItem.Size = new Size(184, 22);
+            addVertexToolStripMenuItem.Text = "Dodaj wierzchołek";
+            addVertexToolStripMenuItem.Click += addVertexToolStripMenuItem_Click;
             // 
             // addConstraintToolStripMenuItem
             // 
-            addConstraintToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { stałaDługośćToolStripMenuItem, pionowaToolStripMenuItem, poziomaToolStripMenuItem, beToolStripMenuItem });
+            addConstraintToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fixedLengthToolStripMenuItem, verticalToolStripMenuItem, horizontalToolStripMenuItem, bezierToolStripMenuItem });
             addConstraintToolStripMenuItem.Name = "addConstraintToolStripMenuItem";
-            addConstraintToolStripMenuItem.Size = new Size(175, 22);
-            addConstraintToolStripMenuItem.Text = "Dodaj ograniczenie";
+            addConstraintToolStripMenuItem.Size = new Size(184, 22);
+            addConstraintToolStripMenuItem.Text = "Dodaj ograniczenie...";
             // 
-            // stałaDługośćToolStripMenuItem
+            // fixedLengthToolStripMenuItem
             // 
-            stałaDługośćToolStripMenuItem.Name = "stałaDługośćToolStripMenuItem";
-            stałaDługośćToolStripMenuItem.Size = new Size(144, 22);
-            stałaDługośćToolStripMenuItem.Text = "Stała długość";
-            stałaDługośćToolStripMenuItem.Click += stałaDługośćToolStripMenuItem_Click;
+            fixedLengthToolStripMenuItem.Name = "fixedLengthToolStripMenuItem";
+            fixedLengthToolStripMenuItem.Size = new Size(180, 22);
+            fixedLengthToolStripMenuItem.Text = "Stała długość";
+            fixedLengthToolStripMenuItem.Click += fixedLengthToolStripMenuItem_Click;
             // 
-            // pionowaToolStripMenuItem
+            // verticalToolStripMenuItem
             // 
-            pionowaToolStripMenuItem.Name = "pionowaToolStripMenuItem";
-            pionowaToolStripMenuItem.Size = new Size(144, 22);
-            pionowaToolStripMenuItem.Text = "Pionowa";
-            pionowaToolStripMenuItem.Click += pionowaToolStripMenuItem_Click;
+            verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
+            verticalToolStripMenuItem.Size = new Size(180, 22);
+            verticalToolStripMenuItem.Text = "Pionowa";
+            verticalToolStripMenuItem.Click += verticalToolStripMenuItem_Click;
             // 
-            // poziomaToolStripMenuItem
+            // horizontalToolStripMenuItem
             // 
-            poziomaToolStripMenuItem.Name = "poziomaToolStripMenuItem";
-            poziomaToolStripMenuItem.Size = new Size(144, 22);
-            poziomaToolStripMenuItem.Text = "Pozioma";
-            poziomaToolStripMenuItem.Click += poziomaToolStripMenuItem_Click;
+            horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
+            horizontalToolStripMenuItem.Size = new Size(180, 22);
+            horizontalToolStripMenuItem.Text = "Pozioma";
+            horizontalToolStripMenuItem.Click += horizontalToolStripMenuItem_Click;
             // 
-            // beToolStripMenuItem
+            // bezierToolStripMenuItem
             // 
-            beToolStripMenuItem.Name = "beToolStripMenuItem";
-            beToolStripMenuItem.Size = new Size(144, 22);
-            beToolStripMenuItem.Text = "Bézier";
-            beToolStripMenuItem.Click += beToolStripMenuItem_Click;
+            bezierToolStripMenuItem.Name = "bezierToolStripMenuItem";
+            bezierToolStripMenuItem.Size = new Size(180, 22);
+            bezierToolStripMenuItem.Text = "Bézier";
+            bezierToolStripMenuItem.Click += bezierToolStripMenuItem_Click;
             // 
             // removeConstraintToolStripMenuItem
             // 
             removeConstraintToolStripMenuItem.Name = "removeConstraintToolStripMenuItem";
-            removeConstraintToolStripMenuItem.Size = new Size(175, 22);
+            removeConstraintToolStripMenuItem.Size = new Size(184, 22);
             removeConstraintToolStripMenuItem.Text = "Usuń ograniczenie";
             removeConstraintToolStripMenuItem.Click += removeConstraintToolStripMenuItem_Click;
             // 
@@ -165,12 +167,12 @@
             // 
             verticesContextMenuStrip.Items.AddRange(new ToolStripItem[] { deleteVertexToolStripMenuItem, setContinuityInVertexToolStripMenuItem });
             verticesContextMenuStrip.Name = "verticesContextMenuStrip";
-            verticesContextMenuStrip.Size = new Size(271, 48);
+            verticesContextMenuStrip.Size = new Size(280, 48);
             // 
             // deleteVertexToolStripMenuItem
             // 
             deleteVertexToolStripMenuItem.Name = "deleteVertexToolStripMenuItem";
-            deleteVertexToolStripMenuItem.Size = new Size(270, 22);
+            deleteVertexToolStripMenuItem.Size = new Size(279, 22);
             deleteVertexToolStripMenuItem.Text = "Usuń wierczhołek";
             deleteVertexToolStripMenuItem.Click += deleteVertexToolStripMenuItem_Click;
             // 
@@ -178,8 +180,8 @@
             // 
             setContinuityInVertexToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { g0ToolStripMenuItem, g1ToolStripMenuItem, c1ToolStripMenuItem });
             setContinuityInVertexToolStripMenuItem.Name = "setContinuityInVertexToolStripMenuItem";
-            setContinuityInVertexToolStripMenuItem.Size = new Size(270, 22);
-            setContinuityInVertexToolStripMenuItem.Text = "Ustaw żądaną ciągłość w wierzchołku";
+            setContinuityInVertexToolStripMenuItem.Size = new Size(279, 22);
+            setContinuityInVertexToolStripMenuItem.Text = "Ustaw żądaną ciągłość w wierzchołku...";
             // 
             // g0ToolStripMenuItem
             // 
@@ -204,11 +206,22 @@
             c1ToolStripMenuItem.Text = "C1";
             c1ToolStripMenuItem.Click += c1ToolStripMenuItem_Click;
             // 
+            // clearButton
+            // 
+            clearButton.Location = new Point(713, 27);
+            clearButton.Name = "clearButton";
+            clearButton.Size = new Size(75, 23);
+            clearButton.TabIndex = 4;
+            clearButton.Text = "Wyczyść";
+            clearButton.UseVisualStyleBackColor = true;
+            clearButton.Click += clearButton_Click;
+            // 
             // PolygonEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(clearButton);
             Controls.Add(drawingPictureBox);
             Controls.Add(bresenhamRadioButton);
             Controls.Add(defaultRadioButton);
@@ -235,12 +248,12 @@
         private RadioButton bresenhamRadioButton;
         private PictureBox drawingPictureBox;
         private ContextMenuStrip edgesContextMenuStrip;
-        private ToolStripMenuItem dodajWierzchołekToolStripMenuItem;
+        private ToolStripMenuItem addVertexToolStripMenuItem;
         private ToolStripMenuItem addConstraintToolStripMenuItem;
-        private ToolStripMenuItem stałaDługośćToolStripMenuItem;
-        private ToolStripMenuItem pionowaToolStripMenuItem;
-        private ToolStripMenuItem poziomaToolStripMenuItem;
-        private ToolStripMenuItem beToolStripMenuItem;
+        private ToolStripMenuItem fixedLengthToolStripMenuItem;
+        private ToolStripMenuItem verticalToolStripMenuItem;
+        private ToolStripMenuItem horizontalToolStripMenuItem;
+        private ToolStripMenuItem bezierToolStripMenuItem;
         private ContextMenuStrip verticesContextMenuStrip;
         private ToolStripMenuItem deleteVertexToolStripMenuItem;
         private ToolStripMenuItem setContinuityInVertexToolStripMenuItem;
@@ -248,5 +261,6 @@
         private ToolStripMenuItem g1ToolStripMenuItem;
         private ToolStripMenuItem c1ToolStripMenuItem;
         private ToolStripMenuItem removeConstraintToolStripMenuItem;
+        private Button clearButton;
     }
 }

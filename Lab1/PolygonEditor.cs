@@ -29,6 +29,8 @@ namespace Lab1
         private Vertex.ContuinityType DefaultContuinity { get; set; } = Vertex.ContuinityType.C1;
         private Polygon Polygon { get; }/* = new Polygon();*/
 
+        private string ConstraintErrorMessage { get; } = "Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.";
+
 
         public PolygonEditor()
         {
@@ -170,28 +172,7 @@ namespace Lab1
             HoldPoint = null;
         }
 
-        private void sta³aD³ugoœæToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LengthDialogForm.SetStartingValue((int)Math.Round(SelectedEdge!.Length));
 
-            if (LengthDialogForm.ShowDialog() == DialogResult.OK)
-            {
-                if (!Polygon.TrySetFixedEdge(SelectedEdgeIndex, SelectedEdge, LengthDialogForm.Length))
-                {
-                    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-                }
-            }
-        }
-
-        private void pionowaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetVerticalOrHorizontalEdge(SelectedEdgeIndex, SelectedEdge!, "pionowego", IsEdgeVertical, Polygon.TrySetVerticalEdge);
-        }
-
-        private void poziomaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetVerticalOrHorizontalEdge(SelectedEdgeIndex, SelectedEdge!, "poziomego", IsEdgeHorizontal, Polygon.TrySetHorizontalEdge);
-        }
 
         private bool IsEdgeVertical(Edge edge) => edge.IsVertical;
         private bool IsEdgeHorizontal(Edge edge) => edge.IsHorizontal;
@@ -206,23 +187,12 @@ namespace Lab1
             {
                 if (!settingFunc(index, edge))
                 {
-                    MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
+                    MessageBox.Show(ConstraintErrorMessage);
                 }
             }
         }
 
-        private void beToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!Polygon.TrySetBezierCurve(SelectedEdgeIndex, SelectedEdge!))
-            {
-                MessageBox.Show("Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.");
-            }
-        }
 
-        private void dodajWierzcho³ekToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Polygon.AddVertexInEdge(SelectedEdgeIndex, SelectedEdge!);
-        }
 
 
         private void defaultRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -231,7 +201,10 @@ namespace Lab1
             {
                 EdgeDrawingVisitor.LineDrawer = LineDrawers[0];
             }
-            else
+        }
+        private void bresenhamRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (bresenhamRadioButton.Checked)
             {
                 EdgeDrawingVisitor.LineDrawer = LineDrawers[1];
             }
@@ -275,6 +248,47 @@ namespace Lab1
         {
             HelpForm helpForm = new HelpForm();
             helpForm.Show();
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            Polygon.Edges.Clear();
+        }
+
+        private void addVertexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Polygon.AddVertexInEdge(SelectedEdgeIndex, SelectedEdge!);
+        }
+
+        private void fixedLengthToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LengthDialogForm.SetStartingValue((int)Math.Round(SelectedEdge!.Length));
+
+            if (LengthDialogForm.ShowDialog() == DialogResult.OK)
+            {
+                if (!Polygon.TrySetFixedEdge(SelectedEdgeIndex, SelectedEdge, LengthDialogForm.Length))
+                {
+                    MessageBox.Show(ConstraintErrorMessage);
+                }
+            }
+        }
+
+        private void verticalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetVerticalOrHorizontalEdge(SelectedEdgeIndex, SelectedEdge!, "pionowego", IsEdgeVertical, Polygon.TrySetVerticalEdge);
+        }
+
+        private void horizontalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetVerticalOrHorizontalEdge(SelectedEdgeIndex, SelectedEdge!, "poziomego", IsEdgeHorizontal, Polygon.TrySetHorizontalEdge);
+        }
+
+        private void bezierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!Polygon.TrySetBezierCurve(SelectedEdgeIndex, SelectedEdge!))
+            {
+                MessageBox.Show(ConstraintErrorMessage);
+            }
         }
     }
 }
