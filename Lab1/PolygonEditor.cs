@@ -40,6 +40,9 @@ namespace Lab1
             LineDrawers = [new DefaultLineDrawer(G), new BresenhamLineDrawer(Bitmap, G)];
 
             EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
+
+            PolygonExample.Init();
+            Polygon = PolygonExample.GetPolygon()!;
         }
 
         private void drawingPictureBox_MouseClick(object sender, MouseEventArgs e)

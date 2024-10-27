@@ -17,8 +17,6 @@ namespace Lab1.GeometryModel.Edges
 
         public float Length => Vertex.Distance(Start, End);
 
-
-
         public virtual bool IsControlVertex(Vertex v)
         {
             return v == Start || v == End;
@@ -29,7 +27,6 @@ namespace Lab1.GeometryModel.Edges
             Start = start;
             End = end;
         }
-
 
         public virtual bool IsBasic { get => true; }
         public virtual bool IsHorizontal { get => false; }

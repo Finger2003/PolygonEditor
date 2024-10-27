@@ -290,7 +290,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
                     double newX = start.X + length * Math.Cos(start.ControlAngle);
                     double newY = start.Y + length * Math.Sin(start.ControlAngle);
                     v1.SetPosition((float)newX, (float)newY);
-                    v1.WasMoved = true;
+                    //v1.WasMoved = true;
                 }
 
                 if (v2.WasMoved)
@@ -314,7 +314,7 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
                     double newX = end.X - length * Math.Cos(end.ControlAngle);
                     double newY = end.Y - length * Math.Sin(end.ControlAngle);
                     v2.SetPosition((float)newX, (float)newY);
-                    v2.WasMoved = true;
+                    //v2.WasMoved = true;
                 }
 
                 if (v1.WasMoved)

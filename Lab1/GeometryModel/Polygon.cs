@@ -138,11 +138,12 @@ namespace Lab1.GeometryModel
             FullCorrectionEdgeVisitor.Forward = true;
             do
             {
-                if (index >= Edges.Count)
-                {
-                    index = 0;
-                }
-                correctingStatus = Edges[index++].Accept(FullCorrectionEdgeVisitor);
+                //if (index >= Edges.Count)
+                //{
+                //    index = 0;
+                //}
+                correctingStatus = Edges[index].Accept(FullCorrectionEdgeVisitor);
+                index = GetNextIndex(index);
                 //correctingStatus = Edges[index++].CorrectEndPosition();
 
             } while (correctingStatus == Edge.CorrectionStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
@@ -155,10 +156,11 @@ namespace Lab1.GeometryModel
             FullCorrectionEdgeVisitor.Forward = false;
             do
             {
-                if (index < 0)
-                    index = Edges.Count - 1;
-                correctingStatus = Edges[index--].Accept(FullCorrectionEdgeVisitor);
+                //if (index < 0)
+                //    index = Edges.Count - 1;
+                correctingStatus = Edges[index].Accept(FullCorrectionEdgeVisitor);
                 //correctingStatus = Edges[index--].CorrectStartPosition();
+                index = GetPreviousIndex(index);
             } while (correctingStatus == Edge.CorrectionStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
 
             return correctingStatus != Edge.CorrectionStatus.CorrectionFailed;
@@ -268,6 +270,9 @@ namespace Lab1.GeometryModel
             ResetVerticesPreviousPositions();
             ResetVerticesFlags();
 
+            Vertex.ContuinityType oldStartContinuity = edge.Start.Continuity;
+            Vertex.ContuinityType oldEndContinuity = edge.End.Continuity;
+
             if (edge.Start.Continuity == Vertex.ContuinityType.G0)
                 edge.Start.Continuity = DefaultContuinity;
 
@@ -289,6 +294,8 @@ namespace Lab1.GeometryModel
             if (!CorrectEdges(index, index))
             {
                 Edges[index] = edge;
+                edge.Start.Continuity = oldStartContinuity;
+                edge.End.Continuity = oldEndContinuity;
                 Restore();
                 return false;
             }
