@@ -64,7 +64,7 @@ namespace Lab1.Edges
         //    ButtonPreviousPosition = RemoveConstraintButton.Location;
         //}
 
-        public override bool CorrectEndPosition()
+        public override correctingStatus CorrectEndPosition()
         {
             if (Start.Continuity != Vertex.ContuinityType.G0 && !V1.WasMoved && Start.ContinuityPropertiesChanged)
             {
@@ -84,12 +84,12 @@ namespace Lab1.Edges
             {
                 End.ControlAngle = GetControlAngle(V2, End);
                 End.ControlLength = GetControlLength(V2, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
-            return false;
+            return correctingStatus.FurtherCorrectionNotNeeded;
         }
 
-        public override bool CorrectStartPosition()
+        public override correctingStatus CorrectStartPosition()
         {
             if (End.Continuity != Vertex.ContuinityType.G0 && !V2.WasMoved && End.ContinuityPropertiesChanged)
             {
@@ -109,9 +109,9 @@ namespace Lab1.Edges
             {
                 Start.ControlAngle = GetControlAngle(Start, V1);
                 Start.ControlLength = GetControlLength(Start, V1);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
-            return false;
+            return correctingStatus.FurtherCorrectionNotNeeded;
         }
 
         protected override double GetControlAngle(Vertex v1, Vertex v2)

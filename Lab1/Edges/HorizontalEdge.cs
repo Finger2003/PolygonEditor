@@ -76,7 +76,7 @@ namespace Lab1.Edges
         }
 
 
-        public override bool CorrectEndPosition()
+        public override correctingStatus CorrectEndPosition()
         {
             return correctSecondVertex(Start, End);
 
@@ -129,7 +129,7 @@ namespace Lab1.Edges
             //return true;
         }
 
-        public override bool CorrectStartPosition()
+        public override correctingStatus CorrectStartPosition()
         {
             return correctSecondVertex(End, Start);
 
@@ -183,11 +183,12 @@ namespace Lab1.Edges
             //Start.WasMoved = true;
             //return true;
         }
-        private bool correctSecondVertex(Vertex firstVertex, Vertex secondVertex)
+        private correctingStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex)
         {
             if ((firstVertex.Continuity != Vertex.ContuinityType.G0 && firstVertex.ControlAngle != 0 && firstVertex.ControlAngle != Math.PI && !firstVertex.ContinuityChanged) || secondVertex.WasMoved)
             {
-                throw new VertexCannotBeMoved();
+                //throw new VertexCannotBeMoved();
+                return correctingStatus.CorrectionFailed;
             }
 
             if (firstVertex.Continuity == Vertex.ContuinityType.G0)
@@ -195,14 +196,19 @@ namespace Lab1.Edges
                 if (firstVertex.Position.Y == secondVertex.Position.Y)
                 {
                     secondVertex.ControlLength = GetControlLength(Start, End);
-                    return secondVertex.Continuity == Vertex.ContuinityType.C1;
+                    if (secondVertex.Continuity == Vertex.ContuinityType.C1)
+                    {
+                        return correctingStatus.FurtherCorrectionNeeded;
+                    }
+                    return correctingStatus.FurtherCorrectionNotNeeded;
+                    //return secondVertex.Continuity == Vertex.ContuinityType.C1;
                 }
 
                 secondVertex.SetPosition(secondVertex.X, firstVertex.Y);
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.G1)
             {
@@ -210,7 +216,12 @@ namespace Lab1.Edges
                 {
                     secondVertex.ControlAngle = GetControlAngle(Start, End);
                     secondVertex.ControlLength = GetControlLength(Start, End);
-                    return secondVertex.Continuity != Vertex.ContuinityType.G0;
+                    if(secondVertex.Continuity == Vertex.ContuinityType.G0)
+                    {
+                        return correctingStatus.FurtherCorrectionNotNeeded;
+                    }
+                    return correctingStatus.FurtherCorrectionNeeded;
+                    //return secondVertex.Continuity != Vertex.ContuinityType.G0;
                 }
 
                 float newX = firstVertex.X + Length * (secondVertex.X > firstVertex.X ? 1 : -1);
@@ -219,7 +230,7 @@ namespace Lab1.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.C1)
             {
@@ -233,11 +244,11 @@ namespace Lab1.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else
             {
-                return false;
+                return correctingStatus.FurtherCorrectionNotNeeded;
             }
         }
 

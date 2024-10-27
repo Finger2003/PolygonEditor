@@ -4,6 +4,13 @@ namespace Lab1.Edges
 {
     public class Edge : IEdgeVisitable
     {
+        public enum correctingStatus
+        {
+            FurtherCorrectionNeeded,
+            FurtherCorrectionNotNeeded,
+            CorrectionFailed
+        }
+
         public virtual Vertex Start { get; set; }
         public virtual Vertex End { get; set; }
 
@@ -42,7 +49,7 @@ namespace Lab1.Edges
         }
 
 
-        public virtual bool CorrectEndPosition()
+        public virtual correctingStatus CorrectEndPosition()
         {
             double angle = Start.ControlAngle;
             return CorrectSecondVertex(Start, End, angle);
@@ -97,7 +104,7 @@ namespace Lab1.Edges
             //return true;
         }
 
-        public virtual bool CorrectStartPosition()
+        public virtual correctingStatus CorrectStartPosition()
         {
             double angle = End.ControlAngle + Math.PI;
             return CorrectSecondVertex(End, Start, angle);
@@ -138,7 +145,7 @@ namespace Lab1.Edges
             End.ControlLength = GetControlLength(Start, End);
         }
 
-        private bool CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
+        private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
             float newX, newY;
 
@@ -146,7 +153,12 @@ namespace Lab1.Edges
             {
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return secondVertex.Continuity != Vertex.ContuinityType.G0;
+                if(secondVertex.Continuity == Vertex.ContuinityType.G0)
+                {
+                    return correctingStatus.FurtherCorrectionNotNeeded;
+                }
+                return correctingStatus.FurtherCorrectionNeeded;
+                //return secondVertex.Continuity != Vertex.ContuinityType.G0;
             }
 
             double length = Length;
@@ -163,7 +175,7 @@ namespace Lab1.Edges
             secondVertex.WasMoved = true;
             secondVertex.ControlAngle = GetControlAngle(Start, End);
             secondVertex.ControlLength = GetControlLength(Start, End);
-            return true;
+            return correctingStatus.FurtherCorrectionNeeded;
         }
 
         public Edge(Vertex start, Vertex end)

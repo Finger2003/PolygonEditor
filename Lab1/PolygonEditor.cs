@@ -145,9 +145,18 @@ namespace Lab1
                     }
 
 
-                    correctEdges(startingIndexForward, startingIndexBackward);
+                    bool correctionSucceeded = correctEdges(startingIndexForward, startingIndexBackward);
 
+                    if (!correctionSucceeded)
+                    {
+                        foreach (Edge edge in Edges)
+                            edge.Restore();
 
+                        foreach (Edge edge in Edges)
+                        {
+                            edge.MoveOwnedVertices(delta.X, delta.Y);
+                        }
+                    }
                 }
                 catch (VertexCannotBeMoved)
                 {
@@ -189,18 +198,23 @@ namespace Lab1
             }
         }
 
-        private void correctEdges(int startingIndexForward, int startingIndexBackward)
+        private bool correctEdges(int startingIndexForward, int startingIndexBackward)
         {
             int index = startingIndexForward;
             int i = 0;
+            Edge.correctingStatus correctingStatus;
             do
             {
                 if (index >= Edges.Count)
                 {
                     index = 0;
                 }
+                correctingStatus = Edges[index++].CorrectEndPosition();
 
-            } while (Edges[index++].CorrectEndPosition() && i++ < Edges.Count);
+            } while (correctingStatus == Edge.correctingStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
+
+            if (correctingStatus == Edge.correctingStatus.CorrectionFailed)
+                return false;
 
             index = startingIndexBackward;
             i = 0;
@@ -208,7 +222,10 @@ namespace Lab1
             {
                 if (index < 0)
                     index = Edges.Count - 1;
-            } while (Edges[index--].CorrectStartPosition() && i++ < Edges.Count);
+                correctingStatus = Edges[index--].CorrectStartPosition();
+            } while (correctingStatus == Edge.correctingStatus.FurtherCorrectionNeeded && i++ < Edges.Count);
+
+            return correctingStatus != Edge.correctingStatus.CorrectionFailed;
         }
 
         private void drawingPictureBox_Paint(object sender, PaintEventArgs e)

@@ -74,7 +74,7 @@ namespace Lab1.Edges
         }
 
 
-        public override bool CorrectEndPosition()
+        public override correctingStatus CorrectEndPosition()
         {
             //if (Start.Position.X == End.Position.X)
             //{
@@ -91,7 +91,7 @@ namespace Lab1.Edges
             return CorrectSecondVertex(Start, End);
         }
 
-        public override bool CorrectStartPosition()
+        public override correctingStatus CorrectStartPosition()
         {
             //if (Start.Position.X == End.Position.X)
             //{
@@ -108,11 +108,12 @@ namespace Lab1.Edges
         }
 
 
-        private bool CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex)
+        private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex)
         {
             if ((firstVertex.Continuity != Vertex.ContuinityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 && !firstVertex.ContinuityChanged) || secondVertex.WasMoved)
             {
-                throw new VertexCannotBeMoved();
+                //throw new VertexCannotBeMoved();
+                return correctingStatus.CorrectionFailed;
             }
 
             if (firstVertex.Continuity == Vertex.ContuinityType.G0)
@@ -120,14 +121,19 @@ namespace Lab1.Edges
                 if (firstVertex.X == secondVertex.X)
                 {
                     secondVertex.ControlLength = GetControlLength(Start, End);
-                    return secondVertex.Continuity == Vertex.ContuinityType.C1;
+                    if(secondVertex.Continuity == Vertex.ContuinityType.C1)
+                    {
+                        return correctingStatus.FurtherCorrectionNeeded;
+                    }
+                    return correctingStatus.FurtherCorrectionNotNeeded;
+                    //return secondVertex.Continuity == Vertex.ContuinityType.C1;
                 }
 
                 secondVertex.SetPosition(firstVertex.X, secondVertex.Y);
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.G1)
             {
@@ -135,7 +141,11 @@ namespace Lab1.Edges
                 {
                     secondVertex.ControlAngle = GetControlAngle(Start, End);
                     secondVertex.ControlLength = GetControlLength(Start, End);
-                    return secondVertex.Continuity != Vertex.ContuinityType.G0;
+                    if (secondVertex.Continuity == Vertex.ContuinityType.G0)
+                    {
+                        return correctingStatus.FurtherCorrectionNotNeeded;
+                    }
+                    return correctingStatus.FurtherCorrectionNeeded;
                 }
 
                 float newY = firstVertex.Y + Length * (secondVertex.Y > firstVertex.Y ? 1 : -1);
@@ -144,7 +154,7 @@ namespace Lab1.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.C1)
             {
@@ -158,11 +168,11 @@ namespace Lab1.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else
             {
-                return false;
+                return correctingStatus.FurtherCorrectionNotNeeded;
             }
         }
 

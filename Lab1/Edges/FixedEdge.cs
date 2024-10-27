@@ -113,7 +113,7 @@ namespace Lab1.Edges
         }
 
 
-        public override bool CorrectEndPosition()
+        public override correctingStatus CorrectEndPosition()
         {
             double angle = Start.ControlAngle;
             return CorrectSecondVertex(Start, End, angle);
@@ -131,7 +131,7 @@ namespace Lab1.Edges
             //return true;
         }
 
-        public override bool CorrectStartPosition()
+        public override correctingStatus CorrectStartPosition()
         {
             double angle = End.ControlAngle + Math.PI;
             return CorrectSecondVertex(End, Start, angle);
@@ -149,11 +149,12 @@ namespace Lab1.Edges
             //return true;
         }
 
-        private bool CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
+        private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
             if ((firstVertex.Continuity == Vertex.ContuinityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged) || secondVertex.WasMoved)
             {
-                throw new VertexCannotBeMoved();
+                //throw new VertexCannotBeMoved();
+                return correctingStatus.CorrectionFailed;
             }
 
             if (firstVertex.WasMoved)
@@ -162,7 +163,7 @@ namespace Lab1.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.G1)
             {
@@ -175,9 +176,9 @@ namespace Lab1.Edges
                 secondVertex.WasMoved = true;
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                return true;
+                return correctingStatus.FurtherCorrectionNeeded;
             }
-            return false;
+            return correctingStatus.FurtherCorrectionNotNeeded;
         }
 
 
