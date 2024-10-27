@@ -13,7 +13,7 @@ namespace Lab1.GeometryModel
         public List<Edge> Edges { get; } = [];
         private Vertex.ContuinityType DefaultContuinity { get; } = Vertex.ContuinityType.C1;
 
-        public void MoveVertex(Vertex vertex, int vertexIndex, float x, float y)
+        public void SetVertexPosition( int vertexIndex, Vertex vertex, float x, float y)
         {
             ResetVerticesPreviousPositions();
             ResetVertexMovementFlags();
@@ -90,11 +90,11 @@ namespace Lab1.GeometryModel
                 edge.ResetOwnedVerticesMovementFlags();
             }
         }
-        private int GetPreviousIndex(int index)
+        public int GetPreviousIndex(int index)
         {
             return index == 0 ? Edges.Count - 1 : index - 1;
         }
-        private int GetNextIndex(int index)
+        public int GetNextIndex(int index)
         {
             return index == Edges.Count - 1 ? 0 : index + 1;
         }
@@ -221,14 +221,14 @@ namespace Lab1.GeometryModel
 
             Edges[index] = bezierEdge;
 
-            if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
+            if (!CorrectEdges(index, index))
             {
                 Edges[index] = edge;
                 Restore();
                 return false;
             }
 
-            return false;
+            return true;
         }
 
         public void AddVertexInEdge(int index, Edge edge)
