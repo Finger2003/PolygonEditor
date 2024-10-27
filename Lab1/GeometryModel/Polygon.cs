@@ -1,4 +1,5 @@
-﻿using Lab1.GeometryModel.Edges;
+﻿using Lab1.GeometryModel.EdgeFactories;
+using Lab1.GeometryModel.Edges;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -147,50 +148,73 @@ namespace Lab1.GeometryModel
 
         public bool TrySetFixedEdge(int index, Edge edge, int length)
         {
-            ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
-            FixedEdge fixedEdge = new FixedEdge(edge.Start, edge.End, length);
-            fixedEdge.SetVerticesContinuityRelevantProperties(edge!.Start);
-            fixedEdge.SetVerticesContinuityRelevantProperties(edge!.End);
+            //ResetVerticesPreviousPositions();
+            //ResetVertexMovementFlags();
+            //FixedEdge fixedEdge = new FixedEdge(edge.Start, edge.End, length);
+            //fixedEdge.SetVerticesContinuityRelevantProperties(edge!.Start);
+            //fixedEdge.SetVerticesContinuityRelevantProperties(edge!.End);
 
-            Edges[index] = fixedEdge;
-            if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
-            {
-                Edges[index] = edge;
-                Restore();
-                return false;
-            }
-            return true;
+            //Edges[index] = fixedEdge;
+            //if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
+            //{
+            //    Edges[index] = edge;
+            //    Restore();
+            //    return false;
+            //}
+            //return true;
+            return TrySetConstraintForEdge(index, edge, new FixedEdgeFactory(length));
         }
 
         public bool TrySetVerticalEdge(int index, Edge edge)
         {
-            ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
-            VerticalEdge verticalEdge = new VerticalEdge(edge.Start, edge.End);
-            verticalEdge.SetVerticesContinuityRelevantProperties(edge.Start);
-            verticalEdge.SetVerticesContinuityRelevantProperties(edge.End);
+            //ResetVerticesPreviousPositions();
+            //ResetVertexMovementFlags();
+            //VerticalEdge verticalEdge = new VerticalEdge(edge.Start, edge.End);
+            //verticalEdge.SetVerticesContinuityRelevantProperties(edge.Start);
+            //verticalEdge.SetVerticesContinuityRelevantProperties(edge.End);
 
-            Edges[index] = verticalEdge;
+            //Edges[index] = verticalEdge;
 
-            if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
-            {
-                Edges[index] = edge;
-                Restore();
-                return false;
-            }
-            return true;
+            //if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
+            //{
+            //    Edges[index] = edge;
+            //    Restore();
+            //    return false;
+            //}
+            //return true;
+            return TrySetConstraintForEdge(index, edge, new VerticalEdgeFactory());
         }
 
         public bool TrySetHorizontalEdge(int index, Edge edge)
         {
+            //ResetVerticesPreviousPositions();
+            //ResetVertexMovementFlags();
+            //HorizontalEdge horizontalEdge = new HorizontalEdge(edge.Start, edge.End);
+            //horizontalEdge.SetVerticesContinuityRelevantProperties(edge.Start);
+            //horizontalEdge.SetVerticesContinuityRelevantProperties(edge.End);
+
+            //Edges[index] = horizontalEdge;
+
+            //if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
+            //{
+            //    Edges[index] = edge;
+            //    Restore();
+            //    return false;
+            //}
+            //return true;
+            return TrySetConstraintForEdge(index, edge, new HorizontalEdgeFactory());
+        }
+        private bool TrySetConstraintForEdge(int index, Edge edge, EdgeFactory edgeFactory)
+        {
             ResetVerticesPreviousPositions();
             ResetVertexMovementFlags();
-            HorizontalEdge horizontalEdge = new HorizontalEdge(edge.Start, edge.End);
-            horizontalEdge.SetVerticesContinuityRelevantProperties(edge.Start);
-            horizontalEdge.SetVerticesContinuityRelevantProperties(edge.End);
 
-            Edges[index] = horizontalEdge;
+            Edge newEdge = edgeFactory.CreateEdge(edge.Start, edge.End);
+
+            newEdge.SetVerticesContinuityRelevantProperties(edge.Start);
+            newEdge.SetVerticesContinuityRelevantProperties(edge.End);
+
+            Edges[index] = newEdge;
 
             if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
             {
