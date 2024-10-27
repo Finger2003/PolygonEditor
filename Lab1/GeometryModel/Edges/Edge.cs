@@ -146,6 +146,15 @@ namespace Lab1.GeometryModel.Edges
 
             return vertex is not null;
         }
+        public virtual bool TryGetHitOwnedVertex(float x, float y, out Vertex? vertex)
+        {
+            vertex = null;
+
+            if (Start.IsHit(x, y))
+                vertex = Start;
+
+            return vertex is not null;
+        }
         public virtual void ResetOwnedVerticesMovementFlags()
         {
             Start.WasMoved = false;

@@ -115,6 +115,10 @@ namespace Lab1.GeometryModel
         {
             return Math.Abs(p.X - Position.X) < 5 && Math.Abs(p.Y - Position.Y) < 5;
         }
+        public bool IsHit(float x, float y)
+        {
+            return Math.Abs(x - Position.X) < 5 && Math.Abs(y - Position.Y) < 5;
+        }
         public static float Distance(Vertex v1, Vertex v2)
         {
             return Distance(v1.Position, v2.Position);

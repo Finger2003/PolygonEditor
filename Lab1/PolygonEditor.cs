@@ -372,7 +372,6 @@ namespace Lab1
             else if (SelectedEdge!.IsBasic)
             {
                 ResetVerticesPreviousPositions();
-                SelectedEdge.UnsubscribeVertices();
                 HorizontalEdge horizontalEdge = new HorizontalEdge(SelectedEdge!.Start, SelectedEdge!.End);
                 horizontalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
                 horizontalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
@@ -456,7 +455,6 @@ namespace Lab1
 
         private void dodajWierzcho³ekToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SelectedEdge!.UnsubscribeVertices();
 
 
             Vertex start = SelectedEdge!.Start;

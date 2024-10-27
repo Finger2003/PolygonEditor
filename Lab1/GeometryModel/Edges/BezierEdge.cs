@@ -36,6 +36,20 @@ namespace Lab1.GeometryModel.Edges
             return vertex is not null;
         }
 
+        public override bool TryGetHitOwnedVertex(float x, float y, out Vertex? vertex)
+        {
+            vertex = null;
+
+            if (Start.IsHit(x, y))
+                vertex = Start;
+            else if (V1.IsHit(x, y))
+                vertex = V1;
+            else if (V2.IsHit(x, y))
+                vertex = V2;
+
+            return vertex is not null;
+        }
+
         public override correctingStatus CorrectEndPosition()
         {
             if (Start.Continuity != Vertex.ContuinityType.G0 && !V1.WasMoved && Start.ContinuityPropertiesChanged)
