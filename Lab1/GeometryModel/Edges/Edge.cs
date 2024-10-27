@@ -29,11 +29,11 @@ namespace Lab1.GeometryModel.Edges
         {
             return v == Start || v == End;
         }
-        public virtual void SetVerticesContinuityRelevantProperties(Vertex v)
-        {
-            v.ControlAngle = GetControlAngle(Start, End);
-            v.ControlLength = GetControlLength(Start, End);
-        }
+        //public virtual void SetVerticesContinuityRelevantProperties(Vertex v)
+        //{
+        //    v.ControlAngle = GetControlAngle(Start, End);
+        //    v.ControlLength = GetControlLength(Start, End);
+        //}
 
 
         public virtual correctingStatus CorrectEndPosition()
@@ -105,20 +105,20 @@ namespace Lab1.GeometryModel.Edges
         public virtual bool IsBezier { get => false; }
 
 
-        public bool IsHit(Point p)
+        public virtual bool IsHit(Point p)
         {
             double distance = DistanceToPoint(p);
             return distance < 5;
         }
 
-        protected virtual double DistanceToPoint(Point p)
+        private double DistanceToPoint(Point p)
         {
-            var x0 = p.X;
-            var y0 = p.Y;
-            var x1 = Start.Position.X;
-            var y1 = Start.Position.Y;
-            var x2 = End.Position.X;
-            var y2 = End.Position.Y;
+            float x0 = p.X;
+            float y0 = p.Y;
+            float x1 = Start.X;
+            float y1 = Start.Y;
+            float x2 = End.X;
+            float y2 = End.Y;
 
             double numerator = Math.Abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1);
             double denominator = Math.Sqrt(Math.Pow(y2 - y1, 2) + Math.Pow(x2 - x1, 2));
@@ -128,15 +128,15 @@ namespace Lab1.GeometryModel.Edges
 
         public virtual void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
 
-        public virtual void Restore()
-        {
-            Start.Restore();
-        }
+        //public virtual void Restore()
+        //{
+        //    Start.Restore();
+        //}
 
-        public virtual void MoveOwnedVertices(float dx, float dy)
-        {
-            Start.Move(dx, dy);
-        }
+        //public virtual void MoveOwnedVertices(float dx, float dy)
+        //{
+        //    Start.Move(dx, dy);
+        //}
         public virtual bool TryGetHitOwnedVertex(Point p, out Vertex? vertex)
         {
             vertex = null;
@@ -155,14 +155,14 @@ namespace Lab1.GeometryModel.Edges
 
             return vertex is not null;
         }
-        public virtual void ResetOwnedVerticesMovementFlags()
-        {
-            Start.WasMoved = false;
-            Start.ContinuityPropertiesChanged = false;
-        }
-        public virtual void ResetOwnedMovedVerticesPreviousPositions()
-        {
-            Start.ResetPreviousPosition();
-        }
+        //public virtual void ResetOwnedVerticesMovementFlags()
+        //{
+        //    Start.WasMoved = false;
+        //    Start.ContinuityPropertiesChanged = false;
+        //}
+        //public virtual void ResetOwnedMovedVerticesPreviousPositions()
+        //{
+        //    Start.ResetPreviousPosition();
+        //}
     }
 }

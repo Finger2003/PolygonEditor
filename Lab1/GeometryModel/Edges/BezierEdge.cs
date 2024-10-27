@@ -15,12 +15,12 @@ namespace Lab1.GeometryModel.Edges
             V2 = new Vertex((Start.X + End.X) / 2, End.Y, true);
         }
 
-        public override void MoveOwnedVertices(float dx, float dy)
-        {
-            base.MoveOwnedVertices(dx, dy);
-            V1.Move(dx, dy);
-            V2.Move(dx, dy);
-        }
+        //public override void MoveOwnedVertices(float dx, float dy)
+        //{
+        //    base.MoveOwnedVertices(dx, dy);
+        //    V1.Move(dx, dy);
+        //    V2.Move(dx, dy);
+        //}
 
         public override bool TryGetHitOwnedVertex(Point p, out Vertex? vertex)
         {
@@ -115,44 +115,44 @@ namespace Lab1.GeometryModel.Edges
             return v == V1 || v == V2;
         }
 
-        public override void SetVerticesContinuityRelevantProperties(Vertex v)
-        {
-            if (v == V1 || v == Start)
-            {
-                Start.ControlAngle = GetControlAngle(Start, V1);
-                Start.ControlLength = GetControlLength(Start, V1);
-            }
-            else if (v == V2 || v == End)
-            {
-                End.ControlAngle = GetControlAngle(V2, End);
-                End.ControlLength = GetControlLength(V2, End);
-            }
-            else
-            {
-                throw new ArgumentException("Vertex is not a control point of this edge");
-            }
-        }
+        //public override void SetVerticesContinuityRelevantProperties(Vertex v)
+        //{
+        //    if (v == V1 || v == Start)
+        //    {
+        //        Start.ControlAngle = GetControlAngle(Start, V1);
+        //        Start.ControlLength = GetControlLength(Start, V1);
+        //    }
+        //    else if (v == V2 || v == End)
+        //    {
+        //        End.ControlAngle = GetControlAngle(V2, End);
+        //        End.ControlLength = GetControlLength(V2, End);
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentException("Vertex is not a control point of this edge");
+        //    }
+        //}
 
-        public override void ResetOwnedVerticesMovementFlags()
-        {
-            base.ResetOwnedVerticesMovementFlags();
-            V1.WasMoved = false;
-            V2.WasMoved = false;
-        }
+        //public override void ResetOwnedVerticesMovementFlags()
+        //{
+        //    base.ResetOwnedVerticesMovementFlags();
+        //    V1.WasMoved = false;
+        //    V2.WasMoved = false;
+        //}
 
-        public override void ResetOwnedMovedVerticesPreviousPositions()
-        {
-            base.ResetOwnedMovedVerticesPreviousPositions();
-            V1.ResetPreviousPosition();
-            V2.ResetPreviousPosition();
-        }
+        //public override void ResetOwnedMovedVerticesPreviousPositions()
+        //{
+        //    base.ResetOwnedMovedVerticesPreviousPositions();
+        //    V1.ResetPreviousPosition();
+        //    V2.ResetPreviousPosition();
+        //}
 
-        public override void Restore()
-        {
-            base.Restore();
-            V1.Restore();
-            V2.Restore();
-        }
+        //public override void Restore()
+        //{
+        //    base.Restore();
+        //    V1.Restore();
+        //    V2.Restore();
+        //}
 
         public override void CorrectStartPositionBasically() { }
         public override void CorrectEndPositionBasically() { }

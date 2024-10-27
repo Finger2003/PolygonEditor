@@ -1,5 +1,6 @@
 ﻿using Lab1.GeometryModel.EdgeFactories;
 using Lab1.GeometryModel.Edges;
+using Lab1.Visitors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,17 @@ namespace Lab1.GeometryModel
         public List<Edge> Edges { get; } = [];
         private Vertex.ContuinityType DefaultContuinity { get; } = Vertex.ContuinityType.C1;
 
+        private ResetVerticesPreviousPositionsEdgeVisitor ResetVerticesPreviousPositionsEdgeVisitor { get; } = new();
+        private ResetVerticesFlagsEdgeVisitor ResetVerticesFlagsEdgeVisitor { get; } = new();
+        private RestoreEdgeVisitor RestoreEdgeVisitor { get; } = new();
+        private MoveEdgeVisitor MoveEdgeVisitor { get; } = new();
+        private SetVerticesControlValuesEdgeVisitor SetVerticesControlValuesEdgeVisitor { get; } = new();
+        private InitialCorrectionEdgeVisitor InitialCorrectionEdgeVisitor { get; } = new();
+
         public void SetVertexPosition( int vertexIndex, Vertex vertex, float x, float y)
         {
             ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
+            ResetVerticesFlags();
             vertex.SetPosition(x, y);
             Vector2 delta = vertex.PositionDifference;
             vertex.WasMoved = true;
@@ -31,23 +39,37 @@ namespace Lab1.GeometryModel
             {
                 if (vertexOwner.IsControlVertex(vertex))
                 {
-                    vertexOwner.SetVerticesContinuityRelevantProperties(vertex);
+                    //SetVerticesControlValuesEdgeVisitor.Vertex = vertex;
+                    //vertexOwner.Accept(SetVerticesControlValuesEdgeVisitor);
+                    SetVerticesControlValues(vertexOwner, vertex);
+                    //vertexOwner.SetVerticesContinuityRelevantProperties(vertex);
                     startingIndexForward = GetNextIndex(startingIndexForward);
                 }
                 else
                 {
                     int previousIndex = GetPreviousIndex(vertexIndex);
                     Edge previousEdge = Edges[previousIndex];
-                    previousEdge.CorrectStartPositionBasically();
-                    previousEdge.SetVerticesContinuityRelevantProperties(vertex);
+                    InitialCorrectionEdgeVisitor.Forwards = false;
+                    previousEdge.Accept(InitialCorrectionEdgeVisitor);
+                    //previousEdge.CorrectStartPositionBasically();
+
+                    //SetVerticesControlValuesEdgeVisitor.Vertex = vertex;
+                    //previousEdge.Accept(SetVerticesControlValuesEdgeVisitor);
+                    SetVerticesControlValues(previousEdge, vertex);
+                    //previousEdge.SetVerticesContinuityRelevantProperties(vertex);
                     startingIndexBackward = GetPreviousIndex(startingIndexBackward);
                 }
             }
             else
             {
-                vertexOwner.CorrectEndPositionBasically();
+                //vertexOwner.CorrectEndPositionBasically();
+                InitialCorrectionEdgeVisitor.Forwards = true;
+                vertexOwner.Accept(InitialCorrectionEdgeVisitor);
                 startingIndexForward = GetNextIndex(startingIndexForward);
-                vertexOwner.SetVerticesContinuityRelevantProperties(vertex);
+                //SetVerticesControlValuesEdgeVisitor.Vertex = vertex;
+                //vertexOwner.Accept(SetVerticesControlValuesEdgeVisitor);
+                SetVerticesControlValues(vertexOwner, vertex);
+                //vertexOwner.SetVerticesContinuityRelevantProperties(vertex);
             }
 
             bool correctionSucceeded = CorrectEdges(startingIndexForward, startingIndexBackward);
@@ -59,37 +81,44 @@ namespace Lab1.GeometryModel
             }
 
             ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
+            ResetVerticesFlags();
         }
 
 
         private void Restore()
         {
-            foreach (Edge edge in Edges)
-                edge.Restore();
+            //foreach (Edge edge in Edges)
+            //    edge.Restore();
+            Edges.ForEach(edge => edge.Accept(RestoreEdgeVisitor));
         }
         public void Move(float dx, float dy)
         {
-            foreach (Edge edge in Edges)
-            {
-                edge.MoveOwnedVertices(dx, dy);
-            }
+            MoveEdgeVisitor.Dx = dx;
+            MoveEdgeVisitor.Dy = dy;
+            Edges.ForEach(edge => edge.Accept(MoveEdgeVisitor));
+            //foreach (Edge edge in Edges)
+            //{
+            //    edge.MoveOwnedVertices(dx, dy);
+            //}
         }
 
 
         private void ResetVerticesPreviousPositions()
         {
-            foreach (Edge edge in Edges)
-            {
-                edge.ResetOwnedMovedVerticesPreviousPositions();
-            }
+            Edges.ForEach(edge => edge.Accept(ResetVerticesPreviousPositionsEdgeVisitor));
+            //foreach (Edge edge in Edges)
+            //{
+            //    //edge.ResetOwnedMovedVerticesPreviousPositions();
+            //    edge.Accept(resetVerticesPreviousPositionsEdgeVisitor);
+            //}
         }
-        private void ResetVertexMovementFlags()
+        private void ResetVerticesFlags()
         {
-            foreach (Edge edge in Edges)
-            {
-                edge.ResetOwnedVerticesMovementFlags();
-            }
+            Edges.ForEach(edge => edge.Accept(ResetVerticesFlagsEdgeVisitor));
+            //foreach (Edge edge in Edges)
+            //{
+            //    edge.ResetOwnedVerticesMovementFlags();
+            //}
         }
         public int GetPreviousIndex(int index)
         {
@@ -207,12 +236,15 @@ namespace Lab1.GeometryModel
         private bool TrySetConstraintForEdge(int index, Edge edge, EdgeFactory edgeFactory)
         {
             ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
+            ResetVerticesFlags();
 
             Edge newEdge = edgeFactory.CreateEdge(edge.Start, edge.End);
 
-            newEdge.SetVerticesContinuityRelevantProperties(edge.Start);
-            newEdge.SetVerticesContinuityRelevantProperties(edge.End);
+            //newEdge.SetVerticesContinuityRelevantProperties(edge.Start);
+            //newEdge.SetVerticesContinuityRelevantProperties(edge.End);
+            SetVerticesControlValues(newEdge, edge.Start);
+            SetVerticesControlValues(newEdge, edge.End);
+
 
             Edges[index] = newEdge;
 
@@ -228,7 +260,7 @@ namespace Lab1.GeometryModel
         public bool TrySetBezierCurve(int index, Edge edge)
         {
             ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
+            ResetVerticesFlags();
 
             if (edge.Start.Continuity == Vertex.ContuinityType.G0)
                 edge.Start.Continuity = DefaultContuinity;
@@ -240,8 +272,11 @@ namespace Lab1.GeometryModel
             BezierEdge bezierEdge = new BezierEdge(edge.Start, edge.End);
             int previousIndex = GetPreviousIndex(index);
             int nextIndex = GetNextIndex(index);
-            Edges[previousIndex].SetVerticesContinuityRelevantProperties(edge.Start);
-            Edges[nextIndex].SetVerticesContinuityRelevantProperties(edge.End);
+            //Edges[previousIndex].SetVerticesContinuityRelevantProperties(edge.Start);
+            //Edges[nextIndex].SetVerticesContinuityRelevantProperties(edge.End);
+
+            SetVerticesControlValues(Edges[previousIndex], edge.Start);
+            SetVerticesControlValues(Edges[nextIndex], edge.End);
 
             Edges[index] = bezierEdge;
 
@@ -316,7 +351,7 @@ namespace Lab1.GeometryModel
             }
 
             ResetVerticesPreviousPositions();
-            ResetVertexMovementFlags();
+            ResetVerticesFlags();
 
             Vertex.ContuinityType oldContinuity = vertex.Continuity;
             int previousIndex = GetPreviousIndex(index);
@@ -326,15 +361,20 @@ namespace Lab1.GeometryModel
             vertex.ContinuityChanged = true;
 
 
-            Edges[previousIndex].SetVerticesContinuityRelevantProperties(vertex);
+            //Edges[previousIndex].SetVerticesContinuityRelevantProperties(vertex);
 
-            if(!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
+            SetVerticesControlValues(Edges[previousIndex], vertex);
+
+
+            if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
             {
+                vertex.ContinuityChanged = true;
                 Restore();
                 vertex.Continuity = oldContinuity;
                 return false;
             }
 
+            vertex.ContinuityChanged = true;
             return true;
         }
 
@@ -351,6 +391,12 @@ namespace Lab1.GeometryModel
 
             Edge newEdge = new Edge(edge.Start, edge.End);
             Edges[index] = newEdge;
+        }
+
+        private void SetVerticesControlValues(Edge edge, Vertex vertex)
+        {
+            SetVerticesControlValuesEdgeVisitor.Vertex = vertex;
+            edge.Accept(SetVerticesControlValuesEdgeVisitor);
         }
     }
 }
