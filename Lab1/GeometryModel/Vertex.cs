@@ -4,7 +4,7 @@ namespace Lab1.GeometryModel
 {
     public class Vertex
     {
-        public enum ContuinityType
+        public enum ContinuityType
         {
             G0,
             G1,
@@ -56,7 +56,7 @@ namespace Lab1.GeometryModel
                 ContinuityPropertiesChanged = true;
             }
         }
-        public ContuinityType Continuity { get; set; } = ContuinityType.G0;
+        public ContinuityType Continuity { get; set; } = ContinuityType.G0;
         public bool ContinuityChanged { get; set; }
         public bool ContinuityPropertiesChanged { get; set; }
         public double PreviousControlAngle { get; set; }

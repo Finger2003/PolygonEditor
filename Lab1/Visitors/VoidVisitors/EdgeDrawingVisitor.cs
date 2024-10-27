@@ -144,11 +144,11 @@ namespace Lab1.Visitors.VoidVisitors
             G.DrawEllipse(Pens.Black, v2.X - 5, v2.Y - 5, 10, 10);
 
 
-            if (edge.Start.Continuity != Vertex.ContuinityType.G0)
+            if (edge.Start.Continuity != Vertex.ContinuityType.G0)
             {
                 drawContinuity(edge.Start);
             }
-            if (edge.End.Continuity != Vertex.ContuinityType.G0)
+            if (edge.End.Continuity != Vertex.ContinuityType.G0)
             {
                 drawContinuity(edge.End);
             }

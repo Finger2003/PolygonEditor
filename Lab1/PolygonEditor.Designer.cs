@@ -97,11 +97,13 @@
             // 
             // drawingPictureBox
             // 
+            drawingPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             drawingPictureBox.Location = new Point(12, 52);
             drawingPictureBox.Name = "drawingPictureBox";
             drawingPictureBox.Size = new Size(776, 386);
             drawingPictureBox.TabIndex = 3;
             drawingPictureBox.TabStop = false;
+            drawingPictureBox.SizeChanged += drawingPictureBox_SizeChanged;
             drawingPictureBox.Paint += drawingPictureBox_Paint;
             drawingPictureBox.MouseClick += drawingPictureBox_MouseClick;
             drawingPictureBox.MouseDown += drawingPictureBox_MouseDown;
@@ -112,7 +114,7 @@
             // 
             edgesContextMenuStrip.Items.AddRange(new ToolStripItem[] { addVertexToolStripMenuItem, addConstraintToolStripMenuItem, removeConstraintToolStripMenuItem });
             edgesContextMenuStrip.Name = "contextMenuStrip1";
-            edgesContextMenuStrip.Size = new Size(185, 92);
+            edgesContextMenuStrip.Size = new Size(185, 70);
             // 
             // addVertexToolStripMenuItem
             // 
@@ -131,28 +133,28 @@
             // fixedLengthToolStripMenuItem
             // 
             fixedLengthToolStripMenuItem.Name = "fixedLengthToolStripMenuItem";
-            fixedLengthToolStripMenuItem.Size = new Size(180, 22);
+            fixedLengthToolStripMenuItem.Size = new Size(144, 22);
             fixedLengthToolStripMenuItem.Text = "Stała długość";
             fixedLengthToolStripMenuItem.Click += fixedLengthToolStripMenuItem_Click;
             // 
             // verticalToolStripMenuItem
             // 
             verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
-            verticalToolStripMenuItem.Size = new Size(180, 22);
+            verticalToolStripMenuItem.Size = new Size(144, 22);
             verticalToolStripMenuItem.Text = "Pionowa";
             verticalToolStripMenuItem.Click += verticalToolStripMenuItem_Click;
             // 
             // horizontalToolStripMenuItem
             // 
             horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-            horizontalToolStripMenuItem.Size = new Size(180, 22);
+            horizontalToolStripMenuItem.Size = new Size(144, 22);
             horizontalToolStripMenuItem.Text = "Pozioma";
             horizontalToolStripMenuItem.Click += horizontalToolStripMenuItem_Click;
             // 
             // bezierToolStripMenuItem
             // 
             bezierToolStripMenuItem.Name = "bezierToolStripMenuItem";
-            bezierToolStripMenuItem.Size = new Size(180, 22);
+            bezierToolStripMenuItem.Size = new Size(144, 22);
             bezierToolStripMenuItem.Text = "Bézier";
             bezierToolStripMenuItem.Click += bezierToolStripMenuItem_Click;
             // 
@@ -208,6 +210,7 @@
             // 
             // clearButton
             // 
+            clearButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             clearButton.Location = new Point(713, 27);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(75, 23);
@@ -226,7 +229,6 @@
             Controls.Add(bresenhamRadioButton);
             Controls.Add(defaultRadioButton);
             Controls.Add(menuStrip);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             MainMenuStrip = menuStrip;
             Name = "PolygonEditor";
             StartPosition = FormStartPosition.CenterScreen;

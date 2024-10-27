@@ -50,7 +50,7 @@ namespace Lab1
             Polygon.TrySetFixedEdge(3, edges[3], (int)Math.Round(edges[3].Length));
             Polygon.TrySetVerticalEdge(4, edges[4]);
             Polygon.TrySetHorizontalEdge(5, edges[5]);
-            Polygon.TrySetContinuityInVertex(1, vertices[1], Vertex.ContuinityType.G1);
+            Polygon.TrySetContinuityInVertex(1, vertices[1], Vertex.ContinuityType.G1);
         }
 
         public static Polygon? GetPolygon()

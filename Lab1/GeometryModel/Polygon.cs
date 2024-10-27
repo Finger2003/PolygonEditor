@@ -14,7 +14,7 @@ namespace Lab1.GeometryModel
     public class Polygon
     {
         public List<Edge> Edges { get; } = [];
-        private Vertex.ContuinityType DefaultContuinity { get; } = Vertex.ContuinityType.C1;
+        private Vertex.ContinuityType DefaultContinuity { get; } = Vertex.ContinuityType.C1;
 
         private ResetVerticesPreviousPositionsEdgeVisitor ResetVerticesPreviousPositionsEdgeVisitor { get; } = new();
         private ResetVerticesFlagsEdgeVisitor ResetVerticesFlagsEdgeVisitor { get; } = new();
@@ -270,14 +270,14 @@ namespace Lab1.GeometryModel
             ResetVerticesPreviousPositions();
             ResetVerticesFlags();
 
-            Vertex.ContuinityType oldStartContinuity = edge.Start.Continuity;
-            Vertex.ContuinityType oldEndContinuity = edge.End.Continuity;
+            Vertex.ContinuityType oldStartContinuity = edge.Start.Continuity;
+            Vertex.ContinuityType oldEndContinuity = edge.End.Continuity;
 
-            if (edge.Start.Continuity == Vertex.ContuinityType.G0)
-                edge.Start.Continuity = DefaultContuinity;
+            if (edge.Start.Continuity == Vertex.ContinuityType.G0)
+                edge.Start.Continuity = DefaultContinuity;
 
-            if (edge.End.Continuity == Vertex.ContuinityType.G0)
-                edge.End.Continuity = DefaultContuinity;
+            if (edge.End.Continuity == Vertex.ContinuityType.G0)
+                edge.End.Continuity = DefaultContinuity;
 
 
             BezierEdge bezierEdge = new BezierEdge(edge.Start, edge.End);
@@ -317,11 +317,11 @@ namespace Lab1.GeometryModel
 
             if (!Edges[previousIndex].IsBezier)
             {
-                start.Continuity = Vertex.ContuinityType.G0;
+                start.Continuity = Vertex.ContinuityType.G0;
             }
             if (!Edges[nextIndex].IsBezier)
             {
-                end.Continuity = Vertex.ContuinityType.G0;
+                end.Continuity = Vertex.ContinuityType.G0;
             }
 
             Edges.RemoveAt(index);
@@ -342,10 +342,10 @@ namespace Lab1.GeometryModel
             Edge nextEdge = Edges[nextIndex];
 
             if (!previousPreviousEdge.IsBezier)
-                previousPreviousEdge.End.Continuity = Vertex.ContuinityType.G0;
+                previousPreviousEdge.End.Continuity = Vertex.ContinuityType.G0;
 
             if(!nextEdge.IsBezier)
-                nextEdge.Start.Continuity = Vertex.ContuinityType.G0;
+                nextEdge.Start.Continuity = Vertex.ContinuityType.G0;
 
             Edge edge1 = Edges[previousIndex];
             Edge edge2 = Edges[index];
@@ -355,9 +355,9 @@ namespace Lab1.GeometryModel
             Edges.RemoveAt(index);
         }
 
-        public bool TrySetContinuityInVertex(int index, Vertex vertex, Vertex.ContuinityType continuity)
+        public bool TrySetContinuityInVertex(int index, Vertex vertex, Vertex.ContinuityType continuity)
         {
-            if (continuity == Vertex.ContuinityType.G0)
+            if (continuity == Vertex.ContinuityType.G0)
             {
                 vertex.Continuity = continuity;
                 return true;
@@ -366,9 +366,9 @@ namespace Lab1.GeometryModel
             ResetVerticesPreviousPositions();
             ResetVerticesFlags();
 
-            Vertex.ContuinityType oldContinuity = vertex.Continuity;
+            Vertex.ContinuityType oldContinuity = vertex.Continuity;
             int previousIndex = GetPreviousIndex(index);
-            int nextIndex = GetNextIndex(index);
+            //int nextIndex = GetNextIndex(index);
 
             vertex.Continuity = continuity;
             vertex.ContinuityChanged = true;
@@ -379,7 +379,7 @@ namespace Lab1.GeometryModel
             SetVerticesControlValues(Edges[previousIndex], vertex);
 
 
-            if (!CorrectEdges(GetNextIndex(index), GetPreviousIndex(index)))
+            if (!CorrectEdges(index, previousIndex))
             {
                 vertex.ContinuityChanged = true;
                 Restore();
@@ -397,10 +397,10 @@ namespace Lab1.GeometryModel
             int nextIndex = GetNextIndex(index);
 
             if (!Edges[previousIndex].IsBezier)
-                Edges[previousIndex].End.Continuity = Vertex.ContuinityType.G0;
+                Edges[previousIndex].End.Continuity = Vertex.ContinuityType.G0;
 
             if (!Edges[nextIndex].IsBezier)
-                Edges[nextIndex].Start.Continuity = Vertex.ContuinityType.G0;
+                Edges[nextIndex].Start.Continuity = Vertex.ContinuityType.G0;
 
             Edge newEdge = new Edge(edge.Start, edge.End);
             Edges[index] = newEdge;

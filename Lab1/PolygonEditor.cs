@@ -8,7 +8,7 @@ namespace Lab1
 {
     public partial class PolygonEditor : Form
     {
-        private Bitmap Bitmap { get; }
+        private Bitmap Bitmap { get; set; }
         //private List<Edge> Edges { get; } = [];
         private Vertex? SelectedVertex { get; set; }
         private Edge? SelectedEdge { get; set; }
@@ -19,14 +19,14 @@ namespace Lab1
         private EdgeDrawingVisitor EdgeDrawingVisitor { get; set; }
         //private IEdgeVisitor[] EdgeDrawingVisitors { get; }
         private ILineDrawer[] LineDrawers { get; }
-        Graphics G { get; }
+        Graphics G { get; set; }
         private LengthDialogForm LengthDialogForm { get; set; } = new LengthDialogForm();
 
 
         private int SelectedVertexIndex { get; set; } = -1;
         private int SelectedEdgeIndex { get; set; } = -1;
 
-        private Vertex.ContuinityType DefaultContuinity { get; set; } = Vertex.ContuinityType.C1;
+        private Vertex.ContinuityType DefaultContinuity { get; set; } = Vertex.ContinuityType.C1;
         private Polygon Polygon { get; }/* = new Polygon();*/
 
         private string ConstraintErrorMessage { get; } = "Nowe ograniczenie nie mo¿e zostaæ dodane ze wzglêdu na pozosta³e ograniczenia.";
@@ -42,6 +42,9 @@ namespace Lab1
             //Icon icon = new("icon.png");
             ResourceManager resourceManager = new("Lab1.Properties.Resources", typeof(PolygonEditor).Assembly);
             Icon = resourceManager.GetObject("Icon") as Icon;
+
+            drawingPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            //Bitmap.
 
 
             Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
@@ -90,9 +93,9 @@ namespace Lab1
                     SelectedVertex = Polygon.Edges[SelectedVertexIndex].Start;
                     setContinuityInVertexToolStripMenuItem.Enabled = Polygon.Edges[SelectedVertexIndex].IsBezier || Polygon.Edges[previousIndex].IsBezier;
 
-                    g0ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G0;
-                    g1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.G1;
-                    c1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContuinityType.C1;
+                    g0ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContinuityType.G0;
+                    g1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContinuityType.G1;
+                    c1ToolStripMenuItem.Checked = SelectedVertex.Continuity == Vertex.ContinuityType.C1;
 
                     verticesContextMenuStrip.Show(drawingPictureBox, e.Location);
                     return;
@@ -219,20 +222,20 @@ namespace Lab1
         private void g0ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.G0);
+            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContinuityType.G0);
         }
 
         private void g1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.G1);
+            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContinuityType.G1);
         }
 
         private void c1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContuinityType.C1);
+            SetContinuity(SelectedVertexIndex, SelectedVertex!, Vertex.ContinuityType.C1);
         }
 
-        private void SetContinuity(int index, Vertex vertex, Vertex.ContuinityType contuinity)
+        private void SetContinuity(int index, Vertex vertex, Vertex.ContinuityType contuinity)
         {
             if (!Polygon.TrySetContinuityInVertex(index, vertex, contuinity))
             {
@@ -289,6 +292,72 @@ namespace Lab1
             {
                 MessageBox.Show(ConstraintErrorMessage);
             }
+        }
+
+        //private void drawingPictureBox_Resize(object sender, EventArgs e)
+        //{
+        //    Bitmap oldBitmap = Bitmap;
+        //    Graphics oldGraphics = G;
+
+        //    Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
+        //    G = Graphics.FromImage(Bitmap);
+        //    drawingPictureBox.Image = Bitmap;
+
+        //    LineDrawers[0] = new DefaultLineDrawer(G);
+        //    LineDrawers[1] = new BresenhamLineDrawer(Bitmap, G);
+        //    EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
+        //    //EdgeDrawingVisitor.LineDrawer = LineDrawers[defaultRadioButton.Checked ? 0 : 1];
+        //    //EdgeDrawingVisitor.G = G;
+
+        //    oldGraphics.Dispose();
+        //    oldBitmap.Dispose();
+
+        //    drawingPictureBox.Invalidate();
+        //    //LineDrawers = [new DefaultLineDrawer(G), new BresenhamLineDrawer(Bitmap, G)];
+
+        //    //EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
+        //}
+
+        private void drawingPictureBox_Resize_1(object sender, EventArgs e)
+        {
+            Bitmap oldBitmap = Bitmap;
+            Graphics oldGraphics = G;
+
+            Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
+            G = Graphics.FromImage(Bitmap);
+            drawingPictureBox.Image = Bitmap;
+
+            LineDrawers[0] = new DefaultLineDrawer(G);
+            LineDrawers[1] = new BresenhamLineDrawer(Bitmap, G);
+            EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
+            //EdgeDrawingVisitor.LineDrawer = LineDrawers[defaultRadioButton.Checked ? 0 : 1];
+            //EdgeDrawingVisitor.G = G;
+
+            oldGraphics.Dispose();
+            oldBitmap.Dispose();
+
+            drawingPictureBox.Invalidate();
+        }
+
+        private void drawingPictureBox_SizeChanged(object sender, EventArgs e)
+        {
+            Bitmap oldBitmap = Bitmap;
+            Graphics oldGraphics = G;
+
+            Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
+            G = Graphics.FromImage(Bitmap);
+            drawingPictureBox.Image = Bitmap;
+            G.DrawImage(oldBitmap, 0, 0);
+            
+
+            LineDrawers[0] = new DefaultLineDrawer(G);
+            LineDrawers[1] = new BresenhamLineDrawer(Bitmap, G);
+            EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
+
+            oldGraphics.Dispose();
+            oldBitmap.Dispose();
+
+            drawingPictureBox.Invalidate();
         }
     }
 }
