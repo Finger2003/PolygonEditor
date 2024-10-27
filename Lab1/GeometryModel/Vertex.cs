@@ -11,7 +11,6 @@ namespace Lab1.GeometryModel
             C1
         }
 
-
         private Vector2 _position;
         public Vector2 Position
         {
@@ -57,7 +56,6 @@ namespace Lab1.GeometryModel
             }
         }
         public ContinuityType Continuity { get; set; } = ContinuityType.G0;
-        public bool ContinuityChanged { get; set; }
         public bool ContinuityPropertiesChanged { get; set; }
         public double PreviousControlAngle { get; set; }
         public double PreviousControlLength { get; set; }

@@ -87,7 +87,6 @@ namespace Lab1.GeometryModel
             Edges.ForEach(edge => edge.Accept(MoveEdgeVisitor));
         }
 
-
         private void ResetVerticesPreviousPositions()
         {
             Edges.ForEach(edge => edge.Accept(ResetVerticesPreviousPositionsEdgeVisitor));
@@ -195,17 +194,10 @@ namespace Lab1.GeometryModel
             Vertex.ContinuityType oldEndContinuity = edge.End.Continuity;
 
             if (edge.Start.Continuity == Vertex.ContinuityType.G0)
-            {
                 edge.Start.Continuity = DefaultContinuity;
-                edge.Start.ContinuityChanged = true;
-            }
 
             if (edge.End.Continuity == Vertex.ContinuityType.G0)
-            {
                 edge.End.Continuity = DefaultContinuity;
-                edge.End.ContinuityChanged = true;
-
-            }
 
             BezierEdge bezierEdge = new BezierEdge(edge.Start, edge.End);
             int previousIndex = GetPreviousIndex(index);
@@ -221,13 +213,9 @@ namespace Lab1.GeometryModel
                 Edges[index] = edge;
                 edge.Start.Continuity = oldStartContinuity;
                 edge.End.Continuity = oldEndContinuity;
-                edge.Start.ContinuityChanged = false;
-                edge.End.ContinuityChanged = false;
                 Restore();
                 return false;
             }
-            edge.Start.ContinuityChanged = false;
-            edge.End.ContinuityChanged = false;
             return true;
         }
 
@@ -244,13 +232,10 @@ namespace Lab1.GeometryModel
             int nextIndex = GetNextIndex(index);
 
             if (!Edges[previousIndex].IsBezier)
-            {
                 start.Continuity = Vertex.ContinuityType.G0;
-            }
+
             if (!Edges[nextIndex].IsBezier)
-            {
                 end.Continuity = Vertex.ContinuityType.G0;
-            }
 
             Edges.RemoveAt(index);
             Edges.InsertRange(index, [edge1, edge2]);
@@ -298,7 +283,6 @@ namespace Lab1.GeometryModel
             int previousIndex = GetPreviousIndex(index);
 
             vertex.Continuity = continuity;
-            vertex.ContinuityChanged = true;
 
             Edge responsibleEdge = Edges[index];
             if (responsibleEdge.IsBezier)
@@ -309,13 +293,11 @@ namespace Lab1.GeometryModel
 
             if (!CorrectEdges(index, previousIndex))
             {
-                Restore();
-                vertex.ContinuityChanged = false;
                 vertex.Continuity = oldContinuity;
+                Restore();
                 return false;
             }
 
-            vertex.ContinuityChanged = false;
             return true;
         }
 
