@@ -20,7 +20,7 @@ namespace Lab1.Edges
             double deltaX = End.Position.X - Start.Position.X;
             double deltaY = End.Position.Y - Start.Position.Y;
             //int currentLength = Length;
-            if ((int)Length != length)
+            if (Length != length)
             {
                 double lengthRatio = length / Length;
                 deltaX *= lengthRatio;
@@ -48,8 +48,8 @@ namespace Lab1.Edges
         {
             End.Move(Start.PositionDifference);
             End.WasMoved = true;
-            Start.ControlAngle = GetControlAngle(Start, End);
-            Start.ControlLength = GetControlLength(Start, End);
+            End.ControlAngle = GetControlAngle(Start, End);
+            End.ControlLength = GetControlLength(Start, End);
         }
 
         public override void StartChanged()

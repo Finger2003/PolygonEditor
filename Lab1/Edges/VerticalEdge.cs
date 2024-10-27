@@ -195,7 +195,7 @@ namespace Lab1.Edges
         }
         public override void CorrectEndPositionBasically()
         {
-            if (Start.Y == End.Y)
+            if (Start.X == End.X)
             {
                 End.WasMoved = false;
             }
@@ -205,7 +205,7 @@ namespace Lab1.Edges
             }
 
             End.ControlAngle = GetControlAngle(Start, End);
-            Start.ControlLength = GetControlLength(Start, End);
+            End.ControlLength = GetControlLength(Start, End);
         }
 
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);

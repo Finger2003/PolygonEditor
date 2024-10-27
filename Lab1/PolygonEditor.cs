@@ -272,14 +272,17 @@ namespace Lab1
 
         private void sta³aD³ugoœæToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LengthDialogForm.SetStartingValue((int)SelectedEdge!.Length);
+            LengthDialogForm.SetStartingValue((int)Math.Round(SelectedEdge!.Length));
 
             if (SelectedEdge!.IsBasic && LengthDialogForm.ShowDialog() == DialogResult.OK)
             {
+                ResetVerticesPreviousPositions();
                 int length = LengthDialogForm.Length;
                 FixedEdge fixedEdge = new FixedEdge(SelectedEdge!.Start, SelectedEdge!.End, length);
+                fixedEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
+                fixedEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
 
-                ResetVerticesPreviousPositions();
+
                 int selectedIndex = SelectedEdgeIndex;
                 Edges[selectedIndex] = fixedEdge;
                 try
@@ -328,7 +331,8 @@ namespace Lab1
             {
                 ResetVerticesPreviousPositions();
                 VerticalEdge verticalEdge = new VerticalEdge(SelectedEdge!.Start, SelectedEdge!.End);
-
+                verticalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
+                verticalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
 
 
                 Edges[selectedIndex] = verticalEdge;
@@ -369,7 +373,8 @@ namespace Lab1
                 ResetVerticesPreviousPositions();
                 SelectedEdge.UnsubscribeVertices();
                 HorizontalEdge horizontalEdge = new HorizontalEdge(SelectedEdge!.Start, SelectedEdge!.End);
-
+                horizontalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.Start);
+                horizontalEdge.SetVerticesContinuityRelevantProperties(SelectedEdge!.End);
 
                 Edges[selectedIndex] = horizontalEdge;
                 try
