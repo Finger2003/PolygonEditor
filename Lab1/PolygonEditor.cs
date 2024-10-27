@@ -26,6 +26,8 @@ namespace Lab1
         private int SelectedVertexIndex { get; set; } = -1;
         private int SelectedEdgeIndex { get; set; } = -1;
 
+        private Vertex.ContuinityType DefaultContuinity { get; set; } = Vertex.ContuinityType.C1;
+
 
         public PolygonEditor()
         {
@@ -525,11 +527,23 @@ namespace Lab1
             if (SelectedEdge!.IsBasic)
             {
                 ResetVerticesPreviousPositions();
-                SelectedEdge.UnsubscribeVertices();
+                //SelectedEdge.UnsubscribeVertices();
+                if(SelectedEdge!.Start.Continuity == Vertex.ContuinityType.G0)
+                {
+                    SelectedEdge!.Start.Continuity = DefaultContuinity;
+                }
+                if (SelectedEdge!.End.Continuity == Vertex.ContuinityType.G0)
+                {
+                    SelectedEdge!.End.Continuity = DefaultContuinity;
+                }
+
                 BezierEdge fixedEdge = new BezierEdge(SelectedEdge!.Start, SelectedEdge!.End);
 
 
+
                 int selectedIndex = SelectedEdgeIndex;
+
+
                 Edges[selectedIndex] = fixedEdge;
 
                 try
@@ -595,8 +609,21 @@ namespace Lab1
             Edge edge2 = new Edge(middle, end);
 
             //int index = Edges.FindIndex(edge => edge == SelectedEdge);
-            Edges.RemoveAt(SelectedEdgeIndex);
-            Edges.InsertRange(SelectedEdgeIndex, [edge1, edge2]);
+            int index = SelectedEdgeIndex;
+            int previousIndex = index == 0 ? Edges.Count - 1 : index - 1;
+            int nextIndex = index == Edges.Count - 1 ? 0 : index + 1;
+
+            if (!Edges[previousIndex].IsBezier)
+            {
+                start.Continuity = Vertex.ContuinityType.G0;
+            }
+            if(!Edges[nextIndex].IsBezier)
+            {
+                end.Continuity = Vertex.ContuinityType.G0;
+            }
+
+            Edges.RemoveAt(index);
+            Edges.InsertRange(index, [edge1, edge2]);
         }
 
         //private void usuñWierczho³ekToolStripMenuItem_Click(object sender, EventArgs e)
@@ -656,6 +683,16 @@ namespace Lab1
 
             int index1 = SelectedVertexIndex;
             int index2 = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
+            int previousIndex2 = index2 == 0 ? Edges.Count - 1 : index2 - 1;
+            int nextIndex1 = index1 == Edges.Count - 1 ? 0 : index1 + 1;
+            if (!Edges[previousIndex2].IsBezier)
+            {
+                Edges[previousIndex2].End.Continuity = Vertex.ContuinityType.G0;
+            }
+            if (!Edges[nextIndex1].IsBezier)
+            {
+                Edges[nextIndex1].Start.Continuity = Vertex.ContuinityType.G0;
+            }
             if (index1 != -1)
             {
                 Edge edge1 = Edges[index1];
@@ -719,8 +756,19 @@ namespace Lab1
 
         private void removeConstraintToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int index = SelectedEdgeIndex;
+            int previousIndex = index == 0 ? Edges.Count - 1 : index - 1;
+            int nextIndex = index == Edges.Count - 1 ? 0 : index + 1;
+            if (!Edges[previousIndex].IsBezier)
+            {
+                Edges[previousIndex].End.Continuity = Vertex.ContuinityType.G0;
+            }
+            if (!Edges[nextIndex].IsBezier)
+            {
+                Edges[nextIndex].Start.Continuity = Vertex.ContuinityType.G0;
+            }
             Edge newEdge = new Edge(SelectedEdge!.Start, SelectedEdge.End);
-            Edges[SelectedEdgeIndex] = newEdge;
+            Edges[index] = newEdge;
         }
     }
 }
