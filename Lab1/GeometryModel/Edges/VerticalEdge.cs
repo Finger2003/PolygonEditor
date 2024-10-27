@@ -1,7 +1,7 @@
 ﻿using Lab1.Exceptions;
 using Lab1.Visitors;
 
-namespace Lab1.Edges
+namespace Lab1.GeometryModel.Edges
 {
     public class VerticalEdge : SpecialEdge
     {
@@ -28,7 +28,7 @@ namespace Lab1.Edges
 
         private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex)
         {
-            if ((firstVertex.Continuity != Vertex.ContuinityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 && !firstVertex.ContinuityChanged) || secondVertex.WasMoved)
+            if (firstVertex.Continuity != Vertex.ContuinityType.G0 && firstVertex.ControlAngle != Math.PI / 2 && firstVertex.ControlAngle != -Math.PI / 2 && !firstVertex.ContinuityChanged || secondVertex.WasMoved)
             {
                 return correctingStatus.CorrectionFailed;
             }
@@ -38,7 +38,7 @@ namespace Lab1.Edges
                 if (firstVertex.X == secondVertex.X)
                 {
                     secondVertex.ControlLength = GetControlLength(Start, End);
-                    if(secondVertex.Continuity == Vertex.ContuinityType.C1)
+                    if (secondVertex.Continuity == Vertex.ContuinityType.C1)
                     {
                         return correctingStatus.FurtherCorrectionNeeded;
                     }

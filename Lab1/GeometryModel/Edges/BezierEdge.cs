@@ -1,6 +1,6 @@
 ﻿using Lab1.Visitors;
 
-namespace Lab1.Edges
+namespace Lab1.GeometryModel.Edges
 {
     public class BezierEdge : SpecialEdge
     {

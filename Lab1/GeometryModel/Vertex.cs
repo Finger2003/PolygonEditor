@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Lab1
+namespace Lab1.GeometryModel
 {
     public class Vertex
     {
@@ -69,7 +69,7 @@ namespace Lab1
         public Vertex(int x, int y, bool isControlPoint = false) : this(isControlPoint)
         {
             Position = new Vector2(x, y);
-            PreviousPosition = Position; 
+            PreviousPosition = Position;
         }
         public Vertex(float x, float y, bool isControlPoint = false) : this(isControlPoint)
         {
@@ -113,7 +113,7 @@ namespace Lab1
 
         public bool IsHit(Point p)
         {
-            return (Math.Abs(p.X - Position.X) < 5 && Math.Abs(p.Y - Position.Y) < 5);
+            return Math.Abs(p.X - Position.X) < 5 && Math.Abs(p.Y - Position.Y) < 5;
         }
         public static float Distance(Vertex v1, Vertex v2)
         {

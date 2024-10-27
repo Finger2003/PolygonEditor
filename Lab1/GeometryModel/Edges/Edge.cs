@@ -1,6 +1,6 @@
 ﻿using Lab1.Visitors;
 
-namespace Lab1.Edges
+namespace Lab1.GeometryModel.Edges
 {
     public class Edge : IEdgeVisitable
     {
@@ -68,7 +68,7 @@ namespace Lab1.Edges
             {
                 secondVertex.ControlAngle = GetControlAngle(Start, End);
                 secondVertex.ControlLength = GetControlLength(Start, End);
-                if(secondVertex.Continuity == Vertex.ContuinityType.G0)
+                if (secondVertex.Continuity == Vertex.ContuinityType.G0)
                 {
                     return correctingStatus.FurtherCorrectionNotNeeded;
                 }
@@ -153,7 +153,7 @@ namespace Lab1.Edges
         }
         public virtual void ResetOwnedMovedVerticesPreviousPositions()
         {
-                Start.ResetPreviousPosition();
+            Start.ResetPreviousPosition();
         }
     }
 }

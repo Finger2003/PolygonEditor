@@ -2,7 +2,7 @@
 using Lab1.Visitors;
 using System.Numerics;
 
-namespace Lab1.Edges
+namespace Lab1.GeometryModel.Edges
 {
     public class FixedEdge : SpecialEdge
     {
@@ -42,7 +42,7 @@ namespace Lab1.Edges
             End.ControlLength = GetControlLength(Start, End);
         }
 
-       
+
         public override correctingStatus CorrectEndPosition()
         {
             double angle = Start.ControlAngle;
@@ -57,7 +57,7 @@ namespace Lab1.Edges
 
         private correctingStatus CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
-            if ((firstVertex.Continuity == Vertex.ContuinityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged && firstVertex.ContinuityPropertiesChanged) || secondVertex.WasMoved)
+            if (firstVertex.Continuity == Vertex.ContuinityType.C1 && !firstVertex.WasMoved && !firstVertex.ContinuityChanged && firstVertex.ContinuityPropertiesChanged || secondVertex.WasMoved)
             {
                 return correctingStatus.CorrectionFailed;
             }

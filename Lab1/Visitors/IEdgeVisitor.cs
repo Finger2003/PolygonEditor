@@ -1,4 +1,4 @@
-﻿using Lab1.Edges;
+﻿using Lab1.GeometryModel.Edges;
 
 namespace Lab1.Visitors
 {

@@ -1,5 +1,6 @@
-using Lab1.Edges;
 using Lab1.Exceptions;
+using Lab1.GeometryModel;
+using Lab1.GeometryModel.Edges;
 using Lab1.LineDrawers;
 using Lab1.Visitors;
 using System.Numerics;
