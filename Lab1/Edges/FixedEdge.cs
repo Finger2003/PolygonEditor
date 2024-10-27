@@ -44,6 +44,13 @@ namespace Lab1.Edges
             Start.ControlLength = GetControlLength(Start, End);
             //return true;
         }
+        public override void CorrectEndPositionBasically()
+        {
+            End.Move(Start.PositionDifference);
+            End.WasMoved = true;
+            Start.ControlAngle = GetControlAngle(Start, End);
+            Start.ControlLength = GetControlLength(Start, End);
+        }
 
         public override void StartChanged()
         {

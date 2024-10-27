@@ -148,6 +148,12 @@ namespace Lab1
                             --startingIndexBackward;
                         }
                     }
+                    else
+                    {
+                        selectedVertexOwner.CorrectEndPositionBasically();
+                        ++startingIndexForward;
+                        selectedVertexOwner.SetVerticesContinuityRelevantProperties(SelectedVertex);
+                    }
 
                     //if(SelectedVertex)
 

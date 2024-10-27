@@ -60,8 +60,7 @@
 
 
 
-            G.DrawEllipse(Pens.Black, v1.X - 2, v1.Y - 2, 4, 4);
-            G.DrawEllipse(Pens.Black, v2.X - 2, v2.Y - 2, 4, 4);
+
             G.DrawLine(DottedPen, v0, v1);
             G.DrawLine(DottedPen, v1, v2);
             G.DrawLine(DottedPen, v2, v3);

@@ -1,5 +1,6 @@
 ﻿using Lab1.Edges;
 using Lab1.LineDrawers;
+using System.Net;
 
 namespace Lab1.Visitors
 {
@@ -46,6 +47,14 @@ namespace Lab1.Visitors
             LineDrawer.DrawHorizontalLine(start, end);
             //edge.RemoveConstraintButton.BringToFront();
 
+            Vertex startPoint = edge.Start;
+            Vertex endPoint = edge.End;
+
+            PointF midPoint = new PointF((startPoint.X + endPoint.X) / 2,(startPoint.Y + endPoint.Y) / 2);
+            Font font = new Font("Arial", 16, FontStyle.Bold);
+            SizeF textSize = G.MeasureString("H", font);
+            G.DrawString("H", font, Brushes.LightBlue, midPoint.X - textSize.Width / 2, midPoint.Y - textSize.Height - 5);
+
         }
 
         public void Visit(VerticalEdge edge)
@@ -55,6 +64,14 @@ namespace Lab1.Visitors
             Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
             Point end = new Point((int)edge.End.X, (int)edge.End.Y);
             LineDrawer.DrawVerticalLine(start, end);
+
+            Vertex startPoint = edge.Start;
+            Vertex endPoint = edge.End;
+
+            PointF midPoint = new PointF((startPoint.X + endPoint.X) / 2, (startPoint.Y + endPoint.Y) / 2);
+            Font font = new Font("Arial", 16, FontStyle.Bold);
+            SizeF textSize = G.MeasureString("V", font);
+            G.DrawString("V", font, Brushes.LightBlue, midPoint.X + 5, midPoint.Y - textSize.Height/2);
         }
 
         public void Visit(FixedEdge edge)
@@ -71,6 +88,18 @@ namespace Lab1.Visitors
 
             double length = edge.Length;
             double angle = Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 /Math.PI;
+            bool isTextAbove= true;
+
+            if (angle > 90)
+            {
+                angle -= 180;
+                isTextAbove = false;
+            }
+            else if (angle < -90)
+            {
+                angle += 180;
+                isTextAbove = false;
+            }
 
             PointF midPoint = new PointF((startPoint.X + endPoint.X) / 2, (startPoint.Y + endPoint.Y) / 2);
 
@@ -89,8 +118,12 @@ namespace Lab1.Visitors
             Font font = new Font("Arial", 12);
             SizeF textSize = G.MeasureString(text, font);
 
+            float y = 5;
+            if (isTextAbove)
+                y = -textSize.Height - y;
+
             // Rysowanie tekstu na środku odcinka
-            G.DrawString(text, font, Brushes.Blue, -textSize.Width / 2, -textSize.Height -5);
+            G.DrawString(text, font, Brushes.Blue, -textSize.Width / 2, y);
 
             // Resetowanie transformacji
             G.ResetTransform();
@@ -105,6 +138,9 @@ namespace Lab1.Visitors
             Point v1 = new Point((int)edge.V1.X, (int)edge.V1.Y);
             Point v2 = new Point((int)edge.V2.X, (int)edge.V2.Y);
             LineDrawer.DrawBezierCurve(start, end, v1, v2);
+
+            G.DrawEllipse(Pens.Black, v1.X - 5, v1.Y - 5, 10, 10);
+            G.DrawEllipse(Pens.Black, v2.X - 5, v2.Y - 5, 10, 10);
         }
     }
 }

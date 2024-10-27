@@ -132,6 +132,12 @@ namespace Lab1.Edges
             Start.ControlLength = GetControlLength(Start, End);
         }
 
+        public virtual void CorrectEndPositionBasically()
+        {
+            End.ControlAngle = GetControlAngle(Start, End);
+            End.ControlLength = GetControlLength(Start, End);
+        }
+
         private bool CorrectSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
         {
             float newX, newY;

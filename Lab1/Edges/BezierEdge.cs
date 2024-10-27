@@ -175,9 +175,9 @@ namespace Lab1.Edges
         {
             base.ResetOwnedMovedVerticesPreviousPositions();
             //if (V1.WasMoved)
-                V1.ResetPreviousPosition();
+            V1.ResetPreviousPosition();
             //if (V2.WasMoved)
-                V2.ResetPreviousPosition();
+            V2.ResetPreviousPosition();
         }
 
         public override void Restore()
@@ -188,6 +188,7 @@ namespace Lab1.Edges
         }
 
         public override void CorrectStartPositionBasically() { }
+        public override void CorrectEndPositionBasically() { }
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
 }

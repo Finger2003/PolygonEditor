@@ -206,14 +206,14 @@ namespace Lab1.Edges
             }
             else if (firstVertex.Continuity == Vertex.ContuinityType.G1)
             {
-                if(secondVertex.X > firstVertex.X == (firstVertex.ControlAngle == 0) && firstVertex.Y == secondVertex.Y)
+                if (secondVertex.X > firstVertex.X == (firstVertex.ControlAngle == 0) && firstVertex.Y == secondVertex.Y)
                 {
                     secondVertex.ControlAngle = GetControlAngle(Start, End);
                     secondVertex.ControlLength = GetControlLength(Start, End);
                     return secondVertex.Continuity != Vertex.ContuinityType.G0;
                 }
 
-                float newX = firstVertex.X + (secondVertex.X > firstVertex.X ? 1 : -1) * Length;
+                float newX = firstVertex.X + Length * (secondVertex.X > firstVertex.X ? 1 : -1);
 
                 secondVertex.SetPosition(newX, firstVertex.Y);
                 secondVertex.WasMoved = true;
@@ -226,7 +226,7 @@ namespace Lab1.Edges
                 double angle = firstVertex.ControlAngle;
                 double length = firstVertex.ControlLength * 3;
 
-                double newX = firstVertex.X + length * (angle == 0 ? 1 : -1);
+                double newX = firstVertex.X + (secondVertex.X > firstVertex.X ? 1 : -1) * length;
                 double newY = firstVertex.Y;
 
                 secondVertex.SetPosition((float)newX, (float)newY);
@@ -238,7 +238,7 @@ namespace Lab1.Edges
             else
             {
                 return false;
-            }            
+            }
         }
 
         public override void CorrectStartPositionBasically()
@@ -257,6 +257,22 @@ namespace Lab1.Edges
             Start.ControlLength = GetControlLength(Start, End);
             //Start.WasMoved = true;
             //return true;
+        }
+
+        public override void CorrectEndPositionBasically()
+        {
+            if (Start.Y == End.Y)
+            {
+                End.WasMoved = false;
+            }
+            else
+            {
+                End.SetPosition(End.X, Start.Y);
+                End.WasMoved = true;
+            }
+
+            End.ControlAngle = GetControlAngle(Start, End);
+            End.ControlLength = GetControlLength(Start, End);
         }
         public override void Accept(IEdgeVisitor visitor) => visitor.Visit(this);
     }
