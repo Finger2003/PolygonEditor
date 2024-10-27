@@ -2,6 +2,7 @@ using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
 using Lab1.LineDrawers;
 using Lab1.Visitors.VoidVisitors;
+using System.Resources;
 
 namespace Lab1
 {
@@ -26,12 +27,20 @@ namespace Lab1
         private int SelectedEdgeIndex { get; set; } = -1;
 
         private Vertex.ContuinityType DefaultContuinity { get; set; } = Vertex.ContuinityType.C1;
-        private Polygon Polygon { get; } = new Polygon();
+        private Polygon Polygon { get; }/* = new Polygon();*/
 
 
         public PolygonEditor()
         {
             InitializeComponent();
+
+            PolygonExample.Init();
+            Polygon = PolygonExample.GetPolygon()!;
+
+            //Icon icon = new("icon.png");
+            ResourceManager resourceManager = new("Lab1.Properties.Resources", typeof(PolygonEditor).Assembly);
+            Icon = resourceManager.GetObject("Icon") as Icon;
+
 
             Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
             drawingPictureBox.Image = Bitmap;
@@ -41,8 +50,6 @@ namespace Lab1
 
             EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
 
-            PolygonExample.Init();
-            Polygon = PolygonExample.GetPolygon()!;
         }
 
         private void drawingPictureBox_MouseClick(object sender, MouseEventArgs e)
