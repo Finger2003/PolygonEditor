@@ -483,10 +483,10 @@ namespace Lab1
                 return;
             }
 
-            int index1 = SelectedVertexIndex;
-            int index2 = SelectedVertexIndex == 0 ? Edges.Count - 1 : SelectedVertexIndex - 1;
-            int previousIndex2 = index2 == 0 ? Edges.Count - 1 : index2 - 1;
-            int nextIndex1 = index1 == Edges.Count - 1 ? 0 : index1 + 1;
+            int selectedIndex = SelectedVertexIndex;
+            int previousIndex = selectedIndex == 0 ? Edges.Count - 1 : selectedIndex - 1;
+            int previousIndex2 = previousIndex == 0 ? Edges.Count - 1 : previousIndex - 1;
+            int nextIndex1 = selectedIndex == Edges.Count - 1 ? 0 : selectedIndex + 1;
             if (!Edges[previousIndex2].IsBezier)
             {
                 Edges[previousIndex2].End.Continuity = Vertex.ContuinityType.G0;
@@ -495,15 +495,15 @@ namespace Lab1
             {
                 Edges[nextIndex1].Start.Continuity = Vertex.ContuinityType.G0;
             }
-            if (index1 != -1)
+            if (selectedIndex != -1)
             {
-                Edge edge1 = Edges[index1];
-                Edge edge2 = Edges[index2];
+                Edge edge1 = Edges[previousIndex];
+                Edge edge2 = Edges[selectedIndex];
 
 
                 Edge edge = new Edge(edge1.Start, edge2.End);
-                Edges[index1] = edge;
-                Edges.RemoveAt(index2);
+                Edges[previousIndex] = edge;
+                Edges.RemoveAt(selectedIndex);
             }
         }
 
