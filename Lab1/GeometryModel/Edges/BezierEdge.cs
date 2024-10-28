@@ -49,7 +49,7 @@ namespace Lab1.GeometryModel.Edges
         {
             return v == V1 || v == V2;
         }
-                
+
         public override void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
         public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => visitor.Visit(this);
     }

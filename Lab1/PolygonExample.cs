@@ -1,12 +1,5 @@
 ﻿using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
-using Lab1.Visitors.CorrectionStatusVisitors;
-using Lab1.Visitors.VoidVisitors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab1
 {
@@ -42,7 +35,7 @@ namespace Lab1
         public static void Init()
         {
             if (Polygon.Edges.Count > 0)
-                return;            
+                return;
 
             Polygon.Edges.AddRange(edges);
 

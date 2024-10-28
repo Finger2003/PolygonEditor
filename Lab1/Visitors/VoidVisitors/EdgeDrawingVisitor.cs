@@ -1,7 +1,6 @@
 ﻿using Lab1.GeometryModel;
 using Lab1.GeometryModel.Edges;
 using Lab1.LineDrawers;
-using System.Net;
 
 namespace Lab1.Visitors.VoidVisitors
 {

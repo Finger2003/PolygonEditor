@@ -2,12 +2,7 @@
 using Lab1.GeometryModel.Edges;
 using Lab1.Visitors.CorrectionStatusVisitors;
 using Lab1.Visitors.VoidVisitors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab1.GeometryModel
 {
@@ -24,7 +19,7 @@ namespace Lab1.GeometryModel
         private InitialCorrectionEdgeVisitor InitialCorrectionEdgeVisitor { get; } = new();
         private FullCorrectionEdgeVisitor FullCorrectionEdgeVisitor { get; } = new();
 
-        public void SetVertexPosition( int vertexIndex, Vertex vertex, float x, float y)
+        public void SetVertexPosition(int vertexIndex, Vertex vertex, float x, float y)
         {
             ResetVerticesPreviousPositions();
             ResetVerticesFlags();
@@ -257,7 +252,7 @@ namespace Lab1.GeometryModel
             if (!previousPreviousEdge.IsBezier)
                 previousPreviousEdge.End.Continuity = Vertex.ContinuityType.G0;
 
-            if(!nextEdge.IsBezier)
+            if (!nextEdge.IsBezier)
                 nextEdge.Start.Continuity = Vertex.ContinuityType.G0;
 
             Edge edge1 = Edges[previousIndex];

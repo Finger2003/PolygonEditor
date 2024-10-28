@@ -21,9 +21,9 @@
             int deltaX = v3.X - v0.X;
             int deltaY = v3.Y - v0.Y;
 
-            int loopIterations = (int) Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+            int loopIterations = (int)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            double dt = 1 / (double) loopIterations;
+            double dt = 1 / (double)loopIterations;
             double dt2 = dt * dt;
             double dt3 = dt2 * dt;
 

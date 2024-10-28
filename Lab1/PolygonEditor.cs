@@ -303,7 +303,7 @@ namespace Lab1
             G = Graphics.FromImage(Bitmap);
             drawingPictureBox.Image = Bitmap;
             G.DrawImage(oldBitmap, 0, 0);
-            
+
 
             LineDrawers[0] = new DefaultLineDrawer(G);
             LineDrawers[1] = new BresenhamLineDrawer(Bitmap, G);
