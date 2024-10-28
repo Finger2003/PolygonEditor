@@ -29,11 +29,13 @@ namespace Lab1.Visitors.VoidVisitors
             {
                 v0.ControlAngle = GetControlAngle(v0, v1);
                 v0.ControlLength = GetBezierControlLength(v0, v1);
+                v1.WasMoved = true;
             }
             else if (Vertex == v2 || Vertex == v3)
             {
                 v3.ControlAngle = GetControlAngle(v2, v3);
                 v3.ControlLength = GetBezierControlLength(v2, v3);
+                v2.WasMoved = true;
             }
         }
     }

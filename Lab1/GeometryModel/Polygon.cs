@@ -274,20 +274,30 @@ namespace Lab1.GeometryModel
             ResetVerticesPreviousPositions();
             ResetVerticesFlags();
 
+            int originalIndex = index;
             Vertex.ContinuityType oldContinuity = vertex.Continuity;
             int previousIndex = GetPreviousIndex(index);
 
             vertex.Continuity = continuity;
 
-            Edge responsibleEdge = Edges[index];
-            if (responsibleEdge.IsBezier)
+            Edge vertexOwner = Edges[index];
+            Edge controllingEdge;
+
+            if (vertexOwner.IsBezier)
             {
-                responsibleEdge = Edges[previousIndex];
-                index = previousIndex;
+                controllingEdge = Edges[previousIndex];
+                InitialCorrectionEdgeVisitor.Forwards = false;
                 previousIndex = GetPreviousIndex(previousIndex);
             }
+            else
+            {
+                controllingEdge = vertexOwner;
+                InitialCorrectionEdgeVisitor.Forwards = true;
+                index = GetNextIndex(index);
+            }
 
-            SetVerticesControlValues(responsibleEdge, vertex);
+            controllingEdge.Accept(InitialCorrectionEdgeVisitor);
+            SetVerticesControlValues(controllingEdge, vertex);
 
 
             if (!CorrectEdges(index, previousIndex))
@@ -296,6 +306,8 @@ namespace Lab1.GeometryModel
                 Restore();
                 return false;
             }
+
+            SetVertexPosition(originalIndex, vertex, vertex.X, vertex.Y);
 
             return true;
         }
