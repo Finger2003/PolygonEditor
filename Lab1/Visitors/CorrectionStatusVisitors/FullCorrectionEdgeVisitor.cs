@@ -17,18 +17,25 @@ namespace Lab1.Visitors.CorrectionStatusVisitors
 
             CorrectionStatus correctSecondVertex(Vertex firstVertex, Vertex secondVertex, double angle)
             {
+
+
                 double newX, newY;
 
                 if (firstVertex.Continuity == Vertex.ContinuityType.G0)
                 {
                     secondVertex.ControlAngle = GetControlAngle(start, end);
                     secondVertex.ControlLength = GetControlLength(edge);
-                    if (secondVertex.Continuity == Vertex.ContinuityType.G0)
-                    {
-                        return CorrectionStatus.FurtherCorrectionNotNeeded;
-                    }
-                    return CorrectionStatus.FurtherCorrectionNeeded;
+                    //if (secondVertex.Continuity == Vertex.ContinuityType.G0)
+                    //{
+                    //    return CorrectionStatus.FurtherCorrectionNotNeeded;
+                    //}
+                    //return CorrectionStatus.FurtherCorrectionNeeded;
+
+                    return secondVertex.Continuity == Vertex.ContinuityType.G0 ? CorrectionStatus.FurtherCorrectionNotNeeded: CorrectionStatus.FurtherCorrectionNeeded;
                 }
+
+                if (secondVertex.WasMoved)
+                    return CorrectionStatus.CorrectionFailed;
 
                 double length = edge.Length;
                 if (firstVertex.Continuity == Vertex.ContinuityType.C1)

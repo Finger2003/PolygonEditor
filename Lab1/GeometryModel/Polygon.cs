@@ -265,7 +265,7 @@ namespace Lab1.GeometryModel
 
         public bool TrySetContinuityInVertex(int index, Vertex vertex, Vertex.ContinuityType continuity)
         {
-            if (continuity == Vertex.ContinuityType.G0)
+            if (continuity < vertex.Continuity)
             {
                 vertex.Continuity = continuity;
                 return true;
@@ -281,7 +281,11 @@ namespace Lab1.GeometryModel
 
             Edge responsibleEdge = Edges[index];
             if (responsibleEdge.IsBezier)
+            {
                 responsibleEdge = Edges[previousIndex];
+                index = previousIndex;
+                previousIndex = GetPreviousIndex(previousIndex);
+            }
 
             SetVerticesControlValues(responsibleEdge, vertex);
 

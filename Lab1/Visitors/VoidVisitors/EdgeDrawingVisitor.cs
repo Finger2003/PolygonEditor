@@ -16,16 +16,15 @@ namespace Lab1.Visitors.VoidVisitors
 
         public void Visit(Edge edge)
         {
-            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
-            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            Point start = new Point((int)Math.Round(edge.Start.X), (int)Math.Round(edge.Start.Y));
+            Point end = new Point((int)Math.Round(edge.End.X), (int)Math.Round(edge.End.Y));
             LineDrawer.DrawStraightLine(start, end);
         }
 
         public void Visit(HorizontalEdge edge)
         {
-
-            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
-            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            Point start = new Point((int)Math.Round(edge.Start.X), (int)Math.Round(edge.Start.Y));
+            Point end = new Point((int)Math.Round(edge.End.X), (int)Math.Round(edge.End.Y));
             LineDrawer.DrawHorizontalLine(start, end);
 
             Vertex startPoint = edge.Start;
@@ -35,14 +34,12 @@ namespace Lab1.Visitors.VoidVisitors
             Font font = new Font("Arial", 16, FontStyle.Bold);
             SizeF textSize = G.MeasureString("H", font);
             G.DrawString("H", font, Brushes.LightBlue, midPoint.X - textSize.Width / 2, midPoint.Y - textSize.Height - 5);
-
         }
 
         public void Visit(VerticalEdge edge)
         {
-
-            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
-            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            Point start = new Point((int)Math.Round(edge.Start.X), (int)Math.Round(edge.Start.Y));
+            Point end = new Point((int)Math.Round(edge.End.X), (int)Math.Round(edge.End.Y));
             LineDrawer.DrawVerticalLine(start, end);
 
             Vertex startPoint = edge.Start;
@@ -56,10 +53,9 @@ namespace Lab1.Visitors.VoidVisitors
 
         public void Visit(FixedEdge edge)
         {
-            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
-            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
+            Point start = new Point((int)Math.Round(edge.Start.X), (int)Math.Round(edge.Start.Y));
+            Point end = new Point((int)Math.Round(edge.End.X), (int)Math.Round(edge.End.Y));
             LineDrawer.DrawStraightLine(start, end);
-
 
             Vertex startPoint = edge.Start;
             Vertex endPoint = edge.End;
@@ -105,21 +101,19 @@ namespace Lab1.Visitors.VoidVisitors
 
             // Resetowanie transformacji
             G.ResetTransform();
-
         }
 
         public void Visit(BezierEdge edge)
         {
             // draw bezier edge
-            Point start = new Point((int)edge.Start.X, (int)edge.Start.Y);
-            Point end = new Point((int)edge.End.X, (int)edge.End.Y);
-            Point v1 = new Point((int)edge.V1.X, (int)edge.V1.Y);
-            Point v2 = new Point((int)edge.V2.X, (int)edge.V2.Y);
+            Point start = new Point((int)Math.Round(edge.Start.X), (int)Math.Round(edge.Start.Y));
+            Point end = new Point((int)Math.Round(edge.End.X), (int)Math.Round(edge.End.Y));
+            Point v1 = new Point((int)Math.Round(edge.V1.X), (int)Math.Round(edge.V1.Y));
+            Point v2 = new Point((int)Math.Round(edge.V2.X), (int)Math.Round(edge.V2.Y));
             LineDrawer.DrawBezierCurve(start, end, v1, v2);
 
             G.DrawEllipse(Pens.Black, v1.X - 5, v1.Y - 5, 10, 10);
             G.DrawEllipse(Pens.Black, v2.X - 5, v2.Y - 5, 10, 10);
-
 
             if (edge.Start.Continuity != Vertex.ContinuityType.G0)
             {
@@ -129,7 +123,6 @@ namespace Lab1.Visitors.VoidVisitors
             {
                 drawContinuity(edge.End);
             }
-
 
             void drawContinuity(Vertex vertex)
             {

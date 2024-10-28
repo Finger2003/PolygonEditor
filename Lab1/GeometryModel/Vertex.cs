@@ -17,7 +17,7 @@ namespace Lab1.GeometryModel
             get => _position;
             set
             {
-                PreviousPosition = _position;
+                PreviousPosition = Position;
                 _position = value;
             }
         }
@@ -28,7 +28,6 @@ namespace Lab1.GeometryModel
         public event Action? StartChanged;
         public event Action? EndChanged;
         public bool WasMoved { get; set; } = false;
-        public bool WasChecked { get; set; } = false;
         public Vector2 PreviousPosition { get; set; }
         public Vector2 PositionDifference { get => Position - PreviousPosition; }
 
