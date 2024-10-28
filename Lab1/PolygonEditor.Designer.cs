@@ -60,7 +60,7 @@
             menuStrip.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
-            menuStrip.Size = new Size(800, 24);
+            menuStrip.Size = new Size(784, 24);
             menuStrip.TabIndex = 0;
             menuStrip.Text = "menuStrip1";
             // 
@@ -100,7 +100,7 @@
             drawingPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             drawingPictureBox.Location = new Point(12, 52);
             drawingPictureBox.Name = "drawingPictureBox";
-            drawingPictureBox.Size = new Size(776, 386);
+            drawingPictureBox.Size = new Size(760, 397);
             drawingPictureBox.TabIndex = 3;
             drawingPictureBox.TabStop = false;
             drawingPictureBox.SizeChanged += drawingPictureBox_SizeChanged;
@@ -211,7 +211,7 @@
             // clearButton
             // 
             clearButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            clearButton.Location = new Point(713, 27);
+            clearButton.Location = new Point(697, 27);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(75, 23);
             clearButton.TabIndex = 4;
@@ -223,13 +223,14 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(784, 461);
             Controls.Add(clearButton);
             Controls.Add(drawingPictureBox);
             Controls.Add(bresenhamRadioButton);
             Controls.Add(defaultRadioButton);
             Controls.Add(menuStrip);
             MainMenuStrip = menuStrip;
+            MinimumSize = new Size(500, 300);
             Name = "PolygonEditor";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Polygon Editor";

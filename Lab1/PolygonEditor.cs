@@ -46,11 +46,11 @@ namespace Lab1
             Bitmap = new Bitmap(drawingPictureBox.Width, drawingPictureBox.Height);
             drawingPictureBox.Image = Bitmap;
             G = Graphics.FromImage(Bitmap);
-            G.Clear(Color.White);
-            LineDrawers = [new DefaultLineDrawer(G), new BresenhamLineDrawer(Bitmap, G)];
 
+            LineDrawers = [new DefaultLineDrawer(G), new BresenhamLineDrawer(Bitmap, G)];
             EdgeDrawingVisitor = new EdgeDrawingVisitor(LineDrawers[defaultRadioButton.Checked ? 0 : 1], G);
 
+            Paint();
         }
 
         private void drawingPictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -137,6 +137,11 @@ namespace Lab1
 
 
         private void drawingPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            Paint();
+        }
+
+        private void Paint()
         {
             G.Clear(Color.White);
             foreach (Edge edge in Polygon.Edges)
@@ -252,6 +257,7 @@ namespace Lab1
         private void clearButton_Click(object sender, EventArgs e)
         {
             Polygon.Edges.Clear();
+            Paint();
         }
 
         private void addVertexToolStripMenuItem_Click(object sender, EventArgs e)
