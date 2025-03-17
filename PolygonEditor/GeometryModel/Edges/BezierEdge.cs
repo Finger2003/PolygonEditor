@@ -50,6 +50,14 @@ namespace PolygonEditor.GeometryModel.Edges
             return v == V1 || v == V2;
         }
 
+        protected override double DistanceToHitLine(Point p)
+        {
+            double distance = DistanceBetweenLineAndPoint(Start.X, Start.Y, V1.X, V1.Y, p);
+            double distance2 = DistanceBetweenLineAndPoint(V1.X, V1.Y, V2.X, V2.Y, p);
+            double distance3 = DistanceBetweenLineAndPoint(V2.X, V2.Y, End.X, End.Y, p);
+            return Math.Min(distance, Math.Min(distance2, distance3));
+        }
+
         public override void Accept(IEdgeVoidVisitor visitor) => visitor.Visit(this);
         public override CorrectionStatus Accept(IEdgeCorrectionStatusVisitor visitor) => visitor.Visit(this);
     }

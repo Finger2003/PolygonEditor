@@ -36,24 +36,23 @@ namespace PolygonEditor.GeometryModel.Edges
         public virtual bool IsBezier { get => false; }
 
 
-        public virtual bool IsHit(Point p)
+        public bool IsHit(Point p)
         {
-            double distance = DistanceToPoint(p);
+            double distance = DistanceToHitLine(p);
             return distance < 5;
         }
 
-        private double DistanceToPoint(Point p)
+        protected virtual double DistanceToHitLine(Point p)
+        {
+            return DistanceBetweenLineAndPoint(Start.X, Start.Y, End.X, End.Y, p);
+        }
+
+        protected double DistanceBetweenLineAndPoint(float x1, float y1, float x2, float y2, Point p)
         {
             float x0 = p.X;
             float y0 = p.Y;
-            float x1 = Start.X;
-            float y1 = Start.Y;
-            float x2 = End.X;
-            float y2 = End.Y;
-
             double numerator = Math.Abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1);
             double denominator = Math.Sqrt(Math.Pow(y2 - y1, 2) + Math.Pow(x2 - x1, 2));
-
             return numerator / denominator;
         }
 
